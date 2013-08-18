@@ -47,6 +47,11 @@ function onDeviceReady() {
             for (var url in feedRecordsShownInGUI) {
                 retrieveFeedPersistAndShowInGUI(url);
             }
+            var feedsAboList = document.getElementById("feedsAboList");
+            for (var i = 0; i < feedsAboList.childNodes; i++) {
+                if (i === feedsAboList.childNodes-1)
+                    feedsAboList[i]["className"] = "active";
+            }
         }
 
         /***** Initialization *****/
@@ -142,16 +147,16 @@ function addFeedInGUI(feedTitle, feedUrl) {
     li.appendChild(p);
     var feedAbos = document.getElementById("feedsAboList");
     feedAbos.appendChild(li);
-
+ 
     li.onclick = function showFeedEntry() {
         var url = li["data-rss-link"];
-        
+
         var feedsAboListElement = document.getElementById("feedsAboList");
         var allFeeds = feedsAboListElement.childNodes;
-        for (var i =0;  i< allFeeds.length; i++){
+        for (var i = 0; i < allFeeds.length; i++) {
             allFeeds[i].removeAttribute("class");
         }
-        li["className"]="active";
+        li["className"] = "active";
         showFeedEntriesInGUI(url);
     };
 }
@@ -197,7 +202,7 @@ function addFeedEntriesInGUI(feedEntry) {
         articleTitle.innerHTML = '';
         var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
         articleTitle.appendChild(titleLink);
-        
+
         var contentBlock = document.getElementById("articleContent");
         contentBlock.innerHTML = feedEntry.content;
         showArticlePage = document.getElementById("showArticlePage");
