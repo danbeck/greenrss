@@ -72,13 +72,13 @@ function onDeviceReady() {
         });
         // On clicking the history button, show the history page
         UI.button('reloadFeedsButton').click(function(e) {
-            UI.pagestack.push('reloadPage',
-                    {subtitle: 'reload Page'});
+//            UI.pagestack.push('reloadPage',
+//                    {subtitle: 'reload Page'});
         });
         // On clicking the info button, show the info page
         UI.button('configureButton').click(function(e) {
-            UI.pagestack.push('configurePage',
-                    {subtitle: 'Configuration'});
+//            UI.pagestack.push('configurePage',
+//                    {subtitle: 'Configuration'});
         });
 
     } catch (e) {
