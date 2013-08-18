@@ -179,7 +179,7 @@ function addFeedEntriesInGUI(feedEntry) {
 //        var content = p.getElementsByClassName("content")[0];
 //        if (!content) {
         var articleTitle = document.createElement("h2");
-        var titleLink = createLinkElement(feedEntry.link, feedEntry.title);
+        var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
         
         articleTitle.appendChild(titleLink);
         articleTitle["className"] = "entry-title";
@@ -189,6 +189,7 @@ function addFeedEntriesInGUI(feedEntry) {
 //        p.appendChild(contentBlock);
 
         showArticlePage = document.getElementById("showArticlePage");
+        showArticlePage.innerHTML = "";
         showArticlePage.appendChild(articleTitle );
 //        showArticlePage.appendChild(contentSpan);
         showArticlePage.appendChild(contentBlock);
@@ -221,6 +222,11 @@ function createLinkElement(href, innerHTML){
     var a = document.createElement("a");
     a["href"] = href;
     a.innerHTML = innerHTML;
+    return a;
+}
+function createNewWindowLinkElement(href, innerHTML){
+    var a = createLinkElement(href, innerHTML);
+    a["target"] = "_blank";
     return a;
 }
 function toggle_visibility(id) {
