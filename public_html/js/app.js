@@ -175,28 +175,27 @@ function addFeedEntriesInGUI(feedEntry) {
     var feedElements = document.getElementById("feedEntriesList");
     feedElements.appendChild(li);
 
-    p1.onclick = function showFeedEntry() {
+    li.onclick = function showFeedEntry() {
 //        var content = p.getElementsByClassName("content")[0];
 //        if (!content) {
-        var h2Title = document.createElement("h2");
-        var titleLink = document.createElement("a");
-//        var p = document.createElement("a");
-        titleLink.innerhTML = feedEntry.title;
-        titleLink["href"] = feedEntry.link;
-        h2Title.appendChild(titleLink);
-        h2Title ["className"] = "articleTitle";
-        var contentSpan = document.createElement("p");
-        contentSpan["className"] = "content";
-        contentSpan.innerHTML = feedEntry.content;
-//        p.appendChild(contentSpan);
+        var articleTitle = document.createElement("h2");
+        var titleLink = createLinkElement(feedEntry.link, feedEntry.title);
+        
+        articleTitle.appendChild(titleLink);
+        articleTitle["className"] = "entry-title";
+        var contentBlock = document.createElement("div");
+        contentBlock["className"] = "content";
+        contentBlock.innerHTML = feedEntry.content;
+//        p.appendChild(contentBlock);
 
         showArticlePage = document.getElementById("showArticlePage");
-        showArticlePage.appendChild(h2Title);
-        showArticlePage.appendChild(contentSpan);
+        showArticlePage.appendChild(articleTitle );
+//        showArticlePage.appendChild(contentSpan);
+        showArticlePage.appendChild(contentBlock);
         UI.pagestack.push('showArticlePage',
                 {subtitle: 'show Article'});
 
-        }
+        };
 //    }
 //
 //        else {
@@ -218,6 +217,12 @@ function addFeedEntriesInGUI(feedEntry) {
 
 }
 
+function createLinkElement(href, innerHTML){
+    var a = document.createElement("a");
+    a["href"] = href;
+    a.innerHTML = innerHTML;
+    return a;
+}
 function toggle_visibility(id) {
     var e = document.getElementById(id);
     if (e.style.display === 'block')
