@@ -46,6 +46,16 @@
 #articleContent img {
     margin: 0.5rem 1rem ;
 }
+
+#articleContent h1 {
+    margin: 1rem 0;
+}
+#articleContent h2{
+    margin: 0.8rem 0;
+}
+#articleContent h3 {
+    margin: 0.6rem 0;
+}
 #feedEntries p:first-child{
     color: #333333;
 }
