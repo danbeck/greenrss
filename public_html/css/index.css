@@ -1,0 +1,25 @@
+@media screen and (max-width: 480px) and (orientation:portrait)  {
+    #feedsAbo{
+        float:left;
+        width:100%;
+    }
+    #feedEntries{
+        margin-left: 0%;
+    }
+}
+
+
+@media screen and (min-width: 481px) , screen and (orientation:landscape)  {
+    #feedsAbo{
+        float:left;
+        width:33%;
+    }
+    #feedEntries{
+        margin-left: 35%;
+    }
+}
+
+#addfeeddialog{
+    position: fixed;
+}
+

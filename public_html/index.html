@@ -1,14 +1,189 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html>
+
     <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="copyright" content="Daniel Beck <d.danielbeck AT googlemail.com>">
+
+        <meta name="description" content="RSS Feed Reader">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Ubuntu UI Style imports - Ambiance theme -->
+        <link href="/usr/share/ubuntu-html5-theme/0.1/ambiance/css/appTemplate.css" rel="stylesheet" type="text/css" />
+
+        <!-- Ubuntu UI javascript imports - Ambiance theme -->
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/fast-buttons.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/core.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/buttons.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/dialogs.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/pagestacks.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/popovers.js"></script>
+        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/list.js"></script>
+
+        <!-- Cordova API script -->
+        <script src="/usr/share/cordova-ubuntu-2.8/www/cordova-2.8.js"></script>
+
+        <script src="https://www.google.com/jsapi"></script>
+
+        <!-- Application script -->
+        <script src="js/app.js"></script>
+        <link href="css/index.css" rel="stylesheet" type="text/css" />
+
+
+        <title>Cordova Ubuntu: RSS Feed Reader</title>
     </head>
+
     <body>
-        <div>TODO write content</div>
+
+        <div data-role="page">
+
+            <header data-role="header">
+                <nav data-role="navbar" class="tabs" >
+                    <div class="tabs-inner">
+                        <ul>
+                            <li class="active" role="tab">
+                                <a href="#item1" class="tab-item">Feed Reader</a>
+                            </li></ul>
+                    </div>
+                </nav>
+            </header>
+
+            <div data-role="content">
+                <div data-role="pagestack">
+
+                    <!-- Application wide footer -->
+                    <footer data-role="footer" class="revealed">
+                        <nav>
+                            <ul>
+                                <li>
+                                    <a href="#" id="configureButton">
+                                        <img src="./img/configure.png" alt="Configure" />
+                                        <span>Configure</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" id="reloadFeedsButton">
+                                        <img src="./img/reload.png" alt="Reload" />
+                                        <span>Reload</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" id="addFeedButton">
+                                        <img src="./img/addFeed.png" alt="Add Feed" />
+                                        <span>Add Feed</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </footer>
+
+                    <div data-role="page" id="categories">
+                        <ul data-role="list">
+                            <li><a href="#">test1</a></li>
+                            <li><a href="#">test2</a></li>
+                        </ul>
+                    </div>
+
+                    <div data-role="page" id="configurePage">
+                        <ul data-role="list">
+                            <li><a href="#">test1</a></li>
+                            <li><a href="#">test2</a></li>
+                        </ul>
+                    </div>
+                    <div data-role="dialog" id="addfeeddialog">
+                        <section>
+                            <h1>Add a new feed</h1>
+                            <p>Type the url feed you want to add</p>
+                            <input type="url" id="rssFeed" placeholder="http://">
+                            <menu>
+                                <button data-role="button" id="addfeedcancel">Cancel</button>
+                                <button data-role="button" id="addfeedsuccess" class="success" >Add</button>
+                            </menu>
+                        </section>
+                    </div>
+                    <div data-role="dialog" id="loading"><section><progress></progress></section></div>
+
+                    <div data-role="page" id="reloadPage">
+                        <!--<div data-role="page">-->
+                        <section data-role="list"> <ul>
+                                <li><a href="#">Feed 1</a></li>
+                                <li><a href="#">test2</a></li>
+                            </ul>
+                        </section>
+                        <section data-role="list"> <ul>
+                                <li><a href="#">Feed 1</a></li>
+                                <li><a href="#">Feed 2</a></li>
+                            </ul>
+                        </section>
+                        <!--</div>-->
+                        <!--                        <div data-role="page">
+                                                    <ul data-role="list">
+                                                        <li><a href="#">test1</a></li>
+                                                        <li><a href="#">test2</a></li>
+                                                    </ul>
+                                                </div>-->
+                    </div>
+
+                    <div id="addFeedsPage" class="popover" data-gravity="s" style="margin-top: 720px; margin-right: 450px;">
+                        <ul class="list">
+                            <li><a href="#">Item1</a></li>
+                            <li class="active"><a href="#">Item2</a></li>
+                            <li><a href="#">Item3</a></li>
+                            <li><a href="#">Item4</a></li>
+                            <li><a href="#">Item5</a></li>
+                            <li><a href="#">Item6</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div data-role="page" id="main-page">
+
+                        <section data-role="list" id="feedsAbo"> 
+                            <ul id="feedsAboList"></ul>
+                        </section>
+                        <section data-role="list" id="feedEntries"> 
+                            <ul id="feedEntriesList">
+                            </ul>
+                        </section>
+                    </div>
+
+                    <div data-role="page" id="showArticlePage">
+
+                    </div>
+
+                    <div data-role="page" id="scan-page">
+                        <h1>Scan Code</h1>
+                        <div style="padding-top: 30px;">
+                            <h4>Results:</h4>
+                            <div id="scan-results"></div>
+                        </div>
+                    </div>
+
+                    <div data-role="page" id="history-page">
+                        <h1>Scan History</h1>
+                        <section data-role="list" id="history-items-list"></section>
+                    </div>
+
+                    <div data-role="page" id="info-page">
+                        <h1>Application Info</h1>
+
+                        <span class="textfield label">
+                            This is an example app for Ubuntu Cordova
+                        </span>
+                    </div>
+
+                </div> <!-- PageStack -->
+
+                <div data-role="dialog" id="scanning">
+                    <section>
+                        <div> Scanning... </div>
+                        <progress></progress>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+
     </body>
+
 </html>
