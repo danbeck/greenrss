@@ -218,17 +218,19 @@ function addFeedEntriesInGUI(feedEntry) {
 
 }
 
+function createNewWindowLinkElement(href, innerHTML){
+    var a = createLinkElement(href, innerHTML);
+    a["target"] = "_blank";
+    return a;
+}
+
 function createLinkElement(href, innerHTML){
     var a = document.createElement("a");
     a["href"] = href;
     a.innerHTML = innerHTML;
     return a;
 }
-function createNewWindowLinkElement(href, innerHTML){
-    var a = createLinkElement(href, innerHTML);
-    a["target"] = "_blank";
-    return a;
-}
+
 function toggle_visibility(id) {
     var e = document.getElementById(id);
     if (e.style.display === 'block')
