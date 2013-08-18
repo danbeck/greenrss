@@ -9,7 +9,7 @@
 }
 
 
-@media screen and (min-width: 481px) , screen and (orientation:landscape)  {
+@media screen and (min-width: 481px) and (max-width: 1000px), screen and (orientation:landscape) and (max-width: 1000px) {
     #feedsAbo{
         float:left;
         width:33%;
@@ -19,17 +19,41 @@
     }
 }
 
+@media screen and (min-width: 1001px) , screen and (orientation:landscape)  {
+    #feedsAbo{
+        float:left;
+        width:330px;
+    }
+    #feedEntries{
+        margin-left: 350px;
+    }
+}
+
 #addfeeddialog{
     position: fixed;
 }
 
-.content p {
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
+#articleTitle{
+    padding: 0 1rem;    
+}
+#articleContent {
+    padding: 0 1rem;
+}
+#articleContent p {
+    /*    -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;*/
+    margin: 1rem 0;
 }
 
+#articleContent img {
+    /*    -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;*/
+    margin: 0.5rem 1rem ;
+}
 #feedEntries p:first-child{
     /*font-weight: bold;*/
     color: #333333;

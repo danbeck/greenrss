@@ -1,5 +1,14 @@
 google.load("feeds", "1");
-if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+//if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+//// This is the event that fires when Cordova is fully loaded
+//    document.addEventListener("deviceready", onDeviceReady, false);
+//} else {
+//// This is the event that then the browser window is loaded
+//    window.onload = onDeviceReady;
+//}
+
+
+if (cordovaUsed()) {
 // This is the event that fires when Cordova is fully loaded
     document.addEventListener("deviceready", onDeviceReady, false);
 } else {
@@ -25,7 +34,6 @@ function onDeviceReady() {
         if (typeof localStorage["feeds"] === "undefined") {
             try {
                 localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
-//                retrieveFeedAndPersistAndShowInGUI("http://planetkde.org/rss20.xml");
                 retrieveFeedPersistAndShowInGUI("http://daniel-beck.org/feed/");
             } catch (e) {
                 if (e === QUOTA_EXCEEDED_ERR) {
@@ -178,25 +186,21 @@ function addFeedEntriesInGUI(feedEntry) {
     li.onclick = function showFeedEntry() {
 //        var content = p.getElementsByClassName("content")[0];
 //        if (!content) {
-        var articleTitle = document.createElement("h2");
+        var articleTitle = document.getElementById("articleTitle");
+        articleTitle.innerHTML = '';
         var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
-        
         articleTitle.appendChild(titleLink);
-        articleTitle["className"] = "entry-title";
-        var contentBlock = document.createElement("div");
-        contentBlock["className"] = "content";
+        
+        var contentBlock = document.getElementById("articleContent");
         contentBlock.innerHTML = feedEntry.content;
-//        p.appendChild(contentBlock);
-
         showArticlePage = document.getElementById("showArticlePage");
         showArticlePage.innerHTML = "";
-        showArticlePage.appendChild(articleTitle );
-//        showArticlePage.appendChild(contentSpan);
+        showArticlePage.appendChild(articleTitle);
         showArticlePage.appendChild(contentBlock);
         UI.pagestack.push('showArticlePage',
                 {subtitle: 'show Article'});
 
-        };
+    };
 //    }
 //
 //        else {
@@ -218,13 +222,13 @@ function addFeedEntriesInGUI(feedEntry) {
 
 }
 
-function createNewWindowLinkElement(href, innerHTML){
+function createNewWindowLinkElement(href, innerHTML) {
     var a = createLinkElement(href, innerHTML);
     a["target"] = "_blank";
     return a;
 }
 
-function createLinkElement(href, innerHTML){
+function createLinkElement(href, innerHTML) {
     var a = document.createElement("a");
     a["href"] = href;
     a.innerHTML = innerHTML;
@@ -251,12 +255,16 @@ function hide(id) {
 
 
 function showAlert(message) {
-    if (!navigator.notification)
-        alert(message);
-    else
+    if (cordovaUsed())
         navigator.notification.alert(message);
+    else
+        alert(message);
 }
 
 function showError(message) {
     showAlert("Error:" + message);
+}
+
+function cordovaUsed() {
+    return navigator.notification;
 }

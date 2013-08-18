@@ -9,16 +9,16 @@
         <meta name="viewport" content="width=device-width">
 
         <!-- Ubuntu UI Style imports - Ambiance theme -->
-        <link href="/usr/share/ubuntu-html5-theme/0.1/ambiance/css/appTemplate.css" rel="stylesheet" type="text/css" />
+        <link href="lib/ubuntu-html5-theme/0.1/ambiance/css/appTemplate.css" rel="stylesheet" type="text/css" />
 
         <!-- Ubuntu UI javascript imports - Ambiance theme -->
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/fast-buttons.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/core.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/buttons.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/dialogs.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/pagestacks.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/popovers.js"></script>
-        <script src="/usr/share/ubuntu-html5-theme/0.1/ambiance/js/list.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/fast-buttons.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/core.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/buttons.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/dialogs.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/pagestacks.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/popovers.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/list.js"></script>
 
         <!-- Cordova API script -->
         <script src="/usr/share/cordova-ubuntu-2.8/www/cordova-2.8.js"></script>
@@ -148,38 +148,11 @@
                     </div>
 
                     <div data-role="page" id="showArticlePage">
-
-                    </div>
-
-                    <div data-role="page" id="scan-page">
-                        <h1>Scan Code</h1>
-                        <div style="padding-top: 30px;">
-                            <h4>Results:</h4>
-                            <div id="scan-results"></div>
-                        </div>
-                    </div>
-
-                    <div data-role="page" id="history-page">
-                        <h1>Scan History</h1>
-                        <section data-role="list" id="history-items-list"></section>
-                    </div>
-
-                    <div data-role="page" id="info-page">
-                        <h1>Application Info</h1>
-
-                        <span class="textfield label">
-                            This is an example app for Ubuntu Cordova
-                        </span>
+                        <h1 id="articleTitle"></h1>
+                        <article id="articleContent"></article>
                     </div>
 
                 </div> <!-- PageStack -->
-
-                <div data-role="dialog" id="scanning">
-                    <section>
-                        <div> Scanning... </div>
-                        <progress></progress>
-                    </section>
-                </div>
 
             </div>
         </div>
