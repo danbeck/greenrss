@@ -57,6 +57,18 @@
     bottom:70px;
 }
 
+#feedsAboList li.active{
+    /*background-color: #c2c2c2;*/
+    background-color: #aa3809;
+    /*fo: white;*/
+}
+
+#feedsAboList li.active p{
+    /*background-color: #c2c2c2;*/
+    color: white;
+    /*fo: white;*/
+}
+
 #addfeeddialog{
     position: fixed;
 }

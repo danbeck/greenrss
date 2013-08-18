@@ -138,13 +138,20 @@ function addFeedInGUI(feedTitle, feedUrl) {
     var p = document.createElement("p");
     p.innerHTML = feedTitle;
     var li = document.createElement("li");
-    p["data-rss-link"] = feedUrl;
+    li["data-rss-link"] = feedUrl;
     li.appendChild(p);
     var feedAbos = document.getElementById("feedsAboList");
     feedAbos.appendChild(li);
 
-    p.onclick = function showFeedEntry() {
-        var url = p["data-rss-link"];
+    li.onclick = function showFeedEntry() {
+        var url = li["data-rss-link"];
+        
+        var feedsAboListElement = document.getElementById("feedsAboList");
+        var allFeeds = feedsAboListElement.childNodes;
+        for (var i =0;  i< allFeeds.length; i++){
+            allFeeds[i].removeAttribute("class");
+        }
+        li["className"]="active";
         showFeedEntriesInGUI(url);
     };
 }
