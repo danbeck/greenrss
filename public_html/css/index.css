@@ -57,6 +57,10 @@
     bottom:70px;
 }
 
+#showArticlePage{
+    height:auto;
+}
+
 #feedsAboList li.active{
     /*background-color: #c2c2c2;*/
     background-color: #aa3809;
