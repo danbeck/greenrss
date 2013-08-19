@@ -76,12 +76,12 @@ function onDeviceReady() {
             hide("addfeeddialog");
         });
         // On clicking the history button, show the history page
-        UI.button('reloadFeedsButton').click(function(e) {
+        UI.button('reloadFeedsButton').click(function() {
 //            UI.pagestack.push('reloadPage',
 //                    {subtitle: 'reload Page'});
         });
         // On clicking the info button, show the info page
-        UI.button('configureButton').click(function(e) {
+        UI.button('configureButton').click(function() {
 //            UI.pagestack.push('configurePage',
 //                    {subtitle: 'Configuration'});
         });
