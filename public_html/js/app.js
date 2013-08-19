@@ -63,7 +63,7 @@ function onDeviceReady() {
         /***** Connecting events *****/
 
         // On clicking the scan button, show the scan page
-        UI.button('addFeedButton').click(function(e) {
+        UI.button('addFeedButton').click(function() {
             toggle_visibility("addfeeddialog");
         });
 //        var addFeedCancel = document.getElementById("addfeedcancel");
