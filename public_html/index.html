@@ -30,124 +30,113 @@
         <link href="css/index.css" rel="stylesheet" type="text/css" />
 
 
-        <title>Cordova Ubuntu: RSS Feed Reader</title>
+        <title>RamSamSam Reader</title>
     </head>
 
     <body>
+        <header data-role="header">
+            <nav data-role="navbar" class="tabs" >
+                <div class="tabs-inner">
+                    <ul>
+                        <li class="active" role="tab">
+                            <a href="#item1" class="tab-item">Feed Reader</a>
+                        </li></ul>
+                </div>
+            </nav>
+        </header>
 
-        <div data-role="page">
+        <div data-role="content">
+            <div data-role="pagestack">
 
-            <header data-role="header">
-                <nav data-role="navbar" class="tabs" >
-                    <div class="tabs-inner">
+                <!-- Application wide footer -->
+                <footer data-role="footer" class="revealed">
+                    <nav>
                         <ul>
-                            <li class="active" role="tab">
-                                <a href="#item1" class="tab-item">Feed Reader</a>
-                            </li></ul>
-                    </div>
-                </nav>
-            </header>
+                            <li>
+                                <a href="#" id="configureButton">
+                                    <img src="./img/configure.png" alt="Configure" />
+                                    <span>Configure</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="reloadFeedsButton">
+                                    <img src="./img/reload.png" alt="Reload" />
+                                    <span>Reload</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="addFeedButton">
+                                    <img src="./img/addFeed.png" alt="Add Feed" />
+                                    <span>Add Feed</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
 
-            <div data-role="content">
-                <div data-role="pagestack">
+                <div data-role="page" id="configurePage">
+                    <ul data-role="list">
+                        <li><a href="#">test1</a></li>
+                        <li><a href="#">test2</a></li>
+                    </ul>
+                </div>
+                <div data-role="dialog" id="addfeeddialog">
+                    <section>
+                        <h1>Add a new feed</h1>
+                        <p>Type the url feed you want to add</p>
+                        <input type="url" id="rssFeed" placeholder="http://">
+                        <menu>
+                            <button data-role="button" id="addfeedcancel">Cancel</button>
+                            <button data-role="button" id="addfeedsuccess" class="success" >Add</button>
+                        </menu>
+                    </section>
+                </div>
+                <!--<div data-role="dialog" id="loading"><section><progress></progress></section></div>-->
 
-                    <!-- Application wide footer -->
-                    <footer data-role="footer" class="revealed">
-                        <nav>
-                            <ul>
-                                <li>
-                                    <a href="#" id="configureButton">
-                                        <img src="./img/configure.png" alt="Configure" />
-                                        <span>Configure</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" id="reloadFeedsButton">
-                                        <img src="./img/reload.png" alt="Reload" />
-                                        <span>Reload</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" id="addFeedButton">
-                                        <img src="./img/addFeed.png" alt="Add Feed" />
-                                        <span>Add Feed</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </footer>
-
-                    <div data-role="page" id="categories">
-                        <ul data-role="list">
-                            <li><a href="#">test1</a></li>
+                <div data-role="page" id="reloadPage">
+                    <!--<div data-role="page">-->
+                    <section data-role="list"> <ul>
+                            <li><a href="#">Feed 1</a></li>
                             <li><a href="#">test2</a></li>
                         </ul>
-                    </div>
-
-                    <div data-role="page" id="configurePage">
-                        <ul data-role="list">
-                            <li><a href="#">test1</a></li>
-                            <li><a href="#">test2</a></li>
+                    </section>
+                    <section data-role="list"> <ul>
+                            <li><a href="#">Feed 1</a></li>
+                            <li><a href="#">Feed 2</a></li>
                         </ul>
-                    </div>
-                    <div data-role="dialog" id="addfeeddialog">
-                        <section>
-                            <h1>Add a new feed</h1>
-                            <p>Type the url feed you want to add</p>
-                            <input type="url" id="rssFeed" placeholder="http://">
-                            <menu>
-                                <button data-role="button" id="addfeedcancel">Cancel</button>
-                                <button data-role="button" id="addfeedsuccess" class="success" >Add</button>
-                            </menu>
-                        </section>
-                    </div>
-                    <div data-role="dialog" id="loading"><section><progress></progress></section></div>
+                    </section>
+                </div>
 
-                    <div data-role="page" id="reloadPage">
-                        <!--<div data-role="page">-->
-                        <section data-role="list"> <ul>
-                                <li><a href="#">Feed 1</a></li>
-                                <li><a href="#">test2</a></li>
-                            </ul>
-                        </section>
-                        <section data-role="list"> <ul>
-                                <li><a href="#">Feed 1</a></li>
-                                <li><a href="#">Feed 2</a></li>
-                            </ul>
-                        </section>
-                    </div>
+                <div id="addFeedsPage" class="popover" data-gravity="s" style="margin-top: 720px; margin-right: 450px;">
+                    <ul class="list">
+                        <li><a href="#">Item1</a></li>
+                        <li class="active"><a href="#">Item2</a></li>
+                        <li><a href="#">Item3</a></li>
+                        <li><a href="#">Item4</a></li>
+                        <li><a href="#">Item5</a></li>
+                        <li><a href="#">Item6</a></li>
+                    </ul>
+                </div>
 
-                    <div id="addFeedsPage" class="popover" data-gravity="s" style="margin-top: 720px; margin-right: 450px;">
-                        <ul class="list">
-                            <li><a href="#">Item1</a></li>
-                            <li class="active"><a href="#">Item2</a></li>
-                            <li><a href="#">Item3</a></li>
-                            <li><a href="#">Item4</a></li>
-                            <li><a href="#">Item5</a></li>
-                            <li><a href="#">Item6</a></li>
+
+                <div data-role="page" id="main-page">
+
+                    <section data-role="list" id="feedsAbo"> 
+                        <ul id="feedsAboList"></ul>
+                    </section>
+                    <section data-role="list" id="feedEntries"> 
+                        <ul id="feedEntriesList">
                         </ul>
-                    </div>
+                    </section>
+                </div>
 
+                <div data-role="page" id="showArticlePage">
+                    <h1 id="articleTitle"></h1>
+                    <article id="articleContent"></article>
+                </div>
 
-                    <div data-role="page" id="main-page">
+            </div> <!-- PageStack -->
 
-                        <section data-role="list" id="feedsAbo"> 
-                            <ul id="feedsAboList"></ul>
-                        </section>
-                        <section data-role="list" id="feedEntries"> 
-                            <ul id="feedEntriesList">
-                            </ul>
-                        </section>
-                    </div>
-
-                    <div data-role="page" id="showArticlePage">
-                        <h1 id="articleTitle"></h1>
-                        <article id="articleContent"></article>
-                    </div>
-
-                </div> <!-- PageStack -->
-
-            </div>
         </div>
 
     </body>
