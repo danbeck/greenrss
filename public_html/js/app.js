@@ -49,7 +49,7 @@ function onDeviceReady() {
             }
             var feedsAboList = document.getElementById("feedsAboList");
             for (var i = 0; i < feedsAboList.childNodes; i++) {
-                if (i === feedsAboList.childNodes-1)
+                if (i === feedsAboList.childNodes - 1)
                     feedsAboList[i]["className"] = "active";
             }
         }
@@ -147,7 +147,7 @@ function addFeedInGUI(feedTitle, feedUrl) {
     li.appendChild(p);
     var feedAbos = document.getElementById("feedsAboList");
     feedAbos.appendChild(li);
- 
+
     li.onclick = function showFeedEntry() {
         var url = li["data-rss-link"];
 
@@ -163,77 +163,40 @@ function addFeedInGUI(feedTitle, feedUrl) {
 
 
 function addFeedEntriesInGUI(feedEntry) {
-
-//    var li = document.createElement("li");
-//    var p = document.createElement("p");
-//    var titleSpan = document.createElement("span");
-//    titleSpan["className"] = "title";
-//    var summarySpan = document.createElement("span");
-//    summarySpan["className"] = "summary";
-//    titleSpan.innerHTML = feedEntry.title;
-//    summarySpan.innerHTML = feedEntry.contentSnippet;
-//    p.appendChild(titleSpan);
-//    p.appendChild(summarySpan);
-//    li.appendChild(p);
-//
-//    var feedElements = document.getElementById("feedEntriesList");
-//    feedElements.appendChild(li);
-
     var li = document.createElement("li");
     var a = document.createElement("a");
     var p1 = document.createElement("p");
     var p2 = document.createElement("p");
     p1["data-article"] = feedEntry;
-//    h3["data-role"] = "content";
-//    p["data-role"] = "content";
     a.appendChild(p1);
     a.appendChild(p2);
     p1.innerHTML = feedEntry.title;
     p2.innerHTML = feedEntry.contentSnippet;
-//    a.appendChild(p);
     li.appendChild(a);
     var feedElements = document.getElementById("feedEntriesList");
     feedElements.appendChild(li);
 
-    li.onclick = function showFeedEntry() {
-//        var content = p.getElementsByClassName("content")[0];
-//        if (!content) {
-        var articleTitle = document.getElementById("articleTitle");
-        articleTitle.innerHTML = '';
-        var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
-        articleTitle.appendChild(titleLink);
-
-        var contentBlock = document.getElementById("articleContent");
-        contentBlock.innerHTML = feedEntry.content;
-        showArticlePage = document.getElementById("showArticlePage");
-        showArticlePage.innerHTML = "";
-        showArticlePage.appendChild(articleTitle);
-        showArticlePage.appendChild(contentBlock);
-        UI.pagestack.push('showArticlePage',
-                {subtitle: 'show Article'});
-
+    li.onclick = function() {
+        showArticle(feedEntry, li);
     };
-//    }
-//
-//        else {
-//            p.removeChild(content);
-//        }
-//    };
-//    
-//    
-//    header.innerHTML = feedEntry.title;
-
-//    var titleSpan = document.createElement("span");
-//    titleSpan["className"] = "title";
-//    var summarySpan = document.createElement("span");
-//    summarySpan["className"] = "summary";
-//    titleSpan.innerHTML = feedEntry.title;
-//    p.appendChild(titleSpan);
-//    p.appendChild(summarySpan);
-//    li.appendChild(p);
-
 }
 
+function showArticle(feedEntry, li) {
+    var articleTitle = document.getElementById("articleTitle");
+    articleTitle.innerHTML = '';
+    var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
+    articleTitle.appendChild(titleLink);
+
+    var contentBlock = document.getElementById("articleContent");
+    contentBlock.innerHTML = feedEntry.content;
+    var showArticlePage = document.getElementById("showArticlePage");
+    showArticlePage.innerHTML = "";
+    showArticlePage.appendChild(articleTitle);
+    showArticlePage.appendChild(contentBlock);
+    UI.pagestack.push('showArticlePage',
+            {subtitle: 'show Article'});
+
+}
 function createNewWindowLinkElement(href, innerHTML) {
     var a = createLinkElement(href, innerHTML);
     a["target"] = "_blank";
