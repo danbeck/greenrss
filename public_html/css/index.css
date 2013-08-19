@@ -81,6 +81,10 @@
     position: fixed;
 }
 
+#articleTitle a, #articleContent a{
+    color:#cc3818;
+}
+
 #articleTitle{
     padding:  0 1rem 1rem 1rem;
 }
