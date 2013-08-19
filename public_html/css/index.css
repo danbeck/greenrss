@@ -61,6 +61,10 @@
     height:auto;
 }
 
+#feedsAboList li, #feedEntries li{
+    cursor:pointer;
+}
+
 #feedsAboList li.active{
     /*background-color: #c2c2c2;*/
     background-color: #aa3809;
