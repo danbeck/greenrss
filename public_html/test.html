@@ -1,0 +1,98 @@
+<!doctype>
+<html>
+    <head>
+        <script>
+            EMAIL = "XXX";
+            PASSWD = "XXX";
+            THEOLDREADER_API_URL = "https://theoldreader.com/reader/api/0/";
+
+            window.onload = function() {
+                var testbutton = document.getElementById("testbutton");
+                testbutton.onclick = function()
+                {
+                    
+                    var categoryElement = document.getElementById("categories");
+                    categoryElement.innerHTML ="";
+                    theoldreader_getLoginToken(theoldReader_drawCategories);
+                };
+
+                function theoldReader_drawCategories(token) {
+                    theoldreader_getCategories(token, drawCategory);
+
+                }
+
+                function drawCategory(label, id) {
+//                    theoldreader_getCategories(token, );
+                    var categoryElement = document.getElementById("categories");
+                    var liElement = document.createElement("li");
+                    liElement.innerHTML = label + " - " + id;
+                    categoryElement.appendChild(liElement);
+                }
+                
+                function theoldreader_getCategories(token, onCategory) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "tag/list?output=json", true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            var tagsArray = response.tags;//[{"id":"user/-/label/Science","sortid":"51d425bd82d4932d3c00001d"}...]
+                            for (var i = 0; i < tagsArray.length; i++) {
+                                var label = tagsArray[i].id.substr(13);
+                                var id = tagsArray[i].sortid;
+                                onCategory(label, id);
+                            }
+                        }
+                    };
+                    xhr.send();
+
+                }
+                
+                function theoldreader_getSubscriptionList(token, onCategory) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "tag/list?output=json", true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            var tagsArray = response.tags;//[{"id":"user/-/label/Science","sortid":"51d425bd82d4932d3c00001d"}...]
+                            for (var i = 0; i < tagsArray.length; i++) {
+                                var label = tagsArray[i].id.substr(13);
+                                var id = tagsArray[i].sortid;
+                                onCategory(label, id);
+                            }
+                        }
+                    };
+                    xhr.send();
+
+                }
+                
+                function theoldreader_getLoginToken(gotToken) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", THEOLDREADER_API_URL + "accounts/ClientLogin", true);
+
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            gotToken(response.Auth);
+                        }
+                    };
+                    xhr.send("output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email="+ EMAIL + "&Passwd=" + PASSWD);
+                }
+            };</script>
+    </head>
+    <body>
+        <p><button id="testbutton">Hit me!</button></p>
+        <div><ul id="categories"></ul></div>
+    </body>
