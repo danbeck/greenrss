@@ -35,6 +35,8 @@ function onDeviceReady() {
             try {
                 localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
                 retrieveFeedPersistAndShowInGUI("http://daniel-beck.org/feed/");
+                retrieveFeedPersistAndShowInGUI("http://planet.ubuntu.com/rss20.xml");
+                retrieveFeedPersistAndShowInGUI("http://planetkde.org/rss20.xml");
             } catch (e) {
                 if (e === QUOTA_EXCEEDED_ERR) {
                     showError()("Error: Local Storage limit exceeds.");
