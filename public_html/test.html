@@ -21,6 +21,9 @@
                 function theoldReader_drawCategories(token) {
                     theoldreader_getCategories(token, drawCategory);
                     theoldreader_getSubscriptionList(token, drawSubscription);
+                    theoldreader_getUnreadCount(token);
+                    theoldreader_getItemIdsFromFolder(token, "51d425bd82d4932d3c00001d");
+//                    theoldreader_getItemIdsFromFeed();
 
                 }
 
@@ -43,7 +46,7 @@
                     for (var i = 0; i < subscription.categories.length; i++) {
                         catHTML += subscription.categories[i] + " II ";
                     }
-
+                    liElement.innerHTML += catHTML;
                     subscriptionElement.appendChild(liElement);
                 }
 
@@ -94,6 +97,118 @@
 
                 }
 
+
+
+                function theoldreader_getUnreadCount(token, onCount) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "unread-count?output=json", true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+//                            "{"subscriptions":[{"id":"feed/51d406556f48ea85c900000c","title":"Changing Bits","categories":[],"sortid":"51d406556f48ea85c900000c","firstitemmsec":"1376596357295","url":"http://blog.mikemccandless.com/feeds/posts/default","htmlUrl":"http://blog.mikemccandless.com/","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/5141/93cc/e721/ece3/fe06/icon_1c27.ico"},
+//                                              {"id":"feed/51d40685d1716c54ad000046","title":"GOG.com News","categories":[],"sortid":"51d40685d1716c54ad000046","firstitemmsec":"1377092059472","url":"http://www.gog.com/frontpage/rss","htmlUrl":"http://www.gog.com/frontpage/rss","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/50e2/ea13/e721/ec34/2000/icon_18f5.ico"}
+                            onCount(response.max, response.unreadcounts);
+                        }
+                    };
+                    xhr.send();
+                }
+
+
+
+
+                function theoldreader_getAllItemIds(token, onFinish) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/reading-list", true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+//                            "{"subscriptions":[{"id":"feed/51d406556f48ea85c900000c","title":"Changing Bits","categories":[],"sortid":"51d406556f48ea85c900000c","firstitemmsec":"1376596357295","url":"http://blog.mikemccandless.com/feeds/posts/default","htmlUrl":"http://blog.mikemccandless.com/","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/5141/93cc/e721/ece3/fe06/icon_1c27.ico"},
+//                                              {"id":"feed/51d40685d1716c54ad000046","title":"GOG.com News","categories":[],"sortid":"51d40685d1716c54ad000046","firstitemmsec":"1377092059472","url":"http://www.gog.com/frontpage/rss","htmlUrl":"http://www.gog.com/frontpage/rss","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/50e2/ea13/e721/ec34/2000/icon_18f5.ico"}
+                            onFinish(response.itemRefs);
+                        }
+                    };
+                    xhr.send();
+                }
+
+
+
+                function theoldreader_getItemIdsFromFolder(token, folder, onFinish) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/label/"+folder, true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+//                            "{"subscriptions":[{"id":"feed/51d406556f48ea85c900000c","title":"Changing Bits","categories":[],"sortid":"51d406556f48ea85c900000c","firstitemmsec":"1376596357295","url":"http://blog.mikemccandless.com/feeds/posts/default","htmlUrl":"http://blog.mikemccandless.com/","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/5141/93cc/e721/ece3/fe06/icon_1c27.ico"},
+//                                              {"id":"feed/51d40685d1716c54ad000046","title":"GOG.com News","categories":[],"sortid":"51d40685d1716c54ad000046","firstitemmsec":"1377092059472","url":"http://www.gog.com/frontpage/rss","htmlUrl":"http://www.gog.com/frontpage/rss","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/50e2/ea13/e721/ec34/2000/icon_18f5.ico"}
+                            onFinish(response.itemRefs);
+                        }
+                    };
+                    xhr.send();
+                }
+                
+                
+
+                function theoldreader_getItemIdsFromFeed(token, feed, onFinish) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", THEOLDREADER_API_URL + "stream/items/ids?output=json&s=feed/"+feed, true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+//                            "{"subscriptions":[{"id":"feed/51d406556f48ea85c900000c","title":"Changing Bits","categories":[],"sortid":"51d406556f48ea85c900000c","firstitemmsec":"1376596357295","url":"http://blog.mikemccandless.com/feeds/posts/default","htmlUrl":"http://blog.mikemccandless.com/","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/5141/93cc/e721/ece3/fe06/icon_1c27.ico"},
+//                                              {"id":"feed/51d40685d1716c54ad000046","title":"GOG.com News","categories":[],"sortid":"51d40685d1716c54ad000046","firstitemmsec":"1377092059472","url":"http://www.gog.com/frontpage/rss","htmlUrl":"http://www.gog.com/frontpage/rss","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/50e2/ea13/e721/ec34/2000/icon_18f5.ico"}
+                            onFinish(response.itemRefs);
+                        }
+                    };
+                    xhr.send();
+                }
+                
+                
+                function theoldreader_getItemContents(token, items, onFinish) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", THEOLDREADER_API_URL + "stream/items/contents?output=json", true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+                    xhr.setRequestHeader('Authorization', 'GoogleLogin auth=' + token);
+
+                    var data ="";
+                    for(var i =0; i< items.length; i++){
+                        data += "i=" + items[i] + "&";
+                    }
+                    if (items.length>0){
+                        data = data.substr(0,items.length-1);
+                    }
+                    xhr.onreadystatechange = function(e) {
+                        if (xhr.readyState !== 4)
+                            return;
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+//                            "{"subscriptions":[{"id":"feed/51d406556f48ea85c900000c","title":"Changing Bits","categories":[],"sortid":"51d406556f48ea85c900000c","firstitemmsec":"1376596357295","url":"http://blog.mikemccandless.com/feeds/posts/default","htmlUrl":"http://blog.mikemccandless.com/","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/5141/93cc/e721/ece3/fe06/icon_1c27.ico"},
+//                                              {"id":"feed/51d40685d1716c54ad000046","title":"GOG.com News","categories":[],"sortid":"51d40685d1716c54ad000046","firstitemmsec":"1377092059472","url":"http://www.gog.com/frontpage/rss","htmlUrl":"http://www.gog.com/frontpage/rss","iconUrl":"https://theoldreader.com/system/uploads/feed/picture/50e2/ea13/e721/ec34/2000/icon_18f5.ico"}
+//                            onFinish(response.itemRefs);
+                        }
+                    };
+                    xhr.send(data);
+                }
+                
                 function theoldreader_getLoginToken(gotToken) {
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", THEOLDREADER_API_URL + "accounts/ClientLogin", true);
@@ -115,4 +230,6 @@
         <p><button id="testbutton">Hit me!</button></p>
         <div><ul id="categories"></ul></div>
         <div><ul id="subscriptions"></ul></div>
+        <div><ul id="unreadCount"></ul></div>
+        <div><ul id="allItemIds"></ul></div>
     </body>
