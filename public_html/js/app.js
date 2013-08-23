@@ -153,25 +153,18 @@ function addNewSubscriptionInGUI(feedUrl) {
 }
 
 
-function addSubscriptionItemsInGUI(feedInfo) {
-
-    var feedElements = document.getElementById("feedEntriesList");
-    feedElements.innerHTML = '';
-    for (var i = 0; i < feedInfo.entries.length; i++) {
-        var feedEntry = feedInfo.entries[i];
-        addFeedEntriesInGUI(feedEntry);
-    }
-}
-
 function showFeedEntriesInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
 
     var feedElements = document.getElementById("feedEntriesList");
+    var fragment = document.createDocumentFragment();
+
     feedElements.innerHTML = '';
     for (var i = 0; i < feedInfo.entries.length; i++) {
         var feedEntry = feedInfo.entries[i];
-        addFeedEntriesInGUI(feedEntry);
+        addFeedEntriesToFragment(feedEntry,fragment);
     }
+    feedElements.appendChild(fragment);
 }
 function addFeedInGUI(feedTitle, feedUrl) {
     var p = document.createElement("p");
@@ -196,7 +189,7 @@ function addFeedInGUI(feedTitle, feedUrl) {
 }
 
 
-function addFeedEntriesInGUI(feedEntry) {
+function addFeedEntriesToFragment(feedEntry, fragment) {
     var li = document.createElement("li");
     var a = document.createElement("a");
     var p1 = document.createElement("p");
@@ -207,8 +200,7 @@ function addFeedEntriesInGUI(feedEntry) {
     p1.innerHTML = feedEntry.title;
     p2.innerHTML = feedEntry.contentSnippet;
     li.appendChild(a);
-    var feedElements = document.getElementById("feedEntriesList");
-    feedElements.appendChild(li);
+    fragment.appendChild(li);
 
     li.onclick = function() {
         showArticle(feedEntry, li);
