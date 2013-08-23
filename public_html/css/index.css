@@ -49,8 +49,14 @@
     width: 100%;
 }
 
-[data-role="footer"] nav ul li a:active{
+/*[data-role="footer"] nav ul li a:active{
     background-color: #CC4400;
+    color: white;
+}*/
+
+
+[data-role="footer"] nav ul li a:hover{
+    background-color: #ea7140;
     color: white;
 }
 
@@ -70,9 +76,7 @@
 }
 
 #feedsAboList li.active{
-    /*background-color: #c2c2c2;*/
-    background-color: #aa3809;
-    /*fo: white;*/
+    background-color: #ea7140;
 }
 
 #feedsAboList li.active p{
