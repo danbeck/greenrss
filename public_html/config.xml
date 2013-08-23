@@ -15,5 +15,4 @@
     </preference>
     <access origin="*" />
     <content src="index.html" />
-    <feature>
 </widget>
