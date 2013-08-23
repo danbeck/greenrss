@@ -1,12 +1,4 @@
 google.load("feeds", "1");
-//if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-//// This is the event that fires when Cordova is fully loaded
-//    document.addEventListener("deviceready", onDeviceReady, false);
-//} else {
-//// This is the event that then the browser window is loaded
-//    window.onload = onDeviceReady;
-//}
-
 
 if (cordovaUsed()) {
 // This is the event that fires when Cordova is fully loaded
@@ -16,81 +8,76 @@ if (cordovaUsed()) {
     window.onload = onDeviceReady;
 }
 
-/**
- * Instance of the Ubuntu UI used to provide an interface to the
- * Ubuntu SDK HTML5 theme
- * @type {UbuntuUI}
- */
-
 var UI = new UbuntuUI();
 var feedRecordsShownInGUI = {};
+
 /**
  * Entry point to the app. It initializes the Ubuntu SDK HTML5 theme
  * and connects events to handlers
  */
 function onDeviceReady() {
     try {
+        connectUIToHandler();
 
-        if (typeof localStorage["feeds"] === "undefined") {
-            try {
-                localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
-                retrieveFeedPersistAndShowInGUI("http://daniel-beck.org/feed/");
-                retrieveFeedPersistAndShowInGUI("http://planet.ubuntu.com/rss20.xml");
-                retrieveFeedPersistAndShowInGUI("http://planetkde.org/rss20.xml");
-            } catch (e) {
-                if (e === QUOTA_EXCEEDED_ERR) {
-                    showError()("Error: Local Storage limit exceeds.");
-                } else {
-                    showError("Error: Saving to local storage.");
-                }
-            }
+        if (feedsNotInLocalStorage()) {
+            retrieveDefaultFeeds();
         } else {
-            feedRecordsShownInGUI = JSON.parse(localStorage["feeds"]);
+            feedRecordsShownInGUI = loadFeedsFromLocalStorage();
+
             for (var url in feedRecordsShownInGUI) {
                 retrieveFeedPersistAndShowInGUI(url);
             }
-            var feedsAboList = document.getElementById("feedsAboList");
-            for (var i = 0; i < feedsAboList.childNodes; i++) {
-                if (i === feedsAboList.childNodes - 1)
-                    feedsAboList[i]["className"] = "active";
-            }
         }
-
-        /***** Initialization *****/
-
-        // Initialize the Ubuntu SDK HTML5 theme
-        UI.init();
-        // Set up the app by pushing the main view
-        UI.pagestack.push("main-page");
-        /***** Connecting events *****/
-
-        // On clicking the scan button, show the scan page
-        UI.button('addFeedButton').click(function() {
-            toggle_visibility("addfeeddialog");
-        });
-//        var addFeedCancel = document.getElementById("addfeedcancel");
-        UI.button('addfeedcancel').click(function(e) {
-            hide("addfeeddialog");
-        });
-        UI.button('addfeedsuccess').click(function(e) {
-            var newRssFeed = document.getElementById("rssFeed").value;
-            retrieveFeedPersistAndShowInGUI(newRssFeed);
-            hide("addfeeddialog");
-        });
-        // On clicking the history button, show the history page
-        UI.button('reloadFeedsButton').click(function() {
-//            UI.pagestack.push('reloadPage',
-//                    {subtitle: 'reload Page'});
-        });
-        // On clicking the info button, show the info page
-        UI.button('configureButton').click(function() {
-//            UI.pagestack.push('configurePage',
-//                    {subtitle: 'Configuration'});
-        });
-
     } catch (e) {
         showError(e.message);
     }
+}
+
+function loadFeedsFromLocalStorage() {
+    return JSON.parse(localStorage["feeds"]);
+}
+function feedsNotInLocalStorage() {
+    return typeof localStorage["feeds"] === "undefined";
+}
+function retrieveDefaultFeeds() {
+    retrieveFeedPersistAndShowInGUI("http://daniel-beck.org/feed/");
+    retrieveFeedPersistAndShowInGUI("http://planet.ubuntu.com/rss20.xml");
+    retrieveFeedPersistAndShowInGUI("http://planetkde.org/rss20.xml");
+}
+function connectUIToHandler() {
+
+    /***** Initialization *****/
+
+    // Initialize the Ubuntu SDK HTML5 theme
+    UI.init();
+    // Set up the app by pushing the main view
+    UI.pagestack.push("main-page");
+    /***** Connecting events *****/
+
+    // On clicking the scan button, show the scan page
+    UI.button('addFeedButton').click(function() {
+        toggle_visibility("addfeeddialog");
+    });
+//        var addFeedCancel = document.getElementById("addfeedcancel");
+    UI.button('addfeedcancel').click(function(e) {
+        hide("addfeeddialog");
+    });
+    UI.button('addfeedsuccess').click(function(e) {
+        var newRssFeed = document.getElementById("rssFeed").value;
+        retrieveFeedPersistAndShowInGUI(newRssFeed);
+        hide("addfeeddialog");
+    });
+    // On clicking the history button, show the history page
+    UI.button('reloadFeedsButton').click(function() {
+//            UI.pagestack.push('reloadPage',
+//                    {subtitle: 'reload Page'});
+    });
+    // On clicking the info button, show the info page
+    UI.button('configureButton').click(function() {
+//            UI.pagestack.push('configurePage',
+//                    {subtitle: 'Configuration'});
+    });
+
 
 }
 
@@ -114,9 +101,16 @@ function persistFeed(retrievedFeed) {
         "description": retrievedFeed.feed.description,
         "author": retrievedFeed.feed.author,
         "entries": retrievedFeed.feed.entries};
-
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
-    localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
+    try {
+        localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
+    } catch (e) {
+        if (e === QUOTA_EXCEEDED_ERR) {
+            showError()("Error: Local Storage limit exceeds.");
+        } else {
+            showError("Error: Saving to local storage.");
+        }
+    }
 }
 
 function addFeedAndShowFeedEntriesInGUI(feedUrl) {
