@@ -10,6 +10,7 @@ if (cordovaUsed()) {
 
 var UI = new UbuntuUI();
 var feedRecordsShownInGUI = {};
+var feedRecordsSavedInDB = {};
 
 /**
  * Entry point to the app. It initializes the Ubuntu SDK HTML5 theme
@@ -29,9 +30,9 @@ function onDeviceReady() {
         if (feedsNotInLocalStorage()) {
             retrieveDefaultFeeds();
         } else {
-            feedRecordsShownInGUI = loadFeedsFromLocalStorage();
+            var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
 
-            for (var url in feedRecordsShownInGUI) {
+            for (var url in feedsLoadedFromLocalStorage) {
                 retrieveFeedPersistAndShowSubscriptionInGUI(url);
             }
         }
@@ -75,6 +76,7 @@ function connectUIToHandler() {
     UI.button('configureButton').click(function() {
 //            UI.pagestack.push('configurePage',
 //                    {subtitle: 'Configuration'});
+        resetLocalStore();
     });
 
 
@@ -108,13 +110,34 @@ function persistFeedAndAddFeedAndShowFeedEntriesInGUI(retrievedFeed) {
     addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
 }
 function persistFeed(retrievedFeed) {
+    var feedInfoForStorage = {"title": retrievedFeed.feed.title,
+        "description": retrievedFeed.feed.description,
+        "author": retrievedFeed.feed.author
+//,"entries": retrievedFeed.feed.entries
+    };
+
     var feedInfo = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
-        "author": retrievedFeed.feed.author,
-        "entries": retrievedFeed.feed.entries};
+        "author": retrievedFeed.feed.author
+                , "entries": retrievedFeed.feed.entries
+    };
+
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
+    feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
     try {
-        localStorage.setItem("feeds", JSON.stringify(feedRecordsShownInGUI));
+        localStorage.setItem("feeds", JSON.stringify(feedRecordsSavedInDB));
+    } catch (e) {
+        if (e === QUOTA_EXCEEDED_ERR) {
+            showError()("Error: Local Storage limit exceeds.");
+        } else {
+            showError("Error: Saving to local storage.");
+        }
+    }
+}
+
+function resetLocalStore() {
+    try {
+        localStorage.setItem("feeds", '');
     } catch (e) {
         if (e === QUOTA_EXCEEDED_ERR) {
             showError()("Error: Local Storage limit exceeds.");
@@ -168,9 +191,6 @@ function addFeedInGUI(feedTitle, feedUrl) {
             allFeeds[i].removeAttribute("class");
         }
         li["className"] = "active";
-//        showFeedEntriesInGUI(url);
-        
-//         var feedInfo = feedRecordsShownInGUI[feedUrl];
         showFeedEntriesInGUI(url);
     };
 }
@@ -209,6 +229,15 @@ function showArticle(feedEntry, li) {
     showArticlePage.appendChild(contentBlock);
     UI.pagestack.push('showArticlePage',
             {subtitle: 'show Article'});
+
+//             var feed = new google.feeds.Feed(feedURL);
+//    feed.setNumEntries(100);
+//    feed.load(function(retrievedFeed) {
+//        if (!retrievedFeed.error) {
+//            persistFeed(retrievedFeed);
+//            addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
+//        }
+//    });
 
 }
 function createNewWindowLinkElement(href, innerHTML) {
