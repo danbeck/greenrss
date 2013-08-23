@@ -17,6 +17,13 @@ var feedRecordsShownInGUI = {};
  */
 function onDeviceReady() {
     try {
+
+        // Initialize the Ubuntu SDK HTML5 theme
+        UI.init();
+        // Set up the app by pushing the main view
+        UI.pagestack.push("main-page");
+        /***** Connecting events *****/
+
         connectUIToHandler();
 
         if (feedsNotInLocalStorage()) {
@@ -45,14 +52,6 @@ function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowInGUI("http://planetkde.org/rss20.xml");
 }
 function connectUIToHandler() {
-
-    /***** Initialization *****/
-
-    // Initialize the Ubuntu SDK HTML5 theme
-    UI.init();
-    // Set up the app by pushing the main view
-    UI.pagestack.push("main-page");
-    /***** Connecting events *****/
 
     // On clicking the scan button, show the scan page
     UI.button('addFeedButton').click(function() {
