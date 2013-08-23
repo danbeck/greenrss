@@ -186,6 +186,14 @@ function addFeedInGUI(feedTitle, feedUrl) {
     var feedAbos = document.getElementById("feedsAboList");
     feedAbos.appendChild(li);
 
+    li.addEventListener('touchstart', function() {
+        li.className += " tapped";
+    });
+    li.addEventListener('touchend', function() {
+        li.className = "";
+    });
+
+
     li.onclick = function showFeedEntry() {
         var url = li["data-rss-link"];
 
@@ -212,6 +220,14 @@ function addFeedEntriesToFragment(feedEntry, fragment) {
     p2.innerHTML = feedEntry.contentSnippet;
     li.appendChild(a);
     fragment.appendChild(li);
+
+    li.addEventListener('touchstart', function() {
+        li.className += " tapped";
+    });
+    li.addEventListener('touchend', function() {
+        li.className = "";
+    });
+
 
     li.onclick = function() {
         showArticle(feedEntry, li);
