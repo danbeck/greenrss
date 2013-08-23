@@ -32,7 +32,7 @@ function onDeviceReady() {
             feedRecordsShownInGUI = loadFeedsFromLocalStorage();
 
             for (var url in feedRecordsShownInGUI) {
-                retrieveFeedPersistAndShowInGUI(url);
+                retrieveFeedPersistAndShowSubscriptionInGUI(url);
             }
         }
     } catch (e) {
@@ -47,9 +47,9 @@ function feedsNotInLocalStorage() {
     return typeof localStorage["feeds"] === "undefined";
 }
 function retrieveDefaultFeeds() {
-    retrieveFeedPersistAndShowInGUI("http://daniel-beck.org/feed/");
-    retrieveFeedPersistAndShowInGUI("http://planet.ubuntu.com/rss20.xml");
-    retrieveFeedPersistAndShowInGUI("http://planetkde.org/rss20.xml");
+    retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
+    retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
+    retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
 }
 function connectUIToHandler() {
 
@@ -91,9 +91,21 @@ function retrieveFeedPersistAndShowInGUI(feedURL) {
     });
 }
 
+
+function retrieveFeedPersistAndShowSubscriptionInGUI(feedURL) {
+    var feed = new google.feeds.Feed(feedURL);
+    feed.setNumEntries(100);
+    feed.load(function(retrievedFeed) {
+        if (!retrievedFeed.error) {
+            persistFeed(retrievedFeed);
+            addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
+        }
+    });
+}
+
 function persistFeedAndAddFeedAndShowFeedEntriesInGUI(retrievedFeed) {
     persistFeed(retrievedFeed);
-    addFeedAndShowFeedEntriesInGUI(retrievedFeed.feed.feedUrl);
+    addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
 }
 function persistFeed(retrievedFeed) {
     var feedInfo = {"title": retrievedFeed.feed.title,
@@ -112,9 +124,13 @@ function persistFeed(retrievedFeed) {
     }
 }
 
-function addFeedAndShowFeedEntriesInGUI(feedUrl) {
+function addNewSubscriptionInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
     addFeedInGUI(feedInfo.title, feedUrl);
+}
+
+
+function addSubscriptionItemsInGUI(feedInfo) {
 
     var feedElements = document.getElementById("feedEntriesList");
     feedElements.innerHTML = '';
@@ -152,6 +168,9 @@ function addFeedInGUI(feedTitle, feedUrl) {
             allFeeds[i].removeAttribute("class");
         }
         li["className"] = "active";
+//        showFeedEntriesInGUI(url);
+        
+//         var feedInfo = feedRecordsShownInGUI[feedUrl];
         showFeedEntriesInGUI(url);
     };
 }
