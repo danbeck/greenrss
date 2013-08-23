@@ -60,6 +60,13 @@
     color: white;
 }
 
+[data-role="footer"] nav ul li a.tapped{
+    background-color: #eb7f55;
+    color: white;
+}
+
+
+
 #feedsAbo, #feedEntries, #showArticlePage{
     position: fixed;
     overflow-y: auto;
@@ -77,6 +84,10 @@
 
 #feedsAboList li.active{
     background-color: #ea7140;
+}
+
+.tapped{
+    background-color: #eb7f55;
 }
 
 #feedsAboList li.active p{

@@ -54,6 +54,17 @@ function retrieveDefaultFeeds() {
 }
 function connectUIToHandler() {
 
+    var aLinks = document.getElementsByTagName('li');
+    for (var i = 0; i < aLinks.length; i++) {
+        aLinks[i].addEventListener('touchstart', function() {
+            aLinks[i].className += " tapped";
+        });
+        aLinks[i].addEventListener('touchend', function() {
+            aLinks[i].className = "";
+        });
+
+
+    }
     // On clicking the scan button, show the scan page
     UI.button('addFeedButton').click(function() {
         toggle_visibility("addfeeddialog");
@@ -119,7 +130,7 @@ function persistFeed(retrievedFeed) {
     var feedInfo = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
         "author": retrievedFeed.feed.author
-,"entries": retrievedFeed.feed.entries
+                , "entries": retrievedFeed.feed.entries
     };
 
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
@@ -162,7 +173,7 @@ function showFeedEntriesInGUI(feedUrl) {
     feedElements.innerHTML = '';
     for (var i = 0; i < feedInfo.entries.length; i++) {
         var feedEntry = feedInfo.entries[i];
-        addFeedEntriesToFragment(feedEntry,fragment);
+        addFeedEntriesToFragment(feedEntry, fragment);
     }
     feedElements.appendChild(fragment);
 }
