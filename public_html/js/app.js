@@ -119,7 +119,7 @@ function persistFeed(retrievedFeed) {
     var feedInfo = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
         "author": retrievedFeed.feed.author
-                , "entries": retrievedFeed.feed.entries
+,"entries": retrievedFeed.feed.entries
     };
 
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
@@ -137,7 +137,7 @@ function persistFeed(retrievedFeed) {
 
 function resetLocalStore() {
     try {
-        localStorage.setItem("feeds", '');
+        localStorage.removeItem("feeds");
     } catch (e) {
         if (e === QUOTA_EXCEEDED_ERR) {
             showError()("Error: Local Storage limit exceeds.");
