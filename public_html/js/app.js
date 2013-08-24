@@ -47,15 +47,15 @@ function onDeviceReady() {
 
         connectUIToHandler();
 
-//        if (feedsNotInLocalStorage()) {
-//            retrieveDefaultFeeds();
-//        } else {
-//            var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
-//
-//            for (var url in feedsLoadedFromLocalStorage) {
-//                retrieveFeedPersistAndShowSubscriptionInGUI(url);
-//            }
-//        }
+        if (feedsNotInLocalStorage()) {
+            retrieveDefaultFeeds();
+        } else {
+            var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
+
+            for (var url in feedsLoadedFromLocalStorage) {
+                retrieveFeedPersistAndShowSubscriptionInGUI(url);
+            }
+        }
     } catch (e) {
         showError(e.message);
     }
