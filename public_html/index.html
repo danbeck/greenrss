@@ -72,6 +72,22 @@
                             </li>
                         </ul>
                     </nav>
+
+                    <div id="configurePopover" class="popover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
+                        <ul class="list">
+                            <li id="extendConfigurationMenuItem"><a href="#">Extended Configuration</a></li>
+                            <li id="nightmode"><p>Night mode</p>
+                                <label>
+                                    <input type="checkbox" checked="" data-type="switch">
+                                    <span class="toggle">
+                                        <span class="toggle-handle"></span>
+                                        <span class="toggle-bg"></span>
+                                    </span>
+                                </label></li>
+                            <li id="refreshButton"><a href="#">Refresh now</a></li>
+                            <li id="deleteLocalStorage"><a href="#">Delete local-storage</a></li>
+                        </ul>
+                    </div>
                 </footer>
 
                 <div data-role="dialog" id="addfeeddialog">
@@ -88,22 +104,6 @@
                 <!--<div data-role="dialog" id="loading"><section><progress></progress></section></div>-->
 
 
-                <div id="configurePopover" class="popover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
-                    <ul class="list">
-                        <li id="extendConfigurationMenuItem"><a href="#">Extended Configuration</a></li>
-                        <li id="nightmode"><p>Night mode</p>
-                            <label>
-                                <input type="checkbox" checked="" data-type="switch">
-                                <span class="toggle">
-                                    <span class="toggle-handle"></span>
-                                    <span class="toggle-bg"></span>
-                                </span>
-                            </label></li>
-                        <li id="refreshButton"><a href="#">Refresh now</a></li>
-                        <li id="deleteLocalStorage"><a href="#">Delete local-storage</a></li>
-                    </ul>
-                </div>
-
                 <div data-role="page" id="extendedConfigurationPage">
                     <section data-role="list"> 
                         <header><h2>User Interface option</h2></header>
@@ -118,7 +118,7 @@
                                     </span>
                                 </label>
                             <li>
-                                <p> refresh rate in seconds: <input type="number" placeholder="60">
+                                <p>refresh rate in seconds: <input type="number" placeholder="60">
                                 </p>
                             </li>
                         </ul>
@@ -142,7 +142,7 @@
                                     <input type="password" disabled="" placeholder="password">
                                 </p>
                             </li><li>
-                                <p>save password and do not ask me again (Unsecure!)</p>
+                                <p>Save my password (Unsecure!)</p>
                                 <label>
                                     <input type="checkbox">
                                     <span></span>

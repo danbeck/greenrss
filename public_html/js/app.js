@@ -107,10 +107,16 @@ function connectUIToHandler() {
     UI.button('configureButton').click(function() {
 //       UI.pagestack.push('configurePopover',
 //                    {subtitle: 'Configuration'});
-//        UI.popover(this, "configurePopover").toggle();
+        UI.popover(this, "configurePopover").toggle();
+        var configurePopover = document.getElementById("configurePopover");
+        
+        var leftFloat = parseFloat(configurePopover.style.left);
+        leftFloat = leftFloat - 130;
+//        configurePopover.style.removeAttribute("left");
+        configurePopover.style.left = leftFloat +"px";
 //        
-            UI.pagestack.push('extendedConfigurationPage',
-                    {subtitle: 'Configuration'});
+//            UI.pagestack.push('extendedConfigurationPage',
+//                    {subtitle: 'Configuration'});
   
 //        var popover = document.getElementById("configurePopover");
 //        popover.className= " height: 30em; ;margin-bottom: 30px; top:280px; left: 1658.5px; " + popover.className;

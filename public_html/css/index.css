@@ -81,6 +81,9 @@
     top: 75px;
     bottom:70px;
 }
+#configurePopover .list{
+    max-height: 400px;
+}
 
 #showArticlePage{
     height:auto;
