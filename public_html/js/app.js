@@ -103,23 +103,19 @@ function connectUIToHandler() {
 //            UI.pagestack.push('reloadPage',
 //                    {subtitle: 'reload Page'});
     });
-    // On clicking the info button, show the info page
     UI.button('configureButton').click(function() {
-//       UI.pagestack.push('configurePopover',
-//                    {subtitle: 'Configuration'});
         UI.popover(this, "configurePopover").toggle();
+        var li = document.getElementById('extendConfigurationMenuItem');
+        li.onclick = function() {
+            UI.popover(this, "configurePopover").toggle();
+            UI.pagestack.push('extendedConfigurationPage',
+                    {subtitle: 'Configuration'});
+        };
         var configurePopover = document.getElementById("configurePopover");
-        
+
         var leftFloat = parseFloat(configurePopover.style.left);
         leftFloat = leftFloat - 130;
-//        configurePopover.style.removeAttribute("left");
-        configurePopover.style.left = leftFloat +"px";
-//        
-//            UI.pagestack.push('extendedConfigurationPage',
-//                    {subtitle: 'Configuration'});
-  
-//        var popover = document.getElementById("configurePopover");
-//        popover.className= " height: 30em; ;margin-bottom: 30px; top:280px; left: 1658.5px; " + popover.className;
+        configurePopover.style.left = leftFloat + "px";
     });
 }
 
@@ -249,6 +245,7 @@ function addFeedEntriesToFragment(feedEntry, fragment) {
     p1.innerHTML = feedEntry.title;
     p2.innerHTML = feedEntry.contentSnippet;
     li.appendChild(a);
+    
     fragment.appendChild(li);
 
     li.addEventListener('touchstart', function() {
