@@ -12,6 +12,26 @@ var UI = new UbuntuUI();
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
+
+function addGoogleAnalyticsToHTML() {
+
+    var html = 'var _gaq = _gaq || [];\
+  _gaq.push([\'_setAccount\', \'UA-4099512-3\']);\
+  _gaq.push([\'_trackPageview\']);\
+\
+  (function() {\
+    var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true; \
+    ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';\
+    var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);\
+  })();';
+
+    var ga = document.createElement('script');
+    ga.innerHTML = html;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+
+}
+
 /**
  * Entry point to the app. It initializes the Ubuntu SDK HTML5 theme
  * and connects events to handlers
@@ -85,12 +105,16 @@ function connectUIToHandler() {
     });
     // On clicking the info button, show the info page
     UI.button('configureButton').click(function() {
-//            UI.pagestack.push('configurePage',
+//       UI.pagestack.push('configurePopover',
 //                    {subtitle: 'Configuration'});
-        resetLocalStore();
+//        UI.popover(this, "configurePopover").toggle();
+//        
+            UI.pagestack.push('extendedConfigurationPage',
+                    {subtitle: 'Configuration'});
+  
+//        var popover = document.getElementById("configurePopover");
+//        popover.className= " height: 30em; ;margin-bottom: 30px; top:280px; left: 1658.5px; " + popover.className;
     });
-
-
 }
 
 

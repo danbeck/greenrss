@@ -65,9 +65,17 @@
     color: white;
 }
 
+[data-role="list"] header{
+    background-color: #ea7140;
+    color:white;
+}
 
+[data-role="list"] header h2{
+    background-color: #ea7140;
+    color:white;
+}
 
-#feedsAbo, #feedEntries, #showArticlePage{
+#feedsAbo, #feedEntries, #showArticlePage, #extendedConfigurationPage{
     position: fixed;
     overflow-y: auto;
     top: 75px;

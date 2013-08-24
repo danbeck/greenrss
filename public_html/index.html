@@ -74,12 +74,6 @@
                     </nav>
                 </footer>
 
-                <div data-role="page" id="configurePage">
-                    <ul data-role="list">
-                        <li><a href="#">test1</a></li>
-                        <li><a href="#">test2</a></li>
-                    </ul>
-                </div>
                 <div data-role="dialog" id="addfeeddialog">
                     <section>
                         <h1>Add a new feed</h1>
@@ -93,18 +87,73 @@
                 </div>
                 <!--<div data-role="dialog" id="loading"><section><progress></progress></section></div>-->
 
-                <div data-role="page" id="reloadPage">
+
+                <div id="configurePopover" class="popover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
+                    <ul class="list">
+                        <li id="extendConfigurationMenuItem"><a href="#">Extended Configuration</a></li>
+                        <li id="nightmode"><p>Night mode</p>
+                            <label>
+                                <input type="checkbox" checked="" data-type="switch">
+                                <span class="toggle">
+                                    <span class="toggle-handle"></span>
+                                    <span class="toggle-bg"></span>
+                                </span>
+                            </label></li>
+                        <li id="refreshButton"><a href="#">Refresh now</a></li>
+                        <li id="deleteLocalStorage"><a href="#">Delete local-storage</a></li>
+                    </ul>
                 </div>
 
-                <div id="addFeedsPage" class="popover" data-gravity="s" style="margin-top: 720px; margin-right: 450px;">
-                    <ul class="list">
-                        <li><a href="#">Item1</a></li>
-                        <li class="active"><a href="#">Item2</a></li>
-                        <li><a href="#">Item3</a></li>
-                        <li><a href="#">Item4</a></li>
-                        <li><a href="#">Item5</a></li>
-                        <li><a href="#">Item6</a></li>
-                    </ul>
+                <div data-role="page" id="extendedConfigurationPage">
+                    <section data-role="list"> 
+                        <header><h2>User Interface option</h2></header>
+                        <ul data-role="listview">
+                            <li>
+                                <p>Activate night mode</p>
+                                <label>
+                                    <input type="checkbox" checked="" data-type="switch">
+                                    <span class="toggle">
+                                        <span class="toggle-handle"></span>
+                                        <span class="toggle-bg"></span>
+                                    </span>
+                                </label>
+                            <li>
+                                <p> refresh rate in seconds: <input type="number" placeholder="60">
+                                </p>
+                            </li>
+                        </ul>
+                        <header><h2>Feed Synchronization</h2></header>
+                        <!--<aside><p>test</p></aside>-->
+                        <ul data-role="listview">
+                            <li>
+                                <p>I want to synchronize my feeds with "theoldreader"</p>
+                                <label>
+                                    <input type="checkbox" checked="" data-type="switch">
+                                    <span class="toggle">
+                                        <span class="toggle-handle"></span>
+                                        <span class="toggle-bg"></span>
+                                    </span>
+                                </label>
+                            <li>
+                                <p>username: <input type="text" placeholder="username">
+                                </p>
+                            </li>
+                            <li><p>password: 
+                                    <input type="password" disabled="" placeholder="password">
+                                </p>
+                            </li><li>
+                                <p>save password and do not ask me again (Unsecure!)</p>
+                                <label>
+                                    <input type="checkbox">
+                                    <span></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </section>
+                    <section data-role="list" id="feedEntries"> 
+                        <ul id="feedEntriesList">
+                        </ul>
+                    </section>
                 </div>
 
 
