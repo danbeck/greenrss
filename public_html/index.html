@@ -21,7 +21,7 @@
         <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/list.js"></script>
 
         <!-- Cordova API script -->
-        <script src="/usr/share/cordova-ubuntu-2.8/www/cordova-2.8.js"></script>
+        <!--<script src="/usr/share/cordova-ubuntu-2.8/www/cordova-2.8.js"></script>-->
 
         <script src="https://www.google.com/jsapi"></script>
 
@@ -106,7 +106,7 @@
 
                 <div data-role="page" id="extendedConfigurationPage">
                     <section data-role="list"> 
-                        <header><h2>User Interface option</h2></header>
+                        <header><h1>User Interface option</h1></header>
                         <ul data-role="listview">
                             <li>
                                 <p>Activate night mode</p>
@@ -121,30 +121,36 @@
                                 <p>refresh rate in seconds: <input type="number" placeholder="60">
                                 </p>
                             </li>
+                            <li>
+                                <a>
+                                    <p>Organize feeds</p>
+                                </a>
+                            </li>
                         </ul>
-                        <header><h2>Feed Synchronization</h2></header>
+                        <header><h1>Feed Synchronization</h1></header>
                         <!--<aside><p>test</p></aside>-->
                         <ul data-role="listview">
+                            <li><a>
+                                    <p>I want to synchronize my feeds with "theoldreader"</p>
+                                    <label>
+                                        <input id="theoldreader_use_sync" type="checkbox" checked="" data-type="switch">
+                                        <span class="toggle">
+                                            <span class="toggle-handle"></span>
+                                            <span class="toggle-bg"></span>
+                                        </span>
+                                    </label></a>
                             <li>
-                                <p>I want to synchronize my feeds with "theoldreader"</p>
-                                <label>
-                                    <input type="checkbox" checked="" data-type="switch">
-                                    <span class="toggle">
-                                        <span class="toggle-handle"></span>
-                                        <span class="toggle-bg"></span>
-                                    </span>
-                                </label>
-                            <li>
-                                <p>username: <input type="text" placeholder="username">
+                                <p>username: <input type="text" id="theoldreader_username" placeholder="username">
                                 </p>
                             </li>
                             <li><p>password: 
-                                    <input id="theoldreader_username" type="password" disabled="" placeholder="password">
+                                    <!--<input id="theoldreader_username" type="password"  disabled="" placeholder="password">-->
+                                    <input id="theoldreader_password" type="password"  placeholder="password">
                                 </p>
                             </li><li>
                                 <p>Save my password (Unsecure!)</p>
                                 <label>
-                                    <input id="theoldreader_password" type="checkbox">
+                                    <input id="theoldreader_save_password" type="checkbox">
                                     <span></span>
                                 </label>
                             </li>

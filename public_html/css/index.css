@@ -65,14 +65,14 @@
     color: white;
 }
 
-[data-role="list"] header{
-    background-color: #ea7140;
-    color:white;
-}
+/*[data-role="list"] header{*/
+    /*background-color: ;*/
+/*}*/
 
-[data-role="list"] header h2{
-    background-color: #ea7140;
-    color:white;
+[data-role="list"] header h1{
+    /*background-color: #ea7140;*/
+    color:#ea7140;
+    /*color:white;*/
 }
 
 #feedsAbo, #feedEntries, #showArticlePage, #extendedConfigurationPage{

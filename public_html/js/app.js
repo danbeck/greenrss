@@ -12,6 +12,17 @@ var UI = new UbuntuUI();
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
+my.ramsamsam.Pages = {
+    CONFIGURATION_PAGE : "configuration page",
+    MAIN_PAGE : "main page",
+    DIRECTORY_ORGANIZATION_PAGE : "directory  page"
+};
+
+var currentPage = my.ramsamsam.Pages.MAIN_PAGE;
+var theoldreader_username;
+var theoldreader_password;
+var useTheOldReader;
+var lastPageWasConfigurationPage = false;
 
 function addGoogleAnalyticsToHTML() {
 
@@ -37,8 +48,7 @@ function addGoogleAnalyticsToHTML() {
  * and connects events to handlers
  */
 function onDeviceReady() {
-    try {
-
+ 
         // Initialize the Ubuntu SDK HTML5 theme
         UI.init();
         // Set up the app by pushing the main view
@@ -56,9 +66,7 @@ function onDeviceReady() {
                 retrieveFeedPersistAndShowSubscriptionInGUI(url);
             }
         }
-    } catch (e) {
-        showError(e.message);
-    }
+ 
 }
 
 function loadFeedsFromLocalStorage() {
@@ -73,6 +81,10 @@ function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
 }
 function connectUIToHandler() {
+
+    var backButton = document.querySelector("li a[data-role=\"back\"]");
+
+    backButton.addEventListener("click", verifyAndSaveOldReaderAccessData);
 
     var aLinks = document.getElementsByTagName('li');
     for (var i = 0; i < aLinks.length; i++) {
@@ -110,15 +122,47 @@ function connectUIToHandler() {
             UI.popover(this, "configurePopover").toggle();
             UI.pagestack.push('extendedConfigurationPage',
                     {subtitle: 'Configuration'});
+            var useTheOldReader = document.getElementById("theoldreader_use_sync");
+
+            var theoldreaderUsername = document.getElementById("theoldreader_username");
+
+            theoldreaderUsername.addEventListener("onkeyup" , function() {
+                theoldreader_username = theoldreaderUsername.value;
+            });
+            var theoldreaderPassword = document.getElementById("theoldreader_password");
+            theoldreaderUsername.addEventListener("keyup",function() {
+                theoldreader_password = theoldreaderPassword.value;
+            });
         };
+
+
+
         var configurePopover = document.getElementById("configurePopover");
 
         var leftFloat = parseFloat(configurePopover.style.left);
         leftFloat = leftFloat - 130;
         configurePopover.style.left = leftFloat + "px";
     });
+//    var backButton = document.querySelector("data-role['back']");
 }
 
+function verifyAndSaveOldReaderAccessData() {
+    if (lastPageWasConfigurationPage) {
+        checkConfigurationPage();
+    }
+    var theoldreaderStorage = localStorage["theoldReader"];
+    theoldreaderStorage["username"] = theoldreader_username;
+    theoldreaderStorage["password"] = theoldreader_password;
+}
+
+function checkConfigurationPage() {
+    if (useTheOldReader) {
+        if (theoldreader_username === undefined)
+            ;
+        if (theoldreader_password === undefined)
+            ;
+    }
+}
 
 function retrieveFeedPersistAndShowInGUI(feedURL) {
     var feed = new google.feeds.Feed(feedURL);
@@ -245,7 +289,7 @@ function addFeedEntriesToFragment(feedEntry, fragment) {
     p1.innerHTML = feedEntry.title;
     p2.innerHTML = feedEntry.contentSnippet;
     li.appendChild(a);
-    
+
     fragment.appendChild(li);
 
     li.addEventListener('touchstart', function() {
