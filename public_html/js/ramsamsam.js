@@ -14,6 +14,7 @@ var gui;
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
+var configuration = {};
 var theoldreader_username;
 var theoldreader_password;
 var useTheOldReader;
@@ -43,10 +44,14 @@ function addGoogleAnalyticsToHTML() {
  */
 function onDeviceReady() {
     gui = new Gui();
+    gui.onConfigurationChanged = function(config) {
+        configuration = config;
+    };
+//    gui.startGUI();
     // Initialize the Ubuntu SDK HTML5 theme
-    UI.init();
-    // Set up the app by pushing the main view
-    UI.pagestack.push("main-page");
+//    UI.init();
+//    // Set up the app by pushing the main view
+//    UI.pagestack.push("main-page");
     /***** Connecting events *****/
 
     connectUIToHandler();
@@ -76,40 +81,40 @@ function retrieveDefaultFeeds() {
 }
 function connectUIToHandler() {
 
-    var backButton = document.querySelector("li a[data-role=\"back\"]");
-
-    backButton.addEventListener("click", verifyAndSaveOldReaderAccessData);
-
-    var aLinks = document.getElementsByTagName('li');
-    for (var i = 0; i < aLinks.length; i++) {
-        aLinks[i].addEventListener('touchstart', function() {
-            aLinks[i].className += " tapped";
-        });
-        aLinks[i].addEventListener('touchend', function() {
-            aLinks[i].className = "";
-        });
-
-
-    }
-    // On clicking the scan button, show the scan page
-    UI.button('addFeedButton').click(function() {
-        toggle_visibility("addfeeddialog");
-    });
-//        var addFeedCancel = $("addfeedcancel");
-    UI.button('addfeedcancel').click(function(e) {
-        hide("addfeeddialog");
-    });
-    UI.button('addfeedsuccess').click(function(e) {
-        var newRssFeed = $("rssFeed").value;
-        retrieveFeedPersistAndShowInGUI(newRssFeed);
-        hide("addfeeddialog");
-    });
-    // On clicking the history button, show the history page
-    UI.button('reloadFeedsButton').click(function() {
-//            UI.pagestack.push('reloadPage',
-//                    {subtitle: 'reload Page'});
-    });
-    gui.openConfigurePage();
+//    var backButton = document.querySelector("li a[data-role=\"back\"]");
+//
+//    backButton.addEventListener("click", verifyAndSaveOldReaderAccessData);
+//
+//    var aLinks = document.getElementsByTagName('li');
+//    for (var i = 0; i < aLinks.length; i++) {
+//        aLinks[i].addEventListener('touchstart', function() {
+//            aLinks[i].className += " tapped";
+//        });
+//        aLinks[i].addEventListener('touchend', function() {
+//            aLinks[i].className = "";
+//        });
+//
+//
+//    }
+//    // On clicking the scan button, show the scan page
+//    UI.button('addFeedButton').click(function() {
+//        toggle_visibility("addfeeddialog");
+//    });
+////        var addFeedCancel = $("addfeedcancel");
+//    UI.button('addfeedcancel').click(function(e) {
+//        hide("addfeeddialog");
+//    });
+//    UI.button('addfeedsuccess').click(function(e) {
+//        var newRssFeed = $("rssFeed").value;
+//        retrieveFeedPersistAndShowInGUI(newRssFeed);
+//        hide("addfeeddialog");
+//    });
+//    // On clicking the history button, show the history page
+//    UI.button('reloadFeedsButton').click(function() {
+////            UI.pagestack.push('reloadPage',
+////                    {subtitle: 'reload Page'});
+//    });
+//    gui.openConfigurePage();
 }
 
 function verifyAndSaveOldReaderAccessData() {
@@ -217,7 +222,7 @@ function addFeedInGUI(feedTitle, feedUrl) {
     var pa = createP(feedTitle);
     var li = createLi(pa);
     li["data-rss-link"] = feedUrl;
-    
+
     $("feedsAboList").appendChild(li);
 
     li.addEventListener('touchstart', function() {
