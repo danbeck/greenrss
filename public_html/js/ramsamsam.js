@@ -9,16 +9,11 @@ if (cordovaUsed()) {
 }
 
 var UI = new UbuntuUI();
+var gui;
+
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
-my.ramsamsam.Pages = {
-    CONFIGURATION_PAGE : "configuration page",
-    MAIN_PAGE : "main page",
-    DIRECTORY_ORGANIZATION_PAGE : "directory  page"
-};
-
-var currentPage = my.ramsamsam.Pages.MAIN_PAGE;
 var theoldreader_username;
 var theoldreader_password;
 var useTheOldReader;
@@ -48,25 +43,25 @@ function addGoogleAnalyticsToHTML() {
  * and connects events to handlers
  */
 function onDeviceReady() {
- 
-        // Initialize the Ubuntu SDK HTML5 theme
-        UI.init();
-        // Set up the app by pushing the main view
-        UI.pagestack.push("main-page");
-        /***** Connecting events *****/
+    gui = new Gui();
+    // Initialize the Ubuntu SDK HTML5 theme
+    UI.init();
+    // Set up the app by pushing the main view
+    UI.pagestack.push("main-page");
+    /***** Connecting events *****/
 
-        connectUIToHandler();
+    connectUIToHandler();
 
-        if (feedsNotInLocalStorage()) {
-            retrieveDefaultFeeds();
-        } else {
-            var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
+    if (feedsNotInLocalStorage()) {
+        retrieveDefaultFeeds();
+    } else {
+        var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
 
-            for (var url in feedsLoadedFromLocalStorage) {
-                retrieveFeedPersistAndShowSubscriptionInGUI(url);
-            }
+        for (var url in feedsLoadedFromLocalStorage) {
+            retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
- 
+    }
+
 }
 
 function loadFeedsFromLocalStorage() {
@@ -115,34 +110,35 @@ function connectUIToHandler() {
 //            UI.pagestack.push('reloadPage',
 //                    {subtitle: 'reload Page'});
     });
-    UI.button('configureButton').click(function() {
-        UI.popover(this, "configurePopover").toggle();
-        var li = document.getElementById('extendConfigurationMenuItem');
-        li.onclick = function() {
-            UI.popover(this, "configurePopover").toggle();
-            UI.pagestack.push('extendedConfigurationPage',
-                    {subtitle: 'Configuration'});
-            var useTheOldReader = document.getElementById("theoldreader_use_sync");
-
-            var theoldreaderUsername = document.getElementById("theoldreader_username");
-
-            theoldreaderUsername.addEventListener("onkeyup" , function() {
-                theoldreader_username = theoldreaderUsername.value;
-            });
-            var theoldreaderPassword = document.getElementById("theoldreader_password");
-            theoldreaderUsername.addEventListener("keyup",function() {
-                theoldreader_password = theoldreaderPassword.value;
-            });
-        };
-
-
-
-        var configurePopover = document.getElementById("configurePopover");
-
-        var leftFloat = parseFloat(configurePopover.style.left);
-        leftFloat = leftFloat - 130;
-        configurePopover.style.left = leftFloat + "px";
-    });
+    gui.openConfigurePage();
+//    UI.button('configureButton').click(function() {
+//        UI.popover(this, "configurePopover").toggle();
+//        var li = document.getElementById('extendConfigurationMenuItem');
+//        li.onclick = function() {
+//            UI.popover(this, "configurePopover").toggle();
+//            UI.pagestack.push('extendedConfigurationPage',
+//                    {subtitle: 'Configuration'});
+//            var useTheOldReader = document.getElementById("theoldreader_use_sync");
+//
+//            var theoldreaderUsername = document.getElementById("theoldreader_username");
+//
+//            theoldreaderUsername.addEventListener("onkeyup" , function() {
+//                theoldreader_username = theoldreaderUsername.value;
+//            });
+//            var theoldreaderPassword = document.getElementById("theoldreader_password");
+//            theoldreaderUsername.addEventListener("keyup",function() {
+//                theoldreader_password = theoldreaderPassword.value;
+//            });
+//        };
+//
+//
+//
+//        var configurePopover = document.getElementById("configurePopover");
+//
+//        var leftFloat = parseFloat(configurePopover.style.left);
+//        leftFloat = leftFloat - 130;
+//        configurePopover.style.left = leftFloat + "px";
+//    });
 //    var backButton = document.querySelector("data-role['back']");
 }
 
