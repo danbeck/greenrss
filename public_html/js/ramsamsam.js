@@ -49,12 +49,6 @@ function onDeviceReady() {
     };
     
     gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
-//    gui.startGUI();
-    // Initialize the Ubuntu SDK HTML5 theme
-//    UI.init();
-//    // Set up the app by pushing the main view
-//    UI.pagestack.push("main-page");
-    /***** Connecting events *****/
 
     connectUIToHandler();
 
@@ -83,10 +77,6 @@ function retrieveDefaultFeeds() {
 }
 function connectUIToHandler() {
 
-//    var backButton = document.querySelector("li a[data-role=\"back\"]");
-//
-//    backButton.addEventListener("click", verifyAndSaveOldReaderAccessData);
-//
 //    var aLinks = document.getElementsByTagName('li');
 //    for (var i = 0; i < aLinks.length; i++) {
 //        aLinks[i].addEventListener('touchstart', function() {
@@ -95,13 +85,7 @@ function connectUIToHandler() {
 //        aLinks[i].addEventListener('touchend', function() {
 //            aLinks[i].className = "";
 //        });
-//
-//
-//    // On clicking the history button, show the history page
-//    UI.button('reloadFeedsButton').click(function() {
-////            UI.pagestack.push('reloadPage',
-////                    {subtitle: 'reload Page'});
-//    });
+
 }
 
 function verifyAndSaveOldReaderAccessData() {
@@ -111,15 +95,6 @@ function verifyAndSaveOldReaderAccessData() {
     var theoldreaderStorage = localStorage["theoldReader"];
     theoldreaderStorage["username"] = theoldreader_username;
     theoldreaderStorage["password"] = theoldreader_password;
-}
-
-function checkConfigurationPage() {
-    if (useTheOldReader) {
-        if (theoldreader_username === undefined)
-            ;
-        if (theoldreader_password === undefined)
-            ;
-    }
 }
 
 function retrieveFeedPersistAndShowInGUI(feedURL) {
@@ -205,6 +180,7 @@ function showFeedEntriesInGUI(feedUrl) {
     }
     feedElements.appendChild(fragment);
 }
+
 function addFeedInGUI(feedTitle, feedUrl) {
     var pa = createP(feedTitle);
     var li = createLi(pa);
