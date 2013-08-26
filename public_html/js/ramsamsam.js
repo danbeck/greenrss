@@ -97,26 +97,11 @@ function connectUIToHandler() {
 //        });
 //
 //
-//    }
-//    // On clicking the scan button, show the scan page
-//    UI.button('addFeedButton').click(function() {
-//        toggle_visibility("addfeeddialog");
-//    });
-////        var addFeedCancel = $("addfeedcancel");
-//    UI.button('addfeedcancel').click(function(e) {
-//        hide("addfeeddialog");
-//    });
-//    UI.button('addfeedsuccess').click(function(e) {
-//        var newRssFeed = $("rssFeed").value;
-//        retrieveFeedPersistAndShowInGUI(newRssFeed);
-//        hide("addfeeddialog");
-//    });
 //    // On clicking the history button, show the history page
 //    UI.button('reloadFeedsButton').click(function() {
 ////            UI.pagestack.push('reloadPage',
 ////                    {subtitle: 'reload Page'});
 //    });
-//    gui.openConfigurePage();
 }
 
 function verifyAndSaveOldReaderAccessData() {

@@ -14,10 +14,6 @@ function Gui() {
     // On clicking the scan button, show the scan page
     this.UI.button('addFeedButton').click(function() {
         show("addfeeddialog");
-//         var feedSubscriptionURL = $("rssFeed").value;
-//        retrieveFeedPersistAndShowInGUI(newRssFeed);
-//        hide("addfeeddialog");
-//        that.onFeedAdded(feedSubscriptionURL);
 
     });
 
@@ -27,14 +23,9 @@ function Gui() {
         hide("addfeeddialog");
     });
 
-
-//    backButton.addEventListener("click", ope);
-
-
-//        UI.popover(this, "configurePopover").toggle();
-//        var li = document.getElementById('extendConfigurationMenuItem');
-
-
+    UI.button('addfeedcancel').click(function() {
+        hide("addfeeddialog");
+    });
 }
 
 Gui.prototype.onConfigurationChanged = function() {
