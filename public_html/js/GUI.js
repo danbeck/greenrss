@@ -10,10 +10,21 @@ function Gui() {
     this.UI.button('configureButton').click(function() {
         that.openConfigurePage(this, that.onConfigurationChanged);
     });
-    
-       // On clicking the scan button, show the scan page
+
+    // On clicking the scan button, show the scan page
     this.UI.button('addFeedButton').click(function() {
-        toggle_visibility("addfeeddialog");
+        show("addfeeddialog");
+//         var feedSubscriptionURL = $("rssFeed").value;
+//        retrieveFeedPersistAndShowInGUI(newRssFeed);
+//        hide("addfeeddialog");
+//        that.onFeedAdded(feedSubscriptionURL);
+
+    });
+
+    this.UI.button('addfeedsuccess').click(function() {
+        var feedSubscriptionURL = $("rssFeed").value;
+        that.onFeedAdded(feedSubscriptionURL);
+        hide("addfeeddialog");
     });
 
 
@@ -29,6 +40,8 @@ function Gui() {
 Gui.prototype.onConfigurationChanged = function() {
 };
 
+Gui.prototype.onFeedAdded = function() {
+};
 Gui.prototype.reload = function() {
 };
 Gui.prototype.openConfigurePage = function(openConfigButton) {

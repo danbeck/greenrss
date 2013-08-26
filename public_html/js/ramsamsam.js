@@ -47,6 +47,8 @@ function onDeviceReady() {
     gui.onConfigurationChanged = function(config) {
         configuration = config;
     };
+    
+    gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
 //    gui.startGUI();
     // Initialize the Ubuntu SDK HTML5 theme
 //    UI.init();
