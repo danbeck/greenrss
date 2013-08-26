@@ -1,11 +1,41 @@
-function Gui() {
-    this.UI = new UbuntuUI();
-    this.UI.init();
-
-    // Set up the app by pushing the main view
-    this.UI.pagestack.push("main-page");
-
+function $(id) {
+    return document.getElementById(id);
 }
+
+
+
+function show(id) {
+    $(id).style.display = 'block';
+}
+
+function hide(id) {
+    $(id).style.display = 'none';
+}
+
+function toggle_visibility(id) {
+    var e = $(id);
+    if (e.style.display === 'block')
+        e.style.display = 'none';
+    else
+        e.style.display = 'block';
+}
+
+
+function linkOpenInNewWindow(href, innerHTML) {
+    var a = link(href, innerHTML);
+    a["target"] = "_blank";
+    return a;
+}
+
+function link(href, innerHTML) {
+    var a = document.createElement("a");
+    a["href"] = href;
+    a.innerHTML = innerHTML;
+    return a;
+}
+
+
+
 
 Gui.prototype.reload = function() {
 };

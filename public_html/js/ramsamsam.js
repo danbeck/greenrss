@@ -111,35 +111,6 @@ function connectUIToHandler() {
 //                    {subtitle: 'reload Page'});
     });
     gui.openConfigurePage();
-//    UI.button('configureButton').click(function() {
-//        UI.popover(this, "configurePopover").toggle();
-//        var li = document.getElementById('extendConfigurationMenuItem');
-//        li.onclick = function() {
-//            UI.popover(this, "configurePopover").toggle();
-//            UI.pagestack.push('extendedConfigurationPage',
-//                    {subtitle: 'Configuration'});
-//            var useTheOldReader = document.getElementById("theoldreader_use_sync");
-//
-//            var theoldreaderUsername = document.getElementById("theoldreader_username");
-//
-//            theoldreaderUsername.addEventListener("onkeyup" , function() {
-//                theoldreader_username = theoldreaderUsername.value;
-//            });
-//            var theoldreaderPassword = document.getElementById("theoldreader_password");
-//            theoldreaderUsername.addEventListener("keyup",function() {
-//                theoldreader_password = theoldreaderPassword.value;
-//            });
-//        };
-//
-//
-//
-//        var configurePopover = document.getElementById("configurePopover");
-//
-//        var leftFloat = parseFloat(configurePopover.style.left);
-//        leftFloat = leftFloat - 130;
-//        configurePopover.style.left = leftFloat + "px";
-//    });
-//    var backButton = document.querySelector("data-role['back']");
 }
 
 function verifyAndSaveOldReaderAccessData() {
@@ -315,49 +286,7 @@ function showArticle(feedEntry, li) {
     showArticlePage.appendChild(contentBlock);
     UI.pagestack.push('showArticlePage',
             {subtitle: 'show Article'});
-
-//             var feed = new google.feeds.Feed(feedURL);
-//    feed.setNumEntries(100);
-//    feed.load(function(retrievedFeed) {
-//        if (!retrievedFeed.error) {
-//            persistFeed(retrievedFeed);
-//            addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
-//        }
-//    });
-
 }
-function createNewWindowLinkElement(href, innerHTML) {
-    var a = createLinkElement(href, innerHTML);
-    a["target"] = "_blank";
-    return a;
-}
-
-function createLinkElement(href, innerHTML) {
-    var a = document.createElement("a");
-    a["href"] = href;
-    a.innerHTML = innerHTML;
-    return a;
-}
-
-function toggle_visibility(id) {
-    var e = document.getElementById(id);
-    if (e.style.display === 'block')
-        e.style.display = 'none';
-    else
-        e.style.display = 'block';
-}
-
-function show(id) {
-    var e = document.getElementById(id);
-    e.style.display = 'block';
-}
-
-function hide(id) {
-    var e = document.getElementById(id);
-    e.style.display = 'none';
-}
-
-
 function showAlert(message) {
     if (cordovaUsed())
         navigator.notification.alert(message);
