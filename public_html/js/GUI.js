@@ -144,11 +144,11 @@ Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
 
 
         li.onclick = function() {
-            showArticle(feedEntry, li, that);
+            showArticle(feedEntry, that);
         };
     }
 
-    function showArticle(feedEntry, li, that) {
+    function showArticle(feedEntry, that) {
         var articleTitle = $("articleTitle");
         articleTitle.innerHTML = '';
         var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
