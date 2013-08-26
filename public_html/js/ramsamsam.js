@@ -31,8 +31,7 @@ function addGoogleAnalyticsToHTML() {
     var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);\
   })();';
 
-    var ga = document.createElement('script');
-    ga.innerHTML = html;
+    var ga = script(html);
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 
@@ -275,7 +274,7 @@ function addFeedEntriesToFragment(feedEntry, fragment) {
 function showArticle(feedEntry, li) {
     var articleTitle = document.getElementById("articleTitle");
     articleTitle.innerHTML = '';
-    var titleLink = createNewWindowLinkElement(feedEntry.link, feedEntry.title);
+    var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
     articleTitle.appendChild(titleLink);
 
     var contentBlock = document.getElementById("articleContent");
