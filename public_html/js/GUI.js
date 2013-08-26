@@ -80,3 +80,88 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     return that.onConfigurationChanged(returnValue);
 };
+
+Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
+    var pa = createP(feedTitle);
+    var li = createLi(pa);
+    li["data-rss-link"] = feedUrl;
+
+    $("feedsAboList").appendChild(li);
+
+    li.addEventListener('touchstart', function() {
+        li.className += " tapped";
+    });
+    li.addEventListener('touchend', function() {
+        li.className = "";
+    });
+
+    var that = this;
+
+    li.onclick = function showFeedEntry() {
+        var clickedFeedUrl = li["data-rss-link"];
+
+        var feedsAboListElement = $("feedsAboList");
+        var allFeeds = feedsAboListElement.childNodes;
+        for (var i = 0; i < allFeeds.length; i++) {
+            allFeeds[i].removeAttribute("class");
+        }
+        li["className"] = "active";
+        showFeedEntriesInGUI(clickedFeedUrl, feedRecord, that);
+    };
+
+    function showFeedEntriesInGUI(clickedFeedUrl, feedRecord, that) {
+        var feedInfo = feedRecord[clickedFeedUrl];
+
+        var feedElements = $("feedEntriesList");
+        var fragment = document.createDocumentFragment();
+
+        feedElements.innerHTML = '';
+        for (var i = 0; i < feedInfo.entries.length; i++) {
+            var feedEntry = feedInfo.entries[i];
+            addFeedEntriesToFragment(feedEntry, fragment, that);
+        }
+        feedElements.appendChild(fragment);
+    }
+
+
+    function addFeedEntriesToFragment(feedEntry, fragment, that) {
+        var a = document.createElement("a");
+        var p1 = createP(feedEntry.title);
+        var p2 = createP(feedEntry.contentSnippet);
+        p1["data-article"] = feedEntry;
+        a.appendChild(p1);
+        a.appendChild(p2);
+        var li = createLi(a);
+
+        fragment.appendChild(li);
+
+        li.addEventListener('touchstart', function() {
+            li.className += " tapped";
+        });
+        li.addEventListener('touchend', function() {
+            li.className = "";
+        });
+
+
+        li.onclick = function() {
+            showArticle(feedEntry, li, that);
+        };
+    }
+
+    function showArticle(feedEntry, li, that) {
+        var articleTitle = $("articleTitle");
+        articleTitle.innerHTML = '';
+        var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
+        articleTitle.appendChild(titleLink);
+
+        var contentBlock = $("articleContent");
+        contentBlock.innerHTML = feedEntry.content;
+        var showArticlePage = $("showArticlePage");
+        showArticlePage.innerHTML = "";
+        showArticlePage.appendChild(articleTitle);
+        showArticlePage.appendChild(contentBlock);
+        that.UI.pagestack.push('showArticlePage',
+                {subtitle: 'show Article'});
+    }
+
+};

@@ -47,7 +47,7 @@ function onDeviceReady() {
     gui.onConfigurationChanged = function(config) {
         configuration = config;
     };
-    
+
     gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
 
     connectUIToHandler();
@@ -127,13 +127,12 @@ function persistFeed(retrievedFeed) {
     var feedInfoForStorage = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
         "author": retrievedFeed.feed.author
-//,"entries": retrievedFeed.feed.entries
     };
 
     var feedInfo = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
-        "author": retrievedFeed.feed.author
-                , "entries": retrievedFeed.feed.entries
+        "author": retrievedFeed.feed.author,
+        "entries": retrievedFeed.feed.entries
     };
 
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
@@ -163,92 +162,9 @@ function resetLocalStore() {
 
 function addNewSubscriptionInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
-    addFeedInGUI(feedInfo.title, feedUrl);
+    gui.addFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
 }
 
-
-function showFeedEntriesInGUI(feedUrl) {
-    var feedInfo = feedRecordsShownInGUI[feedUrl];
-
-    var feedElements = $("feedEntriesList");
-    var fragment = document.createDocumentFragment();
-
-    feedElements.innerHTML = '';
-    for (var i = 0; i < feedInfo.entries.length; i++) {
-        var feedEntry = feedInfo.entries[i];
-        addFeedEntriesToFragment(feedEntry, fragment);
-    }
-    feedElements.appendChild(fragment);
-}
-
-function addFeedInGUI(feedTitle, feedUrl) {
-    var pa = createP(feedTitle);
-    var li = createLi(pa);
-    li["data-rss-link"] = feedUrl;
-
-    $("feedsAboList").appendChild(li);
-
-    li.addEventListener('touchstart', function() {
-        li.className += " tapped";
-    });
-    li.addEventListener('touchend', function() {
-        li.className = "";
-    });
-
-
-    li.onclick = function showFeedEntry() {
-        var url = li["data-rss-link"];
-
-        var feedsAboListElement = $("feedsAboList");
-        var allFeeds = feedsAboListElement.childNodes;
-        for (var i = 0; i < allFeeds.length; i++) {
-            allFeeds[i].removeAttribute("class");
-        }
-        li["className"] = "active";
-        showFeedEntriesInGUI(url);
-    };
-}
-
-
-function addFeedEntriesToFragment(feedEntry, fragment) {
-    var a = document.createElement("a");
-    var p1 = createP(feedEntry.title);
-    var p2 = createP(feedEntry.contentSnippet);
-    p1["data-article"] = feedEntry;
-    a.appendChild(p1);
-    a.appendChild(p2);
-    var li = createLi(a);
-
-    fragment.appendChild(li);
-
-    li.addEventListener('touchstart', function() {
-        li.className += " tapped";
-    });
-    li.addEventListener('touchend', function() {
-        li.className = "";
-    });
-
-
-    li.onclick = function() {
-        showArticle(feedEntry, li);
-    };
-}
-
-function showArticle(feedEntry, li) {
-    var articleTitle = $("articleTitle");
-    articleTitle.innerHTML = '';
-    var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
-    articleTitle.appendChild(titleLink);
-
-    var contentBlock = $("articleContent");
-    contentBlock.innerHTML = feedEntry.content;
-    var showArticlePage = $("showArticlePage");
-    showArticlePage.innerHTML = "";
-    showArticlePage.appendChild(articleTitle);
-    showArticlePage.appendChild(contentBlock);
-    UI.pagestack.push('showArticlePage',
-            {subtitle: 'show Article'});
-}
 function showAlert(message) {
     if (cordovaUsed())
         navigator.notification.alert(message);
