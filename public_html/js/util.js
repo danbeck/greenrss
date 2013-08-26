@@ -2,8 +2,6 @@ function $(id) {
     return document.getElementById(id);
 }
 
-
-
 function show(id) {
     $(id).style.display = 'block';
 }
@@ -38,4 +36,16 @@ function script(innerHtml) {
     var script = document.createElement('script');
     script.innerHTML = innerHtml;
     return script;
+}
+
+function createLi(element) {
+    var li = document.createElement("li");
+    li.appendChild(element);
+    return li;
+}
+
+function createP(innnerHTML) {
+    var p = document.createElement("p");
+    p.innerHTML = innnerHTML;
+    return p;
 }

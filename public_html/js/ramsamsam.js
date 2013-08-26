@@ -214,13 +214,11 @@ function showFeedEntriesInGUI(feedUrl) {
     feedElements.appendChild(fragment);
 }
 function addFeedInGUI(feedTitle, feedUrl) {
-    var p = document.createElement("p");
-    p.innerHTML = feedTitle;
-    var li = document.createElement("li");
+    var pa = createP(feedTitle);
+    var li = createLi(pa);
     li["data-rss-link"] = feedUrl;
-    li.appendChild(p);
-    var feedAbos = $("feedsAboList");
-    feedAbos.appendChild(li);
+    
+    $("feedsAboList").appendChild(li);
 
     li.addEventListener('touchstart', function() {
         li.className += " tapped";
@@ -245,16 +243,13 @@ function addFeedInGUI(feedTitle, feedUrl) {
 
 
 function addFeedEntriesToFragment(feedEntry, fragment) {
-    var li = document.createElement("li");
     var a = document.createElement("a");
-    var p1 = document.createElement("p");
-    var p2 = document.createElement("p");
+    var p1 = createP(feedEntry.title);
+    var p2 = createP(feedEntry.contentSnippet);
     p1["data-article"] = feedEntry;
     a.appendChild(p1);
     a.appendChild(p2);
-    p1.innerHTML = feedEntry.title;
-    p2.innerHTML = feedEntry.contentSnippet;
-    li.appendChild(a);
+    var li = createLi(a);
 
     fragment.appendChild(li);
 
