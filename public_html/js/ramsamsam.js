@@ -95,12 +95,12 @@ function connectUIToHandler() {
     UI.button('addFeedButton').click(function() {
         toggle_visibility("addfeeddialog");
     });
-//        var addFeedCancel = document.getElementById("addfeedcancel");
+//        var addFeedCancel = $("addfeedcancel");
     UI.button('addfeedcancel').click(function(e) {
         hide("addfeeddialog");
     });
     UI.button('addfeedsuccess').click(function(e) {
-        var newRssFeed = document.getElementById("rssFeed").value;
+        var newRssFeed = $("rssFeed").value;
         retrieveFeedPersistAndShowInGUI(newRssFeed);
         hide("addfeeddialog");
     });
@@ -203,7 +203,7 @@ function addNewSubscriptionInGUI(feedUrl) {
 function showFeedEntriesInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
 
-    var feedElements = document.getElementById("feedEntriesList");
+    var feedElements = $("feedEntriesList");
     var fragment = document.createDocumentFragment();
 
     feedElements.innerHTML = '';
@@ -219,7 +219,7 @@ function addFeedInGUI(feedTitle, feedUrl) {
     var li = document.createElement("li");
     li["data-rss-link"] = feedUrl;
     li.appendChild(p);
-    var feedAbos = document.getElementById("feedsAboList");
+    var feedAbos = $("feedsAboList");
     feedAbos.appendChild(li);
 
     li.addEventListener('touchstart', function() {
@@ -233,7 +233,7 @@ function addFeedInGUI(feedTitle, feedUrl) {
     li.onclick = function showFeedEntry() {
         var url = li["data-rss-link"];
 
-        var feedsAboListElement = document.getElementById("feedsAboList");
+        var feedsAboListElement = $("feedsAboList");
         var allFeeds = feedsAboListElement.childNodes;
         for (var i = 0; i < allFeeds.length; i++) {
             allFeeds[i].removeAttribute("class");
@@ -272,14 +272,14 @@ function addFeedEntriesToFragment(feedEntry, fragment) {
 }
 
 function showArticle(feedEntry, li) {
-    var articleTitle = document.getElementById("articleTitle");
+    var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
     var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
     articleTitle.appendChild(titleLink);
 
-    var contentBlock = document.getElementById("articleContent");
+    var contentBlock = $("articleContent");
     contentBlock.innerHTML = feedEntry.content;
-    var showArticlePage = document.getElementById("showArticlePage");
+    var showArticlePage = $("showArticlePage");
     showArticlePage.innerHTML = "";
     showArticlePage.appendChild(articleTitle);
     showArticlePage.appendChild(contentBlock);
