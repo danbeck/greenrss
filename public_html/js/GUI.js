@@ -10,6 +10,11 @@ function Gui() {
     this.UI.button('configureButton').click(function() {
         that.openConfigurePage(this, that.onConfigurationChanged);
     });
+    
+       // On clicking the scan button, show the scan page
+    this.UI.button('addFeedButton').click(function() {
+        toggle_visibility("addfeeddialog");
+    });
 
 
 //    backButton.addEventListener("click", ope);
@@ -48,12 +53,13 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     var li = $('extendConfigurationMenuItem');
 
+    var that = this;
     li.onclick = function() {
-        this.UI.popover(this, "configurePopover").toggle();
+        that.UI.popover(this, "configurePopover").toggle();
 
 
 
-        this.UI.pagestack.push('extendedConfigurationPage',
+        that.UI.pagestack.push('extendedConfigurationPage',
                 {subtitle: 'Configuration'});
         var useTheOldReader = $("theoldreader_use_sync");
 
@@ -68,9 +74,5 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         });
     };
 
-//        backButton.removeEventListener(backButton, backButtonEventListener);
-
-//        function verifyAndReturnConfiguration() {
-//        }
-    return this.onConfigurationChanged(returnValue);
+    return that.onConfigurationChanged(returnValue);
 };
