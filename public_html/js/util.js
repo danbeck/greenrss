@@ -20,7 +20,7 @@ if (!Function.prototype.bind) {
     };
 }
 
-function simpleHttpRequest(url, success, failure) {
+function getHttpRequest(url, success, failure) {
     var request = makeHttpObject();
     request.open("GET", url, true);
     request.send(null);
@@ -32,6 +32,21 @@ function simpleHttpRequest(url, success, failure) {
                 failure(request.status, request.statusText);
         }
     };
+}
+
+function postUrlEncodedHttpRequest(url, postDataUrl, success, failure) {
+    var request = new XMLHttpRequest();
+    request.open("POST", url, true);
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+    request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+            if (request.status === 200)
+                success(request.responseText);
+            else if (failure)
+                failure(request.status, request.statusText);
+        }
+    };
+    request.send(postDataUrl);
 }
 
 function $(id) {

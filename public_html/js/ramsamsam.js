@@ -138,19 +138,10 @@ function persistFeed(retrievedFeed) {
 
 
 function theoldreader_getLoginToken(email, password, gotToken) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", THEOLDREADER_API_URL + "accounts/ClientLogin", true);
 
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
-    xhr.onreadystatechange = function(e) {
-        if (xhr.readyState !== 4)
-            return;
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            gotToken(response.Auth);
-        }
-    };
-    xhr.send("output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email=" + email + "&Passwd=" + password);
+    var url = THEOLDREADER_API_URL + "accounts/ClientLogin";
+    var data = "output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email=" + email + "&Passwd=" + password;
+    postUrlEncodedHttpRequest(url, data, gotToken);
 }
 
 
