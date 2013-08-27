@@ -1,28 +1,60 @@
-@media screen and (max-width: 480px) and (orientation:portrait)  {
-    #feedsAbo{
-        float:left;
-        width:100%;
-    }
-    #feedEntries{
-        margin-left: 0%;
-        width:0%;
-    }
+@media screen and (max-width: 480px) and (orientation:portrait) {
+	#feedsAbo {
+		float: left;
+		width: 100%;
+	}
+	#feedEntries {
+		margin-left: 0%;
+		width: 0%;
+	}
 }
 
-
-
-
-@media screen and (min-width: 481px) , screen and (orientation:landscape) {
-    #feedsAbo{
-        float:left;
-        width:33%;
-    }
-    #feedEntries{
-        margin-left: 35%;
-        width: 65%;
-    }
+@media screen and (min-width: 481px) , screen and
+	(orientation:landscape) {
+	#feedsAbo {
+		float: left;
+		width: 33%;
+	}
+	#feedEntries {
+		margin-left: 35%;
+		width: 65%;
+	}
 }
 
+/* .popover[data-gravity="s"]:after { */
+/*     background-attachment: scroll; */
+/*     background-clip: border-box; */
+/*     background-color: transparent; */
+/*     background-image: url("../img/DownArrow@18.png"); */
+/*     background-origin: padding-box; */
+/*     background-position: 1.6rem 0.5rem; */
+/*     z-index: 200; */
+/*     background-repeat: no-repeat; */
+/*     background-size: 50% 50%; */
+/*     bottom: -9px; */
+/*     height: 18px; */
+/*     margin-left: -18px; */
+/*     width: 37px; */
+/* } */
+/* .popover[data-gravity="s"]{ */
+/*     background-attachment: scroll; */
+/*     background-clip: border-box; */
+/*     background-color: transparent; */
+/*     background-image: url("../img/DownArrow@18.png"); */
+/*     background-origin: padding-box; */
+/*     background-position: 1.6rem 0.5rem; */
+/*     z-index: 200; */
+/*     background-repeat: no-repeat; */
+/*     background-size: 50% 50%; */
+/*     bottom: -9px; */
+/*     height: 18px; */
+/*     margin-left: -18px; */
+/*     width: 37px; */
+/* } */
+.leftpopover[data-gravity="s"]:before,.leftpopover[data-gravity="s"]:after
+	{
+	left: 90%;
+}
 /*@media screen and (min-width: 481px) and (max-width: 1000px), screen and (orientation:landscape) and (max-width: 1000px) {
     #feedsAbo{
         float:left;
@@ -44,103 +76,123 @@
         width:65%;
     }
 }*/
-[data-role="header"]{
-    position:fixed;
-    width: 100%;
+[data-role="header"] {
+	position: fixed;
+	width: 100%;
 }
 
 /*[data-role="footer"] nav ul li a:active{
     background-color: #CC4400;
     color: white;
 }*/
-
-
-[data-role="footer"] nav ul li a:hover{
-    background-color: #ea7140;
-    color: white;
+[data-role="footer"] nav ul li a:hover {
+	background-color: #ea7140;
+	color: white;
 }
 
-[data-role="footer"] nav ul li a.tapped{
-    background-color: #eb7f55;
-    color: white;
+[data-role="footer"] nav ul li a.tapped {
+	background-color: #eb7f55;
+	color: white;
 }
 
 /*[data-role="list"] header{*/
-    /*background-color: ;*/
+/*background-color: ;*/
 /*}*/
-
-[data-role="list"] header h1{
-    /*background-color: #ea7140;*/
-    color:#ea7140;
-    /*color:white;*/
+[data-role="list"] header h1 {
+	/*background-color: #ea7140;*/
+	color: #ea7140;
+	/*color:white;*/
 }
 
-#feedsAbo, #feedEntries, #showArticlePage, #extendedConfigurationPage{
-    position: fixed;
-    overflow-y: auto;
-    top: 75px;
-    bottom:70px;
-}
-#configurePopover .list{
-    max-height: 400px;
+#feedsAbo,#feedEntries,#showArticlePage,#extendedConfigurationPage {
+	position: fixed;
+	overflow-y: auto;
+	top: 75px;
+	bottom: 70px;
 }
 
-#showArticlePage{
-    height:auto;
+#configurePopover .list {
+	max-height: 400px;
 }
 
-#feedsAboList li, #feedEntries li{
-    cursor:pointer;
+#showArticlePage {
+	height: auto;
 }
 
-#feedsAboList li.active{
-    background-color: #ea7140;
+#feedsAboList li,#feedEntries li {
+	cursor: pointer;
 }
 
-.tapped{
-    background-color: #eb7f55;
+#feedsAboList li.active {
+	background-color: #ea7140;
 }
 
-#feedsAboList li.active p{
-    /*background-color: #c2c2c2;*/
-    color: white;
-    /*fo: white;*/
+.tapped {
+	background-color: #eb7f55;
 }
 
-#addfeeddialog{
-    position: fixed;
+#feedsAboList li.active p {
+	/*background-color: #c2c2c2;*/
+	color: white;
+	/*fo: white;*/
 }
 
-#articleTitle a, #articleContent a{
-    color:#cc3818;
+#addfeeddialog {
+	position: fixed;
 }
 
-#articleTitle{
-    padding:  0 1rem 1rem 1rem;
+#articleTitle a,#articleContent a {
+	color: #cc3818;
 }
+
+#articleTitle {
+	padding: 0 1rem 1rem 1rem;
+}
+
 #articleContent {
-    padding: 0 1rem;
+	padding: 0 1rem;
 }
+
 #articleContent p {
-    margin: 1rem 0;
+	margin: 1rem 0;
 }
 
 #articleContent img {
-    margin: 0.5rem 1rem ;
-    box-shadow: 0px 0px 10px 2px rgba(119, 119, 119, 0.75);
+	margin: 0.5rem 1rem;
+	box-shadow: 0px 0px 10px 2px rgba(119, 119, 119, 0.75);
 }
 
 #articleContent h1 {
-    margin: 1rem 0;
+	margin: 1rem 0;
 }
-#articleContent h2{
-    margin: 0.8rem 0;
+
+#articleContent h2 {
+	margin: 0.8rem 0;
 }
+
 #articleContent h3 {
-    margin: 0.6rem 0;
+	margin: 0.6rem 0;
 }
-#feedEntries p:first-child{
-    color: #333333;
+
+#feedEntries p:first-child {
+	color: #333333;
+}
+
+#articleContent ul {
+	list-style-type: square;
+	list-style-position: inside;
+}
+
+#articleContent ol {
+	list-style-type: decimal;
+}
+
+#articleContent pre {
+	background-color: #CCCCCC;
+	color: #444444;
+	font-family: Fixedsys, Courier, monospace;
+	padding: 10px;
+	margin: 8px;
 }
 
 /*#feedEntries p {

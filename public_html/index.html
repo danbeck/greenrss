@@ -11,6 +11,8 @@
         <!-- Ubuntu UI Style imports - Ambiance theme -->
         <link href="lib/ubuntu-html5-theme/0.1/ambiance/css/appTemplate.css" rel="stylesheet" type="text/css" />
 
+        <script src="js/util.js"></script>
+
         <!-- Ubuntu UI javascript imports - Ambiance theme -->
         <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/fast-buttons.js"></script>
         <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/core.js"></script>
@@ -27,10 +29,10 @@
 
         <!-- Application script -->
         
-        <script src="js/util.js"></script>
         <script src="js/GUI.js"></script>
         <script src="js/ramsamsam.js"></script>
         <link href="css/index.css" rel="stylesheet" type="text/css" />
+<!--         <link href="css/night-theme.css" rel="stylesheet" type="text/css" /> -->
 
 
         <title>RamSamSam Reader</title>
@@ -76,7 +78,7 @@
                         </ul>
                     </nav>
 
-                    <div id="configurePopover" class="popover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
+                    <div id="configurePopover" class="popover leftpopover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
                         <ul class="list">
                             <li id="extendConfigurationMenuItem">Extended Configuration</li>
                             <li id="nightmode"><p>Night mode</p>
@@ -136,10 +138,10 @@
                             <li><a>
                                     <p>I want to synchronize my feeds with "theoldreader"</p>
                                     <label>
-                                        <input id="theoldreader_use_sync" type="checkbox" checked="" data-type="switch">
+                                        <input id="theoldreader_use_sync" type="checkbox" data-type="switch">
                                         <span class="toggle">
-                                            <span class="toggle-handle"></span>
-                                            <span class="toggle-bg"></span>
+                                            <span class="toggle-handle" ></span>
+                                            <span class="toggle-bg" ></span>
                                         </span>
                                     </label></a>
                             <li>

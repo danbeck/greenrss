@@ -1,0 +1,65 @@
+nav.tabs div.tabs-inner .active>a {
+	color: white;
+}
+
+body {
+	background: black;
+}
+
+[data-role="header"] {
+	background: black;
+}
+
+#feedEntries p:first-child {
+	color: white;
+}
+
+[data-role="footer"] nav {
+	background: #222222;
+}
+
+.popover {
+	background: #333333;
+	color: white;
+}
+
+nav.tabs {
+	border-bottom: 14px solid #444444;
+}
+
+[data-role="list"] li p {
+	color: #BBBBBB;
+}
+
+#feedsAboList li p {
+	color: white;
+}
+
+[data-role="content"] p {
+    color: #CCCCCC;
+}
+
+[data-role="content"] {
+    color: #CCCCCC;
+}
+
+[data-role="content"] h1, [data-role="content"] h2, [data-role="content"] h3 {
+    color: white;
+}
+
+#articleContent pre {
+	background-color: #444444;
+	color: #CCCCCC;
+}
+
+
+/* [data-role="list"] li p { */
+/*     color: #BBBBBB; */
+/* } */
+/* #feedsAboList li.active { */
+/*     color: white; */
+/* } */
+
+/* #feedsAboList li.active { */
+/*     background-color: blue; */
+/* } */
