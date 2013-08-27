@@ -120,7 +120,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     var backButton = document.querySelector("li a[data-role=\"back\"]");
 
     backButton.addEventListener("click", function(e) {
-
+true
         that.UI.popover(openConfigButton, "configurePopover").hide();
         if (isDisplayed($("extendedConfigurationPage")))
             that.UI.pagestack.pop('extendedConfigurationPage', {
