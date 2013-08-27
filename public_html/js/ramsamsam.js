@@ -14,6 +14,8 @@ var gui;
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
+var THEOLDREADER_API_URL = "https://theoldreader.com/reader/api/0/";
+
 var DEFAULT_CONFIGURATION = {
     theoldReader_sync: {useTheOldReader: false,
         theoldreader_username: undefined,
@@ -62,6 +64,13 @@ function onDeviceReady() {
     gui = new Gui(configuration);
     gui.onConfigurationChanged = function(config) {
         saveItemInLocalStore("configuration", configuration);
+
+        if (configuration.theoldReader_sync.useTheOldReader) {
+            theoldreader_getLoginToken(configuration.theoldReader_sync.theoldreader_username,
+                    configuration.theoldReader_sync.theoldreader_password, function(auth) {
+                showAlert("login token was: " + auth);
+            });
+        }
     };
 
 
@@ -127,6 +136,24 @@ function persistFeed(retrievedFeed) {
     feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
     saveItemInLocalStore("feeds", feedRecordsSavedInDB);
 }
+
+
+function theoldreader_getLoginToken(email, password, gotToken) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", THEOLDREADER_API_URL + "accounts/ClientLogin", true);
+
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+    xhr.onreadystatechange = function(e) {
+        if (xhr.readyState !== 4)
+            return;
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            gotToken(response.Auth);
+        }
+    };
+    xhr.send("output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email=" + email + "&Passwd=" + password);
+}
+
 
 function saveItemInLocalStore(item, record) {
     try {
