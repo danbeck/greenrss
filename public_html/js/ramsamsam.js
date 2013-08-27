@@ -8,7 +8,6 @@ if (cordovaUsed()) {
     window.onload = onDeviceReady;
 }
 
-var UI = new UbuntuUI();
 var gui;
 
 var feedRecordsShownInGUI = {};
