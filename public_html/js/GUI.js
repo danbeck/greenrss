@@ -40,11 +40,11 @@ Gui.prototype.reload = function() {
 Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     var that = this;
-   
+
     // var backButtonEventListener = function() {
     // };
 
- 
+
     this.UI.popover(openConfigButton, "configurePopover").toggle();
 
     var configurePopover = $("configurePopover");
@@ -52,9 +52,18 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     leftFloat = leftFloat - 130;
     configurePopover.style.left = leftFloat + "px";
 
-    var li = $('extendConfigurationMenuItem');
 
-    li.onclick = function() {
+    if (configuration.useNightMode) {
+        $("useNightMode")["checked"] = true;
+    } else {
+        $("useNightMode").removeAttribute("checked");
+    }
+
+    $("useNightMode").onclick = function() {
+        configuration.useNightMode = !configuration.useNightMode;
+    };
+
+    $('extendConfigurationMenuItem').onclick = function() {
         that.UI.popover(this, "configurePopover").hide();
 
         that.UI.pagestack.push('extendedConfigurationPage', {
@@ -64,6 +73,47 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         hide($("addFeedButton").parentNode);
         hide($("reloadFeedsButton").parentNode);
         hide(openConfigButton.parentNode);
+
+        var oldReaderConf = configuration.theoldReader_sync;
+        if (oldReaderConf.useTheOldReader === true) {
+            $("theoldreader_use_sync")["checked"] = true;
+            $("theoldreader_use_sync")["data-checkbox-enabled"] = true;
+
+        }
+        else {
+
+            $("theoldreader_use_sync")["data-checkbox-enabled"] = false;
+            $("theoldreader_username")["disabled"] = true;
+            $("theoldreader_password")["disabled"] = true;
+            $("theoldreader_save_password")["disabled"] = true;
+        }
+        if (oldReaderConf.theoldreader_username)
+            $("theoldreader_username").value = oldReaderConf.theoldreader_username;
+
+
+        $("theoldreader_use_sync").onclick = function() {
+            $("theoldreader_username")["data-checkbox-enabled"] = !$("theoldreader_username")["data-checkbox-enabled"];
+
+            if ($("theoldreader_username")["data-checkbox-enabled"]) {
+                $("theoldreader_username").removeAttribute("disabled");
+                $("theoldreader_password").removeAttribute("disabled");
+                $("theoldreader_save_password").removeAttribute("disabled");
+                configuration.theoldReader_sync.useTheOldReader = true;
+            } else {
+                $("theoldreader_username")["disabled"] = true;
+                $("theoldreader_password")["disabled"] = true;
+                $("theoldreader_save_password")["disabled"] = true;
+                configuration.theoldReader_sync.useTheOldReader = false;
+            }
+        };
+
+        $("theoldreader_username").onkeyup = function() {
+            configuration.theoldReader_sync.theoldreader_username = this.value;
+        };
+
+        $("theoldreader_password").onkeyup = function() {
+            configuration.theoldReader_sync.theoldreader_password = this.value;
+        };
 
         // var useTheOldReader = $("theoldreader_use_sync");
         //

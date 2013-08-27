@@ -81,9 +81,9 @@
                     <div id="configurePopover" class="popover leftpopover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
                         <ul class="list">
                             <li id="extendConfigurationMenuItem">Extended Configuration</li>
-                            <li id="nightmode"><p>Night mode</p>
+                            <li><p>Night mode</p>
                                 <label>
-                                    <input type="checkbox" checked="" data-type="switch">
+                                    <input id="useNightMode" type="checkbox" data-type="switch">
                                     <span class="toggle">
                                         <span class="toggle-handle"></span>
                                         <span class="toggle-bg"></span>
@@ -113,7 +113,7 @@
                     <section data-role="list"> 
                         <header><h1>User Interface option</h1></header>
                         <ul data-role="listview">
-                            <li>
+<!--                            <li>
                                 <p>Activate night mode</p>
                                 <label>
                                     <input type="checkbox" checked="" data-type="switch">
@@ -122,14 +122,10 @@
                                         <span class="toggle-bg"></span>
                                     </span>
                                 </label>
+                            </li>-->
                             <li>
                                 <p>refresh rate in seconds: <input type="number" placeholder="60">
                                 </p>
-                            </li>
-                            <li>
-                                <a>
-                                    <p>Organize feeds</p>
-                                </a>
                             </li>
                         </ul>
                         <header><h1>Feed Synchronization</h1></header>
