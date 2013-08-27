@@ -76,25 +76,26 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
         var oldReaderConf = configuration.theoldReader_sync;
         if (oldReaderConf.useTheOldReader === true) {
-            $("theoldreader_use_sync")["checked"] = true;
-            $("theoldreader_use_sync")["data-checkbox-enabled"] = true;
-
+            $("theoldreader_use_sync").setAttribute("checked", true);
+            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", true);
         }
         else {
 
-            $("theoldreader_use_sync")["data-checkbox-enabled"] = false;
-            $("theoldreader_username")["disabled"] = true;
-            $("theoldreader_password")["disabled"] = true;
-            $("theoldreader_save_password")["disabled"] = true;
+            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", false);
+            $("theoldreader_username").setAttribute("disabled", true);
+            $("theoldreader_password").setAttribute("disabled", true);
+            $("theoldreader_save_password").setAttribute("disabled", true);
+
         }
         if (oldReaderConf.theoldreader_username)
             $("theoldreader_username").value = oldReaderConf.theoldreader_username;
 
 
         $("theoldreader_use_sync").onclick = function() {
-            $("theoldreader_username")["data-checkbox-enabled"] = !$("theoldreader_username")["data-checkbox-enabled"];
+            var oldValue = $("theoldreader_use_sync").getAttribute("data-checkbox-enabled");
+            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", oldValue !== "true");
 
-            if ($("theoldreader_username")["data-checkbox-enabled"]) {
+            if ($("theoldreader_use_sync").getAttribute("data-checkbox-enabled")==="true") {
                 $("theoldreader_username").removeAttribute("disabled");
                 $("theoldreader_password").removeAttribute("disabled");
                 $("theoldreader_save_password").removeAttribute("disabled");
@@ -148,7 +149,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         show($("reloadFeedsButton").parentNode);
         show(openConfigButton.parentNode);
 
-        var useTheOldReader = $("theoldreader_use_sync").value;
+        var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
         var theoldreaderUsername = $("theoldreader_username").value;
         var theoldreaderPassword = $("theoldreader_password").value;
         if (useTheOldReader)
