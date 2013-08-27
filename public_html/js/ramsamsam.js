@@ -14,6 +14,16 @@ var gui;
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
+var DEFAULT_CONFIGURATION = {
+    theoldReader_sync: {useTheOldReader: false,
+        theoldreader_username: undefined,
+        theoldreader_password: undefined},
+    useNightMode: false,
+    refreshNow: false,
+    deleteLocalStorage: false,
+    refreshRateInSeconds: 60
+};
+
 var configuration = {};
 var theoldreader_username;
 var theoldreader_password;
@@ -43,14 +53,19 @@ function addGoogleAnalyticsToHTML() {
  * and connects events to handlers
  */
 function onDeviceReady() {
-    gui = new Gui();
+    configuration = loadRecordFromLocalStorage("configuration");
+
+    if (!configuration) {
+        configuration = DEFAULT_CONFIGURATION;
+    }
+
+    gui = new Gui(configuration);
     gui.onConfigurationChanged = function(config) {
-        configuration = config;
+        saveItemInLocalStore("configuration", configuration);
     };
 
-    gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
 
-    connectUIToHandler();
+    gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
 
     if (feedsNotInLocalStorage()) {
         retrieveDefaultFeeds();
@@ -61,32 +76,14 @@ function onDeviceReady() {
             retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
     }
-
 }
 
-function loadFeedsFromLocalStorage() {
-    return JSON.parse(localStorage["feeds"]);
-}
-function feedsNotInLocalStorage() {
-    return typeof localStorage["feeds"] === "undefined";
-}
 function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
 }
-function connectUIToHandler() {
 
-//    var aLinks = document.getElementsByTagName('li');
-//    for (var i = 0; i < aLinks.length; i++) {
-//        aLinks[i].addEventListener('touchstart', function() {
-//            aLinks[i].className += " tapped";
-//        });
-//        aLinks[i].addEventListener('touchend', function() {
-//            aLinks[i].className = "";
-//        });
-
-}
 
 function verifyAndSaveOldReaderAccessData() {
     if (lastPageWasConfigurationPage) {
@@ -107,7 +104,6 @@ function retrieveFeedPersistAndShowInGUI(feedURL) {
     });
 }
 
-
 function retrieveFeedPersistAndShowSubscriptionInGUI(feedURL) {
     var feed = new google.feeds.Feed(feedURL);
     feed.setNumEntries(100);
@@ -123,6 +119,7 @@ function persistFeedAndAddFeedAndShowFeedEntriesInGUI(retrievedFeed) {
     persistFeed(retrievedFeed);
     addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
 }
+
 function persistFeed(retrievedFeed) {
     var feedInfoForStorage = {"title": retrievedFeed.feed.title,
         "description": retrievedFeed.feed.description,
@@ -137,8 +134,12 @@ function persistFeed(retrievedFeed) {
 
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
     feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
+    saveItemInLocalStore("feeds", feedRecordsSavedInDB);
+}
+
+function saveItemInLocalStore(item, record) {
     try {
-        localStorage.setItem("feeds", JSON.stringify(feedRecordsSavedInDB));
+        localStorage.setItem(item, JSON.stringify(record));
     } catch (e) {
         if (e === QUOTA_EXCEEDED_ERR) {
             showError()("Error: Local Storage limit exceeds.");
@@ -163,6 +164,20 @@ function resetLocalStore() {
 function addNewSubscriptionInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
     gui.addFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
+}
+
+function loadFeedsFromLocalStorage() {
+    return loadRecordFromLocalStorage("feeds");
+}
+//
+function loadRecordFromLocalStorage(item) {
+    if (!localStorage[item])
+        return undefined;
+    return JSON.parse(localStorage[item]);
+}
+
+function feedsNotInLocalStorage() {
+    return typeof localStorage["feeds"] === "undefined";
 }
 
 function showAlert(message) {
