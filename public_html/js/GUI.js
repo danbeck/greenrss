@@ -79,7 +79,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     var backButton = document.querySelector("li a[data-role=\"back\"]");
 
-    backButton.onclick = function() {
+    backButton.addEventListener("click", function(e) {
 
         // theoldreaderUsername.addEventListener("onkeyup", function() {
         // theoldreader_username = theoldreaderUsername.value;
@@ -112,7 +112,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
         return that.onConfigurationChanged(configuration);
 
-    };
+    });
 };
 
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
