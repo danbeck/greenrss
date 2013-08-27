@@ -115,29 +115,11 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         $("theoldreader_password").onkeyup = function() {
             configuration.theoldReader_sync.theoldreader_password = this.value;
         };
-
-        // var useTheOldReader = $("theoldreader_use_sync");
-        //
-        // var theoldreaderUsername = $("theoldreader_username");
-        //
-        // theoldreaderUsername.addEventListener("onkeyup", function() {
-        // theoldreader_username = theoldreaderUsername.value;
-        // });
-        // var theoldreaderPassword = $("theoldreader_password");
-        // theoldreaderUsername.addEventListener("keyup", function() {
-        // theoldreader_password = theoldreaderPassword.value;
     };
 
     var backButton = document.querySelector("li a[data-role=\"back\"]");
 
     backButton.addEventListener("click", function(e) {
-
-        // theoldreaderUsername.addEventListener("onkeyup", function() {
-        // theoldreader_username = theoldreaderUsername.value;
-        // });
-        // theoldreaderUsername.addEventListener("keyup", function() {
-        // theoldreader_password = theoldreaderPassword.value;
-        // });
 
         that.UI.popover(openConfigButton, "configurePopover").hide();
         if (isDisplayed($("extendedConfigurationPage")))
