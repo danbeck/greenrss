@@ -85,15 +85,6 @@ function retrieveDefaultFeeds() {
 }
 
 
-function verifyAndSaveOldReaderAccessData() {
-    if (lastPageWasConfigurationPage) {
-        checkConfigurationPage();
-    }
-    var theoldreaderStorage = localStorage["theoldReader"];
-    theoldreaderStorage["username"] = theoldreader_username;
-    theoldreaderStorage["password"] = theoldreader_password;
-}
-
 function retrieveFeedPersistAndShowInGUI(feedURL) {
     var feed = new google.feeds.Feed(feedURL);
     feed.setNumEntries(100);
