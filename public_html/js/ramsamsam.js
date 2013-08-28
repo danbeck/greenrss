@@ -71,6 +71,10 @@ function onDeviceReady() {
                 showAlert("login token was: " + auth);
             });
         }
+
+        if (configuration.useNightMode) {
+            showNightMode(configuration.useNightMode);
+        }
     };
 
 
@@ -84,6 +88,21 @@ function onDeviceReady() {
         for (var url in feedsLoadedFromLocalStorage) {
             retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
+    }
+}
+
+function showNightMode(nightMode) {
+    if (nightMode) {
+        var head = document.getElementsByName("head");
+        var link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("href", "css/night-theme.css");
+        head.appendChild(link);
+    }
+    else
+    {
+        var styleSheet = document.querySelector('link[rel=stylesheet][href="css/night-theme.css"]');
+        styleSheet.remove();
     }
 }
 

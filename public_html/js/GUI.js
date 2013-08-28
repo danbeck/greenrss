@@ -148,6 +148,33 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     });
 };
 
+Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(that, openConfigButton){
+        that.UI.popover(openConfigButton, "configurePopover").hide();
+        if (isDisplayed($("extendedConfigurationPage")))
+            that.UI.pagestack.pop('extendedConfigurationPage', {
+                subtitle: 'Configuration'
+            });
+
+        show($("addFeedButton").parentNode);
+        show($("reloadFeedsButton").parentNode);
+        show(openConfigButton.parentNode);
+
+        var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
+        var theoldreaderUsername = $("theoldreader_username").value;
+        var theoldreaderPassword = $("theoldreader_password").value;
+        if (useTheOldReader)
+            that.configuration.useTheOldReader = useTheOldReader;
+
+        if (theoldreaderUsername && theoldreaderUsername !== "")
+            that.configuration.theoldreaderUsername = theoldreaderUsername;
+
+        if (theoldreaderPassword && theoldreaderPassword !== "")
+            that.configuration.theoldreaderPassword = theoldreaderPassword;
+
+        return that.onConfigurationChanged(that.configuration);
+
+    
+}
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     var pa = createP(feedTitle);
     var li = createLi(pa);
