@@ -158,7 +158,8 @@ function persistFeed(retrievedFeed) {
 
 
 function theoldreader_getLoginToken(email, password, gotToken) {
-    theOldReader.getLoginToken(email, password, gotToken);
+//    theOldReader.getLoginToken(email, password, gotToken);
+  theOldReader.getSubscriptionList(email, password, gotToken);
 }
 
 
