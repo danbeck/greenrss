@@ -13,4 +13,5 @@
     <feature name="http://api.phonegap.com/1.0/network"/>
     <access origin="*" />
     <content src="index.html" />
+    <icon src="img/RamSamSam.png"/>
 </widget>
