@@ -14,8 +14,6 @@ var theOldReader = new TheOldReader();
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
-//var THEOLDREADER_API_URL = "https://theoldreader.com/reader/api/0/";
-
 var DEFAULT_CONFIGURATION = {
     theoldReader_sync: {useTheOldReader: false,
         theoldreader_username: undefined,
@@ -27,10 +25,6 @@ var DEFAULT_CONFIGURATION = {
 };
 
 var configuration = {};
-var theoldreader_username;
-var theoldreader_password;
-var useTheOldReader;
-var lastPageWasConfigurationPage = false;
 
 function addGoogleAnalyticsToHTML() {
 
@@ -78,7 +72,7 @@ function onDeviceReady() {
     };
 
 
-    gui.onFeedAdded = retrieveFeedPersistAndShowInGUI;
+    gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
 
     if (feedsNotInLocalStorage()) {
         retrieveDefaultFeeds();
@@ -112,6 +106,16 @@ function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
 }
 
+
+
+function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {
+	feedURL = feedURL.replace(/feed:\/\//,"http://");
+	if (feedURL.match(/^http:\/\/www.ebay/)){
+		feedURL += "&rss=1";
+		feedURL = feedURL.replace(/\/sch\//,"\/sch/rss/?_sacat=");
+	}
+	retrieveFeedPersistAndShowInGUI(feedURL);
+}
 
 function retrieveFeedPersistAndShowInGUI(feedURL) {
     var feed = new google.feeds.Feed(feedURL);
@@ -188,7 +192,7 @@ function resetLocalStore() {
 }
 
 function addNewSubscriptionInGUI(feedUrl) {
-    var feedInfo = feedRecordsShownInGUI[feedUrl];
+	var feedInfo = feedRecordsShownInGUI[feedUrl];
     gui.addFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
 }
 
