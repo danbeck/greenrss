@@ -119,13 +119,17 @@
     height: auto;
 }
 
-#feedsAboList li,#feedEntries li {
+#feedsAboList li,#feedEntries li, #feedsAboList section {
     cursor: pointer;
 }
 
 #feedsAboList li.active {
     background-color: #ea7140;
 }
+
+/*#feedsAboList section h1{
+    color: #ea7140;   
+}*/
 
 .tapped {
     background-color: #eb7f55;

@@ -14,7 +14,7 @@ function Gui(configuration) {
     });
 
     this.UI.button('connectToTheOldReader').click(function() {
-        that.onReload();
+        that.onConnectToTheOldReader();
     });
 
     // On clicking the scan button, show the scan page
@@ -40,7 +40,7 @@ Gui.prototype.onConfigurationChanged = function() {
 Gui.prototype.onFeedAdded = function() {
 };
 
-Gui.prototype.onReload = function() {
+Gui.prototype.onConnectToTheOldReader = function() {
 };
 
 Gui.prototype.reload = function() {
@@ -196,6 +196,46 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
         that.configuration.theoldreaderPassword = theoldreaderPassword;
 
     return that.onConfigurationChanged(that.configuration);
+};
+
+Gui.prototype.showSubscriptions = function(headerName, subscription) {
+    var self = this;
+
+    if (!$(headerName)) {
+        var header = document.createElement("li");
+        header.id = headerName;
+        header["data-role"] = "cloudlocation";
+        header.innerHTML = headerName;
+        $("feedsAboList").appendChild(header);
+    }
+    if (subscription.categories !== undefined && subscription.categories.length > 0) {
+        for (var i = 0; i < subscription.categories.length; i++) {
+            var category = subscription.categories[i];
+            var header = $(headerName);
+            var elementToAttachTo = header;
+            if (!$(category.id)) {
+                var categoryElement = document.createElement("header");
+                categoryElement.id = category.id;
+                categoryElement.innerHTML = category.label;
+                insertAfter($(headerName), categoryElement);
+
+            }
+            var pa = createP(subscription.title);
+            var li = createLi(pa);
+            li["data-rss-link"] = subscription.url;
+            li["data-feed-id"] = subscription.id;
+
+            $(category.id).appendChild(li);
+        }
+    }
+    else {
+        var pa = createP(subscription.title);
+        var li = createLi(pa);
+        li["data-rss-link"] = subscription.url;
+        li["data-feed-id"] = subscription.id;
+
+        insertAfter($(headerName), li);
+    }
 };
 
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {

@@ -60,10 +60,11 @@ function onDeviceReady() {
         saveItemInLocalStore("configuration", configuration);
 
         if (configuration.theoldReader_sync.useTheOldReader) {
-            theoldreader_getLoginToken(configuration.theoldReader_sync.theoldreader_username,
-                    configuration.theoldReader_sync.theoldreader_password, function(auth) {
-                showAlert("login token was: " + auth);
-            });
+//            theoldreader_getLoginToken(configuration.theoldReader_sync.theoldreader_username,
+//                    configuration.theoldReader_sync.theoldreader_password, function(auth) {
+//                showAlert("login token was: " + auth);
+//            }
+//        );
         }
 
         if (configuration.useNightMode) {
@@ -86,7 +87,7 @@ function onDeviceReady() {
     }
 
 
-    gui.onReload = function() {
+    gui.onConnectToTheOldReader = function() {
         theOldReader.getSubscriptionList(
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
@@ -97,10 +98,18 @@ function onDeviceReady() {
 }
 
 function showSubscriptionList(subscriptionList) {
-    subscriptionListJSON = JSON.parse(subscriptionList);
-     for(prop in subscriptionListJSON){
-         
-        
+    subscriptionListJSON = JSON.parse(subscriptionList).subscriptions;
+     for(var i =0; i< subscriptionListJSON.length; i++){
+//         showAlert(JSON.stringify(subscriptionListJSON[i]));
+//         var id = subscriptionListJSON[i].id;
+//         var title = subscriptionListJSON[i].title;
+//         var categories = subscriptionListJSON[i].categories;
+//         var sortid = subscriptionListJSON[i].sortid;
+//         var url = subscriptionListJSON[i].url;
+//         var htmlUrl = subscriptionListJSON[i].htmlUrl;
+//         var iconUrl = subscriptionListJSON[i].iconUrl;
+//         showSubscriptions(subscriptionListJSON[i]);
+         this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i]);
     }
 }
 function showNightMode(nightMode) {
