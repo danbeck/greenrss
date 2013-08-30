@@ -21,9 +21,8 @@ if (!Function.prototype.bind) {
 }
 
 function getHttpRequest(url, success, failure) {
-    var request = makeHttpObject();
+    var request = new XMLHttpRequest();
     request.open("GET", url, true);
-    request.send(null);
     request.onreadystatechange = function() {
         if (request.readyState === 4) {
             if (request.status === 200)
@@ -32,6 +31,7 @@ function getHttpRequest(url, success, failure) {
                 failure(request.status, request.statusText);
         }
     };
+    request.send(null);
 }
 
 function postUrlEncodedHttpRequest(url, postDataUrl, success, failure) {
@@ -75,6 +75,10 @@ function toggle_visibility(e) {
         e.style.display = 'none';
     else
         e.style.display = 'block';
+}
+
+function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 function linkOpenInNewWindow(href, innerHTML) {
