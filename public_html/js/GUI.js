@@ -204,15 +204,17 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     if (!$(headerName)) {
         var header = document.createElement("li");
         header.id = headerName;
-        header["data-role"] = "cloudlocation";
-        header.innerHTML = headerName;
+        header.setAttribute("data-role","cloudlocation");
+        var headerParagraph = document.createElement("h2");
+        headerParagraph.innerHTML = headerName;
+        
+        header.appendChild(headerParagraph);
         $("feedsAboList").appendChild(header);
     }
     if (subscription.categories !== undefined && subscription.categories.length > 0) {
         for (var i = 0; i < subscription.categories.length; i++) {
             var category = subscription.categories[i];
             var header = $(headerName);
-            var elementToAttachTo = header;
             if (!$(category.id)) {
                 var categoryElement = document.createElement("header");
                 categoryElement.id = category.id;
@@ -220,8 +222,19 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
                 insertAfter($(headerName), categoryElement);
 
             }
-            var pa = createP(subscription.title);
-            var li = createLi(pa);
+            var iconAside = document.createElement("aside");;
+            var icon = document.createElement("img");
+            icon.setAttribute("width","35px");
+            icon.setAttribute("height","35px");
+            icon.setAttribute("src", subscription.iconUrl);
+            iconAside.appendChild(icon);
+            var a = document.createElement("a");
+            a.setAttribute("href","#");
+            a.appendChild(iconAside);
+            var p = createP(subscription.title);
+            a.appendChild(p);
+            var li = createLi(a);
+//            var a = createLi();
             li["data-rss-link"] = subscription.url;
             li["data-feed-id"] = subscription.id;
 

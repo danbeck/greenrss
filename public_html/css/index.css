@@ -104,6 +104,19 @@
     /*color:white;*/
 }
 
+li[data-role="cloudlocation"]  h2 {
+    /*background-color: #ea7140;*/
+    color: #ea7140;
+    /*text-align: center;*/
+    padding-left: 1rem;
+    background-color: white;
+    /*color:white;*/
+}
+
+li[data-role="cloudlocation"]{
+    background-color: white;
+    padding-top: 0.5rem;
+}
 #feedsAbo,#feedEntries,#showArticlePage,#extendedConfigurationPage {
     position: fixed;
     overflow-y: auto;
