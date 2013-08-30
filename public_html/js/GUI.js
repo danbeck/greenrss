@@ -13,6 +13,10 @@ function Gui(configuration) {
         that.openConfigurePage(this, that.onConfigurationChanged);
     });
 
+    this.UI.button('connectToTheOldReader').click(function() {
+        that.onReload();
+    });
+
     // On clicking the scan button, show the scan page
     this.UI.button('addFeedButton').click(function() {
         show($("addfeeddialog"));
@@ -35,6 +39,10 @@ Gui.prototype.onConfigurationChanged = function() {
 
 Gui.prototype.onFeedAdded = function() {
 };
+
+Gui.prototype.onReload = function() {
+};
+
 Gui.prototype.reload = function() {
 };
 Gui.prototype.openConfigurePage = function(openConfigButton) {
@@ -61,6 +69,12 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     $("useNightMode").onclick = function() {
         configuration.useNightMode = !configuration.useNightMode;
+        if (configuration.useNightMode) {
+            that.__activateNightMode();
+        }
+        else {
+            that.__deactiveNightMode();
+        }
     };
 
     $('extendConfigurationMenuItem').onclick = function() {
@@ -95,7 +109,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
             var oldValue = $("theoldreader_use_sync").getAttribute("data-checkbox-enabled");
             $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", oldValue !== "true");
 
-            if ($("theoldreader_use_sync").getAttribute("data-checkbox-enabled")==="true") {
+            if ($("theoldreader_use_sync").getAttribute("data-checkbox-enabled") === "true") {
                 $("theoldreader_username").removeAttribute("disabled");
                 $("theoldreader_password").removeAttribute("disabled");
                 $("theoldreader_save_password").removeAttribute("disabled");
@@ -148,33 +162,42 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     });
 };
 
-Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(that, openConfigButton){
-        that.UI.popover(openConfigButton, "configurePopover").hide();
-        if (isDisplayed($("extendedConfigurationPage")))
-            that.UI.pagestack.pop('extendedConfigurationPage', {
-                subtitle: 'Configuration'
-            });
+Gui.prototype.__activateNightMode = function() {
+//	var firstStyleSheet = document.getElementByName("stylesheet");;
+//	
+//	var nightStyleSheet = document.createElement("stylesheet");
+//	nightStyleSheet.setAttribute("src", "css/night-theme.css");
+//	insetAfter(firstStyleSheet);
+};
+Gui.prototype.__deactiveNightMode = function() {
 
-        show($("addFeedButton").parentNode);
-        show($("reloadFeedsButton").parentNode);
-        show(openConfigButton.parentNode);
+};
+Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(that, openConfigButton) {
+    that.UI.popover(openConfigButton, "configurePopover").hide();
+    if (isDisplayed($("extendedConfigurationPage")))
+        that.UI.pagestack.pop('extendedConfigurationPage', {
+            subtitle: 'Configuration'
+        });
 
-        var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
-        var theoldreaderUsername = $("theoldreader_username").value;
-        var theoldreaderPassword = $("theoldreader_password").value;
-        if (useTheOldReader)
-            that.configuration.useTheOldReader = useTheOldReader;
+    show($("addFeedButton").parentNode);
+    show($("reloadFeedsButton").parentNode);
+    show(openConfigButton.parentNode);
 
-        if (theoldreaderUsername && theoldreaderUsername !== "")
-            that.configuration.theoldreaderUsername = theoldreaderUsername;
+    var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
+    var theoldreaderUsername = $("theoldreader_username").value;
+    var theoldreaderPassword = $("theoldreader_password").value;
+    if (useTheOldReader)
+        that.configuration.useTheOldReader = useTheOldReader;
 
-        if (theoldreaderPassword && theoldreaderPassword !== "")
-            that.configuration.theoldreaderPassword = theoldreaderPassword;
+    if (theoldreaderUsername && theoldreaderUsername !== "")
+        that.configuration.theoldreaderUsername = theoldreaderUsername;
 
-        return that.onConfigurationChanged(that.configuration);
+    if (theoldreaderPassword && theoldreaderPassword !== "")
+        that.configuration.theoldreaderPassword = theoldreaderPassword;
 
-    
-}
+    return that.onConfigurationChanged(that.configuration);
+};
+
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     var pa = createP(feedTitle);
     var li = createLi(pa);

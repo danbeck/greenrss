@@ -114,16 +114,16 @@
                     <section data-role="list"> 
                         <header><h1>User Interface option</h1></header>
                         <ul data-role="listview">
-<!--                            <li>
-                                <p>Activate night mode</p>
-                                <label>
-                                    <input type="checkbox" checked="" data-type="switch">
-                                    <span class="toggle">
-                                        <span class="toggle-handle"></span>
-                                        <span class="toggle-bg"></span>
-                                    </span>
-                                </label>
-                            </li>-->
+                            <!--                            <li>
+                                                            <p>Activate night mode</p>
+                                                            <label>
+                                                                <input type="checkbox" checked="" data-type="switch">
+                                                                <span class="toggle">
+                                                                    <span class="toggle-handle"></span>
+                                                                    <span class="toggle-bg"></span>
+                                                                </span>
+                                                            </label>
+                                                        </li>-->
                             <li>
                                 <p>refresh rate in seconds: <input type="number" placeholder="60">
                                 </p>
@@ -131,7 +131,7 @@
                         </ul>
                         <header><h1>Feed Synchronization</h1></header>
                         <!--<aside><p>test</p></aside>-->
-                        <ul data-role="listview">
+                        <ul data-role="listview" class="configurationLeft">
                             <li>    
                                 <p>I want to synchronize my feeds with "theoldreader"</p>
                                 <label>
@@ -156,30 +156,33 @@
                                     <span></span>
                                 </label>
                             </li>
-                        </ul>
-                    </section>
+                        </ul>                        
+                        <div class="configurationRight"/>
+                        <a id="connectToTheOldReader" class="button white" href="#connectTheOldReader" data-role="button"><p>Synchronize data<br>with theOldReader</p></a>
                 </div>
+                </section>
+            </div>
 
 
-                <div data-role="page" id="main-page">
-                    <section data-role="list" id="feedsAbo"> 
-                        <ul id="feedsAboList"></ul>
-                    </section>
-                    <section data-role="list" id="feedEntries"> 
-                        <ul id="feedEntriesList">
-                        </ul>
-                    </section>
-                </div>
+            <div data-role="page" id="main-page">
+                <section data-role="list" id="feedsAbo"> 
+                    <ul id="feedsAboList"></ul>
+                </section>
+                <section data-role="list" id="feedEntries"> 
+                    <ul id="feedEntriesList">
+                    </ul>
+                </section>
+            </div>
 
-                <div data-role="page" id="showArticlePage">
-                    <h1 id="articleTitle"></h1>
-                    <article id="articleContent"></article>
-                </div>
+            <div data-role="page" id="showArticlePage">
+                <h1 id="articleTitle"></h1>
+                <article id="articleContent"></article>
+            </div>
 
-            </div> <!-- PageStack -->
+        </div> <!-- PageStack -->
 
-        </div>
+    </div>
 
-    </body>
+</body>
 
 </html>

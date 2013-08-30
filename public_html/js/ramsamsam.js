@@ -69,6 +69,7 @@ function onDeviceReady() {
         if (configuration.useNightMode) {
             showNightMode(configuration.useNightMode);
         }
+
     };
 
 
@@ -83,8 +84,25 @@ function onDeviceReady() {
             retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
     }
+
+
+    gui.onReload = function() {
+        theOldReader.getSubscriptionList(
+                configuration.theoldReader_sync.theoldreader_username,
+                configuration.theoldReader_sync.theoldreader_password,
+                function(response) {
+                    showSubscriptionList(response);
+                });
+    };
 }
 
+function showSubscriptionList(subscriptionList) {
+    subscriptionListJSON = JSON.parse(subscriptionList);
+     for(prop in subscriptionListJSON){
+         
+        
+    }
+}
 function showNightMode(nightMode) {
     if (nightMode) {
         var head = document.getElementsByName("head");
@@ -109,12 +127,12 @@ function retrieveDefaultFeeds() {
 
 
 function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {
-	feedURL = feedURL.replace(/feed:\/\//,"http://");
-	if (feedURL.match(/^http:\/\/www.ebay/)){
-		feedURL += "&rss=1";
-		feedURL = feedURL.replace(/\/sch\//,"\/sch/rss/?_sacat=");
-	}
-	retrieveFeedPersistAndShowInGUI(feedURL);
+    feedURL = feedURL.replace(/feed:\/\//, "http://");
+    if (feedURL.match(/^http:\/\/www.ebay/)) {
+        feedURL += "&rss=1";
+        feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
+    }
+    retrieveFeedPersistAndShowInGUI(feedURL);
 }
 
 function retrieveFeedPersistAndShowInGUI(feedURL) {
@@ -163,7 +181,7 @@ function persistFeed(retrievedFeed) {
 
 function theoldreader_getLoginToken(email, password, gotToken) {
 //    theOldReader.getLoginToken(email, password, gotToken);
-  theOldReader.getSubscriptionList(email, password, gotToken);
+    theOldReader.getSubscriptionList(email, password, gotToken);
 }
 
 
@@ -192,7 +210,7 @@ function resetLocalStore() {
 }
 
 function addNewSubscriptionInGUI(feedUrl) {
-	var feedInfo = feedRecordsShownInGUI[feedUrl];
+    var feedInfo = feedRecordsShownInGUI[feedUrl];
     gui.addFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
 }
 
