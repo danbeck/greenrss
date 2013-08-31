@@ -104,6 +104,37 @@
     /*color:white;*/
 }
 
+[data-role="list"] header > a {
+text-decoration: none;
+color: #787878;
+display: block;
+height: 3.4rem;
+position: relative;
+border: none;
+line-height: 3.4rem;
+/*padding-left: 0.5rem;*/
+border-bottom: 0.1rem solid #C9C9C9;
+padding-right: 1.5rem;
+border-top: 1px solid #ebebeb;
+font-size: 0.9rem;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+[data-role="list"] header p {
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+border: none;
+display: block;
+/*color: #787878;*/
+font-size: 0.9rem;
+padding-left: 1rem;
+padding-top: 0.5rem;
+line-height: 1rem;
+}
+
 li[data-role="cloudlocation"]  h2 {
     /*background-color: #ea7140;*/
     color: #ea7140;

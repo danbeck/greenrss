@@ -198,16 +198,16 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
     return that.onConfigurationChanged(that.configuration);
 };
 
-Gui.prototype.showSubscriptions = function(headerName, subscription) {
+Gui.prototype.showSubscriptions = function(headerName, subscription, onSubscriptionClick) {
     var self = this;
 
     if (!$(headerName)) {
         var header = document.createElement("li");
         header.id = headerName;
-        header.setAttribute("data-role","cloudlocation");
+        header.setAttribute("data-role", "cloudlocation");
         var headerParagraph = document.createElement("h2");
         headerParagraph.innerHTML = headerName;
-        
+
         header.appendChild(headerParagraph);
         $("feedsAboList").appendChild(header);
     }
@@ -217,19 +217,37 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             var header = $(headerName);
             if (!$(category.id)) {
                 var categoryElement = document.createElement("header");
+
+                var a = document.createElement("a");
+                a.setAttribute("href", "#");
+
+                var p = document.createElement("p");
+                p.innerHTML = category.label;
                 categoryElement.id = category.id;
-                categoryElement.innerHTML = category.label;
+//                categoryElement.innerHTML = category.label;
+
+                var iconAside = document.createElement("aside");
+                var icon = document.createElement("img");
+//                icon.setAttribute("width", "25px");
+//                icon.setAttribute("height", "25px");
+                icon.setAttribute("src", "img/ListItemIsExpanded@8.png");
+                iconAside.appendChild(icon);
+                a.appendChild(iconAside);
+                a.appendChild(p);
+                categoryElement.appendChild(a);
+
+//                var iconAside = document.createElement("p");
                 insertAfter($(headerName), categoryElement);
 
             }
-            var iconAside = document.createElement("aside");;
+            var iconAside = document.createElement("aside");
             var icon = document.createElement("img");
-            icon.setAttribute("width","35px");
-            icon.setAttribute("height","35px");
+            icon.setAttribute("width", "35px");
+            icon.setAttribute("height", "35px");
             icon.setAttribute("src", subscription.iconUrl);
             iconAside.appendChild(icon);
             var a = document.createElement("a");
-            a.setAttribute("href","#");
+            a.setAttribute("href", "#");
             a.appendChild(iconAside);
             var p = createP(subscription.title);
             a.appendChild(p);
@@ -239,6 +257,12 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             li["data-feed-id"] = subscription.id;
 
             $(category.id).appendChild(li);
+
+            li.onclick = function showFeedEntry() {
+                var clickedFeedUrl = li.getAttribute("data-rss-link");
+
+                onSubscriptionClick(clickedFeedUrl);
+            };
         }
     }
     else {
@@ -248,7 +272,34 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         li["data-feed-id"] = subscription.id;
 
         insertAfter($(headerName), li);
+
+        li.onclick = function showFeedEntry() {
+            var clickedFeedUrl = li.getAttribute("data-rss-link");
+
+            onSubscriptionClick(clickedFeedUrl);
+        };
+
     }
+
+
+};
+
+
+Gui.prototype.showFeedItem = function(item, onFeedClick) {
+    var a = document.createElement("a");
+    var p1 = createP(item.title);
+    var p2 = createP(item.summary);
+//        p1["data-article"] = feedEntry;
+    a.appendChild(p1);
+    a.appendChild(p2);
+    var li = createLi(a);
+
+    li.onclick = new function() {
+        var id = li.getAttribute("id");
+        onFeedClick(id);
+    };
+    $("feedEntriesList").appendChild(li);
+
 };
 
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {

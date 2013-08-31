@@ -99,7 +99,7 @@ function onDeviceReady() {
 
 function showSubscriptionList(subscriptionList) {
     subscriptionListJSON = JSON.parse(subscriptionList).subscriptions;
-     for(var i =0; i< subscriptionListJSON.length; i++){
+    for (var i = 0; i < subscriptionListJSON.length; i++) {
 //         showAlert(JSON.stringify(subscriptionListJSON[i]));
 //         var id = subscriptionListJSON[i].id;
 //         var title = subscriptionListJSON[i].title;
@@ -109,8 +109,32 @@ function showSubscriptionList(subscriptionList) {
 //         var htmlUrl = subscriptionListJSON[i].htmlUrl;
 //         var iconUrl = subscriptionListJSON[i].iconUrl;
 //         showSubscriptions(subscriptionListJSON[i]);
-         this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i]);
+        this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i], function(clickedFeedURL) {
+            showFeedItemsInGUI();
+        });
     }
+}
+function showFeedItemsInGUI() {
+    theOldReader.getAllItemIds(configuration.theoldReader_sync.theoldreader_username, configuration.theoldReader_sync.theoldreader_password, function(allItemIds) {
+
+        var allItemIdsAsJSON = JSON.parse(allItemIds);
+        var items = allItemIdsAsJSON.items;
+        for (var i = 0; i < items.length; i++) {
+            var item = {"id": items[i].id,
+                "title": items[i].title,
+                "feedURL": items[i].canonical[i],
+                "summary": items[i].summary.content,
+                "published": items[i].published,
+                "updated": items[i].updated};
+            gui.showFeedItem(item, onFeedClick);
+        }
+
+    });
+}
+
+function onFeedClick(feedid) {
+//    feedidAsJSON JSON.parse(feedid);
+    console.log(feedid);
 }
 function showNightMode(nightMode) {
     if (nightMode) {
@@ -185,12 +209,6 @@ function persistFeed(retrievedFeed) {
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
     feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
     saveItemInLocalStore("feeds", feedRecordsSavedInDB);
-}
-
-
-function theoldreader_getLoginToken(email, password, gotToken) {
-//    theOldReader.getLoginToken(email, password, gotToken);
-    theOldReader.getSubscriptionList(email, password, gotToken);
 }
 
 
