@@ -6,8 +6,8 @@ function TheOldReader() {
     this.__THEOLDREADER_ALLITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/reading-list";
     this.__THEOLDREADER_READITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/read";
     this.__THEOLDREADER_UNREADITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&xt=user/-/state/com.google/read";
-//    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
-    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
+    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
+//    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
 }
 
 TheOldReader.prototype.getLoginToken = function(email, password, gotToken) {
@@ -37,12 +37,16 @@ TheOldReader.prototype.getAllItemIds = function(email, password,
     var url = this.__THEOLDREADER_ALLITEM_IDS_URL;
     getHttpRequest(url, function(allItemIds) {
         var itemRefs = JSON.parse(allItemIds).itemRefs;
-        var urlParameter = "";
+        var newArray = new Array();
         for (var i = 0; i < itemRefs.length; i++) {
-            urlParameter += "&i=" + itemRefs[i].id;
+            newArray.push(itemRefs[i].id);
+//            urlParameter += "&i=" + itemRefs[i].id;
 //            onGetSubscriptionList();
         }
+        var urlParameter = "&i=";
+        urlParameter += newArray.join("&i=");
         getHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL + urlParameter, onGetSubscriptionList);
+        postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL + urlParameter, urlParameter, onGetSubscriptionList);
     });
 };
 
