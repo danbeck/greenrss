@@ -57,14 +57,9 @@ function onDeviceReady() {
 
     gui = new Gui(configuration);
     gui.onConfigurationChanged = function(config) {
-        saveItemInLocalStore("configuration", configuration);
+        saveConfigInLocalStore("configuration", configuration);
 
         if (configuration.theoldReader_sync.useTheOldReader) {
-//            theoldreader_getLoginToken(configuration.theoldReader_sync.theoldreader_username,
-//                    configuration.theoldReader_sync.theoldreader_password, function(auth) {
-//                showAlert("login token was: " + auth);
-//            }
-//        );
         }
 
         if (configuration.useNightMode) {
@@ -85,6 +80,13 @@ function onDeviceReady() {
             retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
     }
+    gui.onSubscriptionClick = function(clickedFeedID) {
+        theOldReader.getAllItemIds(configuration.theoldReader_sync.theoldreader_username,
+                configuration.theoldReader_sync.theoldreader_password, 
+                function(response) {
+                    var responseAsJSON = JSON.parse(response);
+        });
+    };
 
 
     gui.onConnectToTheOldReader = function() {
@@ -92,8 +94,8 @@ function onDeviceReady() {
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
                 function(response) {
-                    showSubscriptionList(response);
-                });
+            showSubscriptionList(response);
+        });
     };
 }
 
@@ -208,11 +210,11 @@ function persistFeed(retrievedFeed) {
 
     feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
     feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
-    saveItemInLocalStore("feeds", feedRecordsSavedInDB);
+    saveConfigInLocalStore("feeds", feedRecordsSavedInDB);
 }
 
 
-function saveItemInLocalStore(item, record) {
+function saveConfigInLocalStore(item, record) {
     try {
         localStorage.setItem(item, JSON.stringify(record));
     } catch (e) {

@@ -172,6 +172,11 @@ Gui.prototype.__activateNightMode = function() {
 Gui.prototype.__deactiveNightMode = function() {
 
 };
+
+
+Gui.prototype.onSubscriptionClick = function(clickedFeedID) {
+
+};
 Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(that, openConfigButton) {
     that.UI.popover(openConfigButton, "configurePopover").hide();
     if (isDisplayed($("extendedConfigurationPage")))
@@ -198,7 +203,7 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
     return that.onConfigurationChanged(that.configuration);
 };
 
-Gui.prototype.showSubscriptions = function(headerName, subscription, onSubscriptionClick) {
+Gui.prototype.showSubscriptions = function(headerName, subscription) {
     var self = this;
 
     if (!$(headerName)) {
@@ -253,35 +258,31 @@ Gui.prototype.showSubscriptions = function(headerName, subscription, onSubscript
             a.appendChild(p);
             var li = createLi(a);
 //            var a = createLi();
-            li["data-rss-link"] = subscription.url;
-            li["data-feed-id"] = subscription.id;
+            li.setAttribute("data-rss-link", subscription.url);
+            li.setAttribute("data-feed-id", subscription.id);
 
             $(category.id).appendChild(li);
 
             li.onclick = function showFeedEntry() {
-                var clickedFeedUrl = li.getAttribute("data-rss-link");
+                var clickedFeedId = li.getAttribute("data-rss-id");
 
-                onSubscriptionClick(clickedFeedUrl);
+                self.onSubscriptionClick(clickedFeedId);
             };
         }
     }
     else {
         var pa = createP(subscription.title);
         var li = createLi(pa);
-        li["data-rss-link"] = subscription.url;
-        li["data-feed-id"] = subscription.id;
+        li.setAttribute("data-rss-link", subscription.url);
+        li.setAttribute("data-feed-id", subscription.id);
 
         insertAfter($(headerName), li);
 
         li.onclick = function showFeedEntry() {
             var clickedFeedUrl = li.getAttribute("data-rss-link");
-
-            onSubscriptionClick(clickedFeedUrl);
+            self.onSubscriptionClick(clickedFeedUrl);
         };
-
     }
-
-
 };
 
 
@@ -305,7 +306,7 @@ Gui.prototype.showFeedItem = function(item, onFeedClick) {
 Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     var pa = createP(feedTitle);
     var li = createLi(pa);
-    li["data-rss-link"] = feedUrl;
+    li.setAttribute("data-rss-link", feedUrl);
 
     $("feedsAboList").appendChild(li);
 
@@ -319,7 +320,7 @@ Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     var that = this;
 
     li.onclick = function showFeedEntry() {
-        var clickedFeedUrl = li["data-rss-link"];
+        var clickedFeedUrl = li.getAttribute("data-rss-link");
 
         var feedsAboListElement = $("feedsAboList");
         var allFeeds = feedsAboListElement.childNodes;
