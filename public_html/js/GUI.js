@@ -320,7 +320,7 @@ Gui.prototype.__showFeedItem = function(item) {
     var self = this;
     var a = document.createElement("a");
     var p1 = createP(item.title);
-//    var shortContent = item.summary.content;
+    var shortContent = item.summary.content;
     var shortContent = item.summary.content.replace(/<img.*>/g, "");
     var shortContent = shortContent.replace(/<p>/g, "");
     var shortContent = shortContent.replace(/<\/p>/g, "");
@@ -335,7 +335,7 @@ Gui.prototype.__showFeedItem = function(item) {
     var shortContent = shortContent.replace(/<em>/g, "");
     var shortContent = shortContent.replace(/<\/em>/g, "");
     var shortContent = shortContent.replace(/<a.*<\/a>/g, "");
-    var shortContent = shortContent.substring(0, 120) + "...";
+//    var shortContent = shortContent.substring(0, 120) + "...";
     var p2 = createP(shortContent);
 
     a.appendChild(p1);
