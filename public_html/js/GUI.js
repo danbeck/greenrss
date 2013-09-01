@@ -203,6 +203,7 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
     return that.onConfigurationChanged(that.configuration);
 };
 
+// new method.
 Gui.prototype.showSubscriptions = function(headerName, subscription) {
     var self = this;
 
@@ -258,13 +259,13 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             a.appendChild(p);
             var li = createLi(a);
 //            var a = createLi();
-            li.setAttribute("data-rss-link", subscription.url);
-            li.setAttribute("data-feed-id", subscription.id);
+            li.setAttribute("data-subscription-url", subscription.url);
+            li.setAttribute("data-subscription-id", subscription.id);
 
             $(category.id).appendChild(li);
 
             li.onclick = function showFeedEntry() {
-                var clickedFeedId = li.getAttribute("data-rss-id");
+                var clickedFeedId = li.getAttribute("data-subscription-id");
 
                 self.onSubscriptionClick(clickedFeedId);
             };
@@ -273,13 +274,13 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     else {
         var pa = createP(subscription.title);
         var li = createLi(pa);
-        li.setAttribute("data-rss-link", subscription.url);
-        li.setAttribute("data-feed-id", subscription.id);
+        li.setAttribute("data-subscription-url", subscription.url);
+        li.setAttribute("data-subscription-id", subscription.id);
 
         insertAfter($(headerName), li);
 
         li.onclick = function showFeedEntry() {
-            var clickedFeedUrl = li.getAttribute("data-rss-link");
+            var clickedFeedUrl = li.getAttribute("data-subscription-url");
             self.onSubscriptionClick(clickedFeedUrl);
         };
     }

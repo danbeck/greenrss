@@ -12,10 +12,9 @@ function TheOldReader() {
 
 TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) {
     var self = this;
-    var url = this.__THEOLDREADER_CLIENT_LOGIN_URL;
     var data = "output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email="
             + email + "&Passwd=" + password;
-    postUrlEncodedHttpRequest(url, data, function(response) {
+    postUrlEncodedHttpRequest(this.__THEOLDREADER_CLIENT_LOGIN_URL, data, function(response) {
         self.__saveToken(response);
         gotToken.apply(undefined, gotToken.arguments);
     });
@@ -30,8 +29,7 @@ TheOldReader.prototype.getSubscriptionList = function(email, password,
     var self = this;
 
     this.__retrieveTokenIfNecessary(email, password, function() {
-        var url = self.__THEOLDREADER_SUBSCRIPTIONLIST_URL;
-        getHttpRequest(url, onGetSubscriptionList);
+        getHttpRequest(self.__THEOLDREADER_SUBSCRIPTIONLIST_URL, onGetSubscriptionList);
     });
 };
 
@@ -40,29 +38,36 @@ TheOldReader.prototype.getSubscriptionList = function(email, password,
 TheOldReader.prototype.getAllItemIds = function(email, password,
         onGetAllItemIds) {
     var self = this;
-    this.__retrieveTokenIfNecessary(email, password, onGetAllItemIds);
-    var url = this.__THEOLDREADER_ALLITEM_IDS_URL;
-    getHttpRequest(url, function(allItemIds) {
-        var itemRefs = JSON.parse(allItemIds).itemRefs;
-        var newArray = new Array();
-        for (var i = 0; i < itemRefs.length; i++) {
-            newArray.push(itemRefs[i].id);
-//            urlParameter += "&i=" + itemRefs[i].id;
-//            onGetSubscriptionList();
-        }
-        var urlParameter = "&i=";
-        urlParameter += newArray.join("&i=");
-        getHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL + urlParameter, onGetAllItemIds);
-        postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL + urlParameter, urlParameter, onGetAllItemIds);
+    this.__retrieveTokenIfNecessary(email, password, function() {
+
+        getHttpRequest(self.__THEOLDREADER_ALLITEM_IDS_URL, function(allItemIds) {
+            var itemRefs = JSON.parse(allItemIds).itemRefs;
+            var urlParameter = createUrlParamerters(itemRefs);
+            postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL, urlParameter, onGetAllItemIds);
+
+            function createUrlParamerters(itemRefs) {
+                if (itemRefs.length === 0)
+                    return "";
+
+                var urlParameter = "i=";
+                var newArray = new Array();
+                for (var i = 0; i < itemRefs.length; i++) {
+                    newArray.push(itemRefs[i].id);
+                }
+                urlParameter += newArray.join("&i=");
+                return urlParameter;
+            }
+        });
     });
+
+
 };
 
 
 TheOldReader.prototype.getReadItemIds = function(email, password,
         onGetSubscriptionList) {
     this.__retrieveTokenIfNecessary(email, password, onGetSubscriptionList);
-    var url = this.__THEOLDREADER_READITEM_IDS_URL;
-    getHttpRequest(url, onGetSubscriptionList);
+    getHttpRequest(this.__THEOLDREADER_READITEM_IDS_URL, onGetSubscriptionList);
 };
 
 TheOldReader.prototype.getItemIdsForFolder = function(email, password,
