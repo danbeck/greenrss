@@ -320,23 +320,9 @@ Gui.prototype.__showFeedItem = function(item) {
     var self = this;
     var a = document.createElement("a");
     var p1 = createP(item.title);
-    var shortContent = item.summary.content;
-    var shortContent = item.summary.content.replace(/<img.*>/g, "");
-    var shortContent = shortContent.replace(/<p>/g, "");
-    var shortContent = shortContent.replace(/<\/p>/g, "");
-    var shortContent = shortContent.replace(/<ul>/g, "");
-    var shortContent = shortContent.replace(/<\/ul>/g, "");
-    var shortContent = shortContent.replace(/<\li>/g, "");
-    var shortContent = shortContent.replace(/<\/li>/g, "");
-    var shortContent = shortContent.replace(/<div>/g, "");
-    var shortContent = shortContent.replace(/<\/div>/g, "");
-    var shortContent = shortContent.replace(/<strong>/g, "");
-    var shortContent = shortContent.replace(/<\/strong>/g, "");
-    var shortContent = shortContent.replace(/<em>/g, "");
-    var shortContent = shortContent.replace(/<\/em>/g, "");
-    var shortContent = shortContent.replace(/<a.*<\/a>/g, "");
-//    var shortContent = shortContent.substring(0, 120) + "...";
-    var p2 = createP(shortContent);
+    var text = stripHTML(item.summary.content);
+
+    var p2 = createP(text);
 
     a.appendChild(p1);
     a.appendChild(p2);

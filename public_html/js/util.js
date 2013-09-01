@@ -49,6 +49,37 @@ function postUrlEncodedHttpRequest(url, postDataUrl, success, failure) {
     request.send(postDataUrl);
 }
 
+function stripHTMLWithRegex(htmlText) {
+    var result = htmlText.replace(/<img.*>/g, "");
+    var result = result.replace(/<p>/g, "");
+    var result = result.replace(/<\/p>/g, "");
+    var result = result.replace(/<ul>/g, "");
+    var result = result.replace(/<\/ul>/g, "");
+    var result = result.replace(/<\li>/g, "");
+    var result = result.replace(/<\/li>/g, "");
+    var result = result.replace(/<div>/g, "");
+    var result = result.replace(/<\/div>/g, "");
+    var result = result.replace(/<strong>/g, "");
+    var result = result.replace(/<\/strong>/g, "");
+    var result = result.replace(/<em>/g, "");
+    var result = result.replace(/<\/em>/g, "");
+    var result = result.replace(/<br>/g, "");
+    var result = result.replace(/<b>/g, "");
+    var result = result.replace(/<\/b>/g, "");
+    var result = result.replace(/<i>/g, "");
+    var result = result.replace(/<\/i>/g, "");
+    var result = result.replace(/<a.*<\/a>/g, "");
+    var result = result.replace(/<a.*>/g, "");
+    return result;
+}
+
+function stripHTML(htmlText) {
+    var div = document.createElement("div");
+    div.innerHTML = htmlText;
+    var text = div.textContent || div.innerText || "";
+    return text;
+}
+
 function $(id) {
     return document.getElementById(id);
 }
