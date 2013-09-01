@@ -97,9 +97,10 @@ function onDeviceReady() {
 //self: Object
 //title: "Paint.NET Blog"
 //updated: 1376904314
-                    for (var i = 0; i < feedItemsContainer.items.length; i++)
-                        gui.showFeedItem(feedItemsContainer.items[i]);
-                });
+//                    for (var i = 0; i < feedItemsContainer.items.length; i++)
+                    gui.showFeedItems(feedItemsContainer.items);
+                }
+        );
     };
 
 
