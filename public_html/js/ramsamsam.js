@@ -81,11 +81,25 @@ function onDeviceReady() {
         }
     }
     gui.onSubscriptionClick = function(clickedFeedID) {
-        theOldReader.getAllItemIds(configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password, 
+        theOldReader.getItemIdsForSubscription(
+                configuration.theoldReader_sync.theoldreader_username,
+                configuration.theoldReader_sync.theoldreader_password,
+                clickedFeedID,
                 function(response) {
-                    var responseAsJSON = JSON.parse(response);
-        });
+                    var feedItemsContainer = JSON.parse(response);
+//alternate: Object
+// - href: "http://blog.getpaint.net"
+//-  type: "text/html"
+//description: ""
+//direction: "ltr"
+//id: "feed/51d407ced5d565c434000098"
+//items: Array[20]
+//self: Object
+//title: "Paint.NET Blog"
+//updated: 1376904314
+                    for (var i = 0; i < feedItemsContainer.items.length; i++)
+                        gui.showFeedItem(feedItemsContainer.items[i]);
+                });
     };
 
 
@@ -94,8 +108,8 @@ function onDeviceReady() {
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
                 function(response) {
-            showSubscriptionList(response);
-        });
+                    showSubscriptionList(response);
+                });
     };
 }
 
@@ -111,9 +125,7 @@ function showSubscriptionList(subscriptionList) {
 //         var htmlUrl = subscriptionListJSON[i].htmlUrl;
 //         var iconUrl = subscriptionListJSON[i].iconUrl;
 //         showSubscriptions(subscriptionListJSON[i]);
-        this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i], function(clickedFeedURL) {
-            showFeedItemsInGUI();
-        });
+        this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i]);
     }
 }
 function showFeedItemsInGUI() {

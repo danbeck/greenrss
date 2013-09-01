@@ -4,6 +4,7 @@ function TheOldReader() {
     this.__THEOLDREADER_SUBSCRIPTIONLIST_URL = this.__THEOLDREADER_API_URL + "subscription/list?output=json";
     this.__THEOLDREADER_ITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json";
     this.__THEOLDREADER_ALLITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/reading-list";
+    this.__THEOLDREADER_ITEM_IDS_FOR_FEED_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=";
     this.__THEOLDREADER_READITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/read";
     this.__THEOLDREADER_UNREADITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&xt=user/-/state/com.google/read";
     this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
@@ -59,8 +60,6 @@ TheOldReader.prototype.getAllItemIds = function(email, password,
             }
         });
     });
-
-
 };
 
 
@@ -83,6 +82,34 @@ TheOldReader.prototype.getItemIdsForSubscription = function(email, password,
     var url = this.__THEOLDREADER_API_URL + "subscription/list?output=json";
     getHttpRequest(url, onGetSubscriptionList);
 };
+
+
+TheOldReader.prototype.getItemIdsForSubscription = function(email, password, subscriptionid,
+        onGetAllItemIds) {
+    var self = this;
+    this.__retrieveTokenIfNecessary(email, password, function() {
+
+        getHttpRequest(self.__THEOLDREADER_ITEM_IDS_FOR_FEED_URL + subscriptionid, function(itemIds) {
+            var itemRefs = JSON.parse(itemIds).itemRefs;
+            var urlParameter = createUrlParamerters(itemRefs);
+            postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL, urlParameter, onGetAllItemIds);
+
+            function createUrlParamerters(itemRefs) {
+                if (itemRefs.length === 0)
+                    return "";
+
+                var urlParameter = "i=";
+                var newArray = new Array();
+                for (var i = 0; i < itemRefs.length; i++) {
+                    newArray.push(itemRefs[i].id);
+                }
+                urlParameter += newArray.join("&i=");
+                return urlParameter;
+            }
+        });
+    });
+};
+
 
 TheOldReader.prototype.getUnreadItemIds = function(email, password,
         onGetSubscriptionList) {

@@ -40,6 +40,9 @@ Gui.prototype.onConfigurationChanged = function() {
 Gui.prototype.onFeedAdded = function() {
 };
 
+Gui.prototype.onFeedItemClicked = function() {
+};
+
 Gui.prototype.onConnectToTheOldReader = function() {
 };
 
@@ -280,14 +283,15 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         insertAfter($(headerName), li);
 
         li.onclick = function showFeedEntry() {
-            var clickedFeedUrl = li.getAttribute("data-subscription-url");
+            var clickedFeedUrl = li.getAttribute("data-subscription-id");
             self.onSubscriptionClick(clickedFeedUrl);
         };
     }
 };
 
 
-Gui.prototype.showFeedItem = function(item, onFeedClick) {
+Gui.prototype.showFeedItem = function(item) {
+    var self = this;
     var a = document.createElement("a");
     var p1 = createP(item.title);
     var p2 = createP(item.summary);
@@ -298,7 +302,7 @@ Gui.prototype.showFeedItem = function(item, onFeedClick) {
 
     li.onclick = new function() {
         var id = li.getAttribute("id");
-        onFeedClick(id);
+        self.onFeedItemClicked(id);
     };
     $("feedEntriesList").appendChild(li);
 
