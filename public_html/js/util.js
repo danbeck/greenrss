@@ -68,8 +68,10 @@ function stripHTMLWithRegex(htmlText) {
     var result = result.replace(/<\/b>/g, "");
     var result = result.replace(/<i>/g, "");
     var result = result.replace(/<\/i>/g, "");
-    var result = result.replace(/<a.*<\/a>/g, "");
-    var result = result.replace(/<a.*>/g, "");
+    var result = result.replace(/<button>/g, "");
+    var result = result.replace(/<\/button>/g, "");
+//    var result = result.replace(/<a.*<\/a>/g, "");
+//    var result = result.replace(/<a.*>/g, "");
     return result;
 }
 
@@ -77,6 +79,7 @@ function stripHTML(htmlText) {
     var div = document.createElement("div");
     div.innerHTML = htmlText;
     var text = div.textContent || div.innerText || "";
+    text = stripHTMLWithRegex(text);
     return text;
 }
 
