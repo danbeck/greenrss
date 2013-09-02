@@ -1,12 +1,68 @@
+google.load("feeds", "1");
+
+function GoogleFeed() {
+
+    // this.__DEFAULT_FEEDS= ["http://daniel-beck.org/feed/",
+    // "http://planet.ubuntu.com/rss20.xml",
+    // "http://planetkde.org/rss20.xml"];
+
+    this.__DEFAULT_FEEDS = {
+        "http://daniel-beck.org/feed/": "null",
+        "http://planet.ubuntu.com/rss20.xml": "null",
+        "http://planetkde.org/rss20.xml": "null"
+    };
+
+}
+
+GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
+    localStorage["feeds"].feedUrl = "null";
+    onSubscriptionAdded.apply(undefined, onSubscriptionAdded.arguments);
+};
+
+GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
+    var feedsToLoad;
+    if (!localStorage["feeds"])
+        feedsToLoad = this.__DEFAULT_FEEDS;
+    else
+        feedsToLoad = JSON.parse(localStorage[item]);
+
+    for (var feedURL in feedsToLoad) {
+        var feed = new google.feeds.Feed(feedURL);
+        feed.setNumEntries(100);
+        feed.load(function(retrievedFeed) {
+            if (!retrievedFeed.error) {
+                var test = undefined;
+//				persistFeed(retrievedFeed);
+//				addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
+            }
+        });
+    }
+};
+var UI_CONVERGENCE_SMALL_DISPLAY = "smalldisplay";
+var UI_CONVERGENCE_BIG_DISPLAY = "bigdisplay";
+
+var MAIN_PAGE = "mainPage";
+
+//const SUBSCRIPTIONS_PANE = "subscriptionPane";
+var SUBSCRIPTIONS_LIST = "subscriptionsList";
+var SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE = "subscriptionItemsSmallDisplayPane";
+var SUBSCRIPTION_ITEMS_LIST = "subscriptionItemsList";
+var SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST = "subscriptionItemsSmallDisplayList";
+
+
+
 function Gui(configuration) {
     var that = this;
 
+
     this.UI = new UbuntuUI();
     this.UI.init();
+    this.convergence = computeConvergence();
+
     this.configuration = configuration;
 
     // Set up the app by pushing the main view
-    this.UI.pagestack.push("main-page");
+    this.UI.pagestack.push(MAIN_PAGE);
     // var backButton = document.querySelector("li a[data-role=\"back\"]");
 
     this.UI.button('configureButton').click(function() {
@@ -32,6 +88,27 @@ function Gui(configuration) {
     this.UI.button('addfeedcancel').click(function() {
         hide($("addfeeddialog"));
     });
+
+    window.onresize = function() {
+        var newConvergence = computeConvergence();
+        if (that.convergence !== newConvergence) {
+            that.convergence = newConvergence;
+            var pageStack = that.UI._pageStack;
+            pageStack._pages = new Array();
+            that.UI.pagestack.push(MAIN_PAGE, {
+                subtitle: 'mainpage'
+            });
+        }
+    };
+
+    function computeConvergence() {
+        if (window.matchMedia("(max-width: 599px)").matches) {
+            return UI_CONVERGENCE_SMALL_DISPLAY;
+        }
+        if (window.matchMedia("(min-width: 600px)").matches) {
+            return UI_CONVERGENCE_BIG_DISPLAY;
+        }
+    }
 }
 
 Gui.prototype.onConfigurationChanged = function() {
@@ -51,10 +128,6 @@ Gui.prototype.reload = function() {
 Gui.prototype.openConfigurePage = function(openConfigButton) {
 
     var that = this;
-
-    // var backButtonEventListener = function() {
-    // };
-
 
     this.UI.popover(openConfigButton, "configurePopover").toggle();
 
@@ -207,44 +280,43 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
 };
 
 // new method.
-Gui.prototype.showSubscriptions = function(headerName, subscription) {
+Gui.prototype.showTheOldReaderSubscriptions = function(headerName, subscription) {
     var self = this;
 
     if (!$(headerName)) {
-        var header = document.createElement("li");
-        header.id = headerName;
-        header.setAttribute("data-role", "cloudlocation");
-        var headerParagraph = document.createElement("h2");
-        headerParagraph.innerHTML = headerName;
-
-        header.appendChild(headerParagraph);
-        $("feedsAboList").appendChild(header);
+        header = dom("li", {id: headerName, "data-role": "cloudlocation"},
+        dom("h2", null, headerName));
+        $(SUBSCRIPTIONS_LIST).appendChild(header);
     }
     if (subscription.categories !== undefined && subscription.categories.length > 0) {
         for (var i = 0; i < subscription.categories.length; i++) {
             var category = subscription.categories[i];
-            var header = $(headerName);
             if (!$(category.id)) {
-                var categoryElement = document.createElement("header");
+//                var categoryElement = document.createElement("header");
+//
+//                var a = document.createElement("a");
+//                a.setAttribute("href", "#");
+//
+//                var p = document.createElement("p");
+//                p.innerHTML = category.label;
+//                categoryElement.id = category.id;
+////                categoryElement.innerHTML = category.label;
+//
+//                var iconAside = document.createElement("aside");
+//                var icon = document.createElement("img");
+////                icon.setAttribute("width", "25px");
+////                icon.setAttribute("height", "25px");
+//                icon.setAttribute("src", "img/ListItemIsExpanded@8.png");
+//                iconAside.appendChild(icon);
+//                a.appendChild(iconAside);
+//                a.appendChild(p);
+//                categoryElement.appendChild(a);
 
-                var a = document.createElement("a");
-                a.setAttribute("href", "#");
-
-                var p = document.createElement("p");
-                p.innerHTML = category.label;
-                categoryElement.id = category.id;
-//                categoryElement.innerHTML = category.label;
-
-                var iconAside = document.createElement("aside");
-                var icon = document.createElement("img");
-//                icon.setAttribute("width", "25px");
-//                icon.setAttribute("height", "25px");
-                icon.setAttribute("src", "img/ListItemIsExpanded@8.png");
-                iconAside.appendChild(icon);
-                a.appendChild(iconAside);
-                a.appendChild(p);
-                categoryElement.appendChild(a);
-
+                var categoryElement = dom("header", {id: category.id},
+                dom("A", {href: "#"},
+                dom("ASIDE", null,
+                        dom("IMG", {src: "img/ListItemIsExpanded@8.png"})),
+                        dom("P", null, category.label)));
 //                var iconAside = document.createElement("p");
                 insertAfter($(headerName), categoryElement);
 
@@ -261,7 +333,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             var p = createP(subscription.title);
             a.appendChild(p);
             var li = createLi(a);
-//            var a = createLi();
             li.setAttribute("data-subscription-url", subscription.url);
             li.setAttribute("data-subscription-id", subscription.id);
 
@@ -290,14 +361,18 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 };
 
 // works for the old reader
-Gui.prototype.showFeedItems = function(feedItems) {
-    $("feedEntriesList").innerHTML = "";
+Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
+    $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     for (var i = 0; i < feedItems.length; i++)
-        this.__showFeedItem(feedItems[i]);
+        this.__showTheOldReaderFeedItem(feedItems[i]);
+
+    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
+    for (var i = 0; i < feedItems.length; i++)
+        this.__showTheOldReaderFeedItem(feedItems[i]);
 };
 
 // works for the old reader
-Gui.prototype.__showFeedItem = function(item) {
+Gui.prototype.__showTheOldReaderFeedItem = function(item) {
 
 //    alternate: Array[1]
 //annotations: Array[0]
@@ -332,16 +407,21 @@ Gui.prototype.__showFeedItem = function(item) {
         var id = li.getAttribute("id");
         self.onFeedItemClicked(id);
     };
-    $("feedEntriesList").appendChild(li);
+    $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
+    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(li.cloneNode(true));
 
 };
 
-Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
-    var pa = createP(feedTitle);
-    var li = createLi(pa);
-    li.setAttribute("data-rss-link", feedUrl);
+Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
+    var that = this;
 
-    $("feedsAboList").appendChild(li);
+//	var pa = createP(feedTitle);
+//    var li = createLi(pa);
+//    li.setAttribute("data-rss-link", feedUrl);
+
+
+    var li = dom("LI", {"data-rss-link": feedUrl}, dom("P", null, feedTitle));
+    $(SUBSCRIPTIONS_LIST).appendChild(li);
 
     li.addEventListener('touchstart', function() {
         li.className += " tapped";
@@ -350,42 +430,65 @@ Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
         li.className = "";
     });
 
-    var that = this;
 
     li.onclick = function showFeedEntry() {
         var clickedFeedUrl = li.getAttribute("data-rss-link");
 
-        var feedsAboListElement = $("feedsAboList");
+        var feedsAboListElement = $(SUBSCRIPTIONS_LIST);
         var allFeeds = feedsAboListElement.childNodes;
         for (var i = 0; i < allFeeds.length; i++) {
             allFeeds[i].removeAttribute("class");
         }
         li["className"] = "active";
-        showFeedEntriesInGUI(clickedFeedUrl, feedRecord, that);
+
+        if (that.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
+            that.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
+                subtitle: 'show FeedItem'
+            });
+        }
+
+        showGoogleFeedEntriesInGUI(clickedFeedUrl, feedRecord, that);
     };
 
-    function showFeedEntriesInGUI(clickedFeedUrl, feedRecord, that) {
+    function showGoogleFeedEntriesInGUI(clickedFeedUrl, feedRecord, that) {
         var feedInfo = feedRecord[clickedFeedUrl];
 
-        var feedElements = $("feedEntriesList");
+//        var feedElements = $(SUBSCRIPTION_ITEMS_LIST);
         var fragment = document.createDocumentFragment();
 
-        feedElements.innerHTML = '';
+        $(SUBSCRIPTION_ITEMS_LIST).innerHTML = '';
         for (var i = 0; i < feedInfo.entries.length; i++) {
             var feedEntry = feedInfo.entries[i];
-            addFeedEntriesToFragment(feedEntry, fragment, that);
+            addGoogleFeedEntriesToFragment(feedEntry, fragment, that);
         }
-        feedElements.appendChild(fragment);
+        $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
+
+
+//        SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST
+//        var feedElements = $(SUBSCRIPTION_ITEMS_LIST);
+        var fragment = document.createDocumentFragment();
+
+        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = '';
+        for (var i = 0; i < feedInfo.entries.length; i++) {
+            var feedEntry = feedInfo.entries[i];
+            addGoogleFeedEntriesToFragment(feedEntry, fragment, that);
+        }
+        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(fragment);
     }
 
-    function addFeedEntriesToFragment(feedEntry, fragment, that) {
-        var a = document.createElement("a");
-        var p1 = createP(feedEntry.title);
-        var p2 = createP(feedEntry.contentSnippet);
-        p1["data-article"] = feedEntry;
-        a.appendChild(p1);
-        a.appendChild(p2);
-        var li = createLi(a);
+    function addGoogleFeedEntriesToFragment(feedEntry, fragment, that) {
+//        var a = document.createElement("a");
+//        var p1 = createP(feedEntry.title);
+//        var p2 = createP(feedEntry.contentSnippet);
+//        p1["data-article"] = feedEntry;
+//        a.appendChild(p1);
+//        a.appendChild(p2);
+//        var li = createLi(a);
+
+        var li = dom("LI", null,
+                dom("A", null,
+                dom("P", {"data-article": feedEntry}, feedEntry.title),
+                dom("P", null, feedEntry.contentSnippet)));
 
         fragment.appendChild(li);
 
@@ -397,24 +500,24 @@ Gui.prototype.addFeedInGui = function(feedTitle, feedUrl, feedRecord) {
         });
 
         li.onclick = function() {
-            showArticle(feedEntry, that);
+            showGoogleArticle(feedEntry, that);
         };
     }
 
-    function showArticle(feedEntry, that) {
+    function showGoogleArticle(feedEntry, that) {
         var articleTitle = $("articleTitle");
         articleTitle.innerHTML = '';
         var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
         articleTitle.appendChild(titleLink);
-
         var contentBlock = $("articleContent");
         contentBlock.innerHTML = feedEntry.content;
         var showArticlePage = $("showArticlePage");
         showArticlePage.innerHTML = "";
         showArticlePage.appendChild(articleTitle);
         showArticlePage.appendChild(contentBlock);
+
         that.UI.pagestack.push('showArticlePage', {
-            subtitle: 'show Article'
+            subtitle: 'show Article',
         });
     }
 

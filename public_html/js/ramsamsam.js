@@ -81,7 +81,7 @@ function onDeviceReady() {
         }
     }
     gui.onSubscriptionClick = function(clickedFeedID) {
-        theOldReader.getItemIdsForSubscription(
+        theOldReader.retrieveOldReaderSubscriptionItems(
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
                 clickedFeedID,
@@ -98,7 +98,7 @@ function onDeviceReady() {
 //title: "Paint.NET Blog"
 //updated: 1376904314
 //                    for (var i = 0; i < feedItemsContainer.items.length; i++)
-                    gui.showFeedItems(feedItemsContainer.items);
+                    gui.showTheOldReaderFeedItems(feedItemsContainer.items);
                 }
         );
     };
@@ -126,7 +126,7 @@ function showSubscriptionList(subscriptionList) {
 //         var htmlUrl = subscriptionListJSON[i].htmlUrl;
 //         var iconUrl = subscriptionListJSON[i].iconUrl;
 //         showSubscriptions(subscriptionListJSON[i]);
-        this.gui.showSubscriptions("theOldReader", subscriptionListJSON[i]);
+        this.gui.showTheOldReaderSubscriptions("theOldReader", subscriptionListJSON[i]);
     }
 }
 function showFeedItemsInGUI() {
@@ -253,7 +253,7 @@ function resetLocalStore() {
 
 function addNewSubscriptionInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
-    gui.addFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
+    gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
 }
 
 function loadFeedsFromLocalStorage() {

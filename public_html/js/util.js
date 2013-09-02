@@ -118,6 +118,39 @@ function linkOpenInNewWindow(href, innerHTML) {
     return a;
 }
 
+function setNodeAttribute(node, attribute, value) {
+    if (attribute === "class")
+        node.className = value;
+    else if (attribute === "checked")
+        node.defaultChecked = value;
+    else if (attribute === "for")
+        node.htmlFor = value;
+    else if (attribute === "style")
+        node.style.cssText = value;
+    else
+        node.setAttribute(attribute, value);
+}
+
+
+function dom(name, attributes) {
+    var node = document.createElement(name);
+
+    if (attributes) {
+        for (var property in attributes) {
+            setNodeAttribute(node, property, attributes[property]);
+        }
+    }
+
+    for (var i = 2; i < arguments.length; i++) {
+        var child = arguments[i];
+        if (typeof child == "string")
+            child = document.createTextNode(child);
+        node.appendChild(child);
+    }
+    return node;
+}
+
+
 function link(href, innerHTML) {
     var a = document.createElement("a");
     a["href"] = href;

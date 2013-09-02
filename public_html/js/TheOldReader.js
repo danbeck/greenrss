@@ -76,15 +76,15 @@ TheOldReader.prototype.getItemIdsForFolder = function(email, password,
     getHttpRequest(url, onGetSubscriptionList);
 };
 
-TheOldReader.prototype.getItemIdsForSubscription = function(email, password,
-        onGetSubscriptionList) {
-    this.__retrieveTokenIfNecessary(email, password, onGetSubscriptionList);
-    var url = this.__THEOLDREADER_API_URL + "subscription/list?output=json";
-    getHttpRequest(url, onGetSubscriptionList);
-};
+//TheOldReader.prototype.getItemIdsForSubscription = function(email, password,
+//        onGetSubscriptionList) {
+//    this.__retrieveTokenIfNecessary(email, password, onGetSubscriptionList);
+//    var url = this.__THEOLDREADER_API_URL + "subscription/list?output=json";
+//    getHttpRequest(url, onGetSubscriptionList);
+//};
 
 
-TheOldReader.prototype.getItemIdsForSubscription = function(email, password, subscriptionid,
+TheOldReader.prototype.retrieveOldReaderSubscriptionItems= function(email, password, subscriptionid,
         onGetAllItemIds) {
     var self = this;
     this.__retrieveTokenIfNecessary(email, password, function() {
