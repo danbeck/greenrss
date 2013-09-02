@@ -11,6 +11,7 @@ if (cordovaUsed()) {
 var gui;
 
 var theOldReader = new TheOldReader();
+//var googleFeed = new GoogleFeed();
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
@@ -71,6 +72,10 @@ function onDeviceReady() {
 
     gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
 
+//    googleFeed.getSubscriptionList(function(result) {
+//        var k = result;
+//
+//    });
     if (feedsNotInLocalStorage()) {
         retrieveDefaultFeeds();
     } else {
@@ -80,6 +85,8 @@ function onDeviceReady() {
             retrieveFeedPersistAndShowSubscriptionInGUI(url);
         }
     }
+
+
     gui.onSubscriptionClick = function(clickedFeedID) {
         theOldReader.retrieveOldReaderSubscriptionItems(
                 configuration.theoldReader_sync.theoldreader_username,
