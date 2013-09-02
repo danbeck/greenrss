@@ -1,4 +1,4 @@
-google.load("feeds", "1");
+//google.load("feeds", "1");
 
 if (cordovaUsed()) {
 // This is the event that fires when Cordova is fully loaded
@@ -11,7 +11,7 @@ if (cordovaUsed()) {
 var gui;
 
 var theOldReader = new TheOldReader();
-//var googleFeed = new GoogleFeed();
+var googleFeed = new GoogleFeed();
 var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
@@ -72,19 +72,20 @@ function onDeviceReady() {
 
     gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
 
-//    googleFeed.getSubscriptionList(function(result) {
-//        var k = result;
-//
-//    });
-    if (feedsNotInLocalStorage()) {
-        retrieveDefaultFeeds();
-    } else {
-        var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
-
-        for (var url in feedsLoadedFromLocalStorage) {
-            retrieveFeedPersistAndShowSubscriptionInGUI(url);
-        }
-    }
+    googleFeed.getSubscriptionList(function(subscriptions) {
+//        gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
+        for (var subscriptionid in subscriptions)
+            this.gui.showGoogleReaderSubscriptions("local", subscriptions[subscriptionid]);
+    });
+    /*  if (feedsNotInLocalStorage()) {
+     retrieveDefaultFeeds();
+     } else {
+     var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
+     
+     for (var url in feedsLoadedFromLocalStorage) {
+     retrieveFeedPersistAndShowSubscriptionInGUI(url);
+     }
+     } */
 
 
     gui.onSubscriptionClick = function(clickedFeedID) {
@@ -122,8 +123,8 @@ function onDeviceReady() {
 }
 
 function showSubscriptionList(subscriptionList) {
-    subscriptionListJSON = JSON.parse(subscriptionList).subscriptions;
-    for (var i = 0; i < subscriptionListJSON.length; i++) {
+   
+    for (var id in subscriptionList) {
 //         showAlert(JSON.stringify(subscriptionListJSON[i]));
 //         var id = subscriptionListJSON[i].id;
 //         var title = subscriptionListJSON[i].title;
@@ -133,7 +134,7 @@ function showSubscriptionList(subscriptionList) {
 //         var htmlUrl = subscriptionListJSON[i].htmlUrl;
 //         var iconUrl = subscriptionListJSON[i].iconUrl;
 //         showSubscriptions(subscriptionListJSON[i]);
-        this.gui.showTheOldReaderSubscriptions("theOldReader", subscriptionListJSON[i]);
+        this.gui.showGoogleReaderSubscriptions("theOldReader", subscriptionList[id]);
     }
 }
 function showFeedItemsInGUI() {

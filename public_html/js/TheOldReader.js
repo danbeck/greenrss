@@ -30,7 +30,33 @@ TheOldReader.prototype.getSubscriptionList = function(email, password,
     var self = this;
 
     this.__retrieveTokenIfNecessary(email, password, function() {
-        getHttpRequest(self.__THEOLDREADER_SUBSCRIPTIONLIST_URL, onGetSubscriptionList);
+        getHttpRequest(self.__THEOLDREADER_SUBSCRIPTIONLIST_URL, function(result) {
+            var subscriptionList = JSON.parse(result).subscriptions;
+
+            var result = {};
+
+            for (var i = 0; i < subscriptionList.length; i++) {
+                var subscription = subscriptionList[i];
+                var subscriptionid = subscription.id;
+//         showAlert(JSON.stringify(subscriptionListJSON[i]));
+//         var id = subscriptionListJSON[i].id;
+//         var title = subscriptionListJSON[i].title;
+//         var categories = subscriptionListJSON[i].categories;
+//         var sortid = subscriptionListJSON[i].sortid;
+//         var url = subscriptionListJSON[i].url;
+//         var htmlUrl = subscriptionListJSON[i].htmlUrl;
+//         var iconUrl = subscriptionListJSON[i].iconUrl;
+//         showSubscriptions(subscriptionListJSON[i]);
+                result[subscriptionid] = {
+                    id: subscriptionid,
+                    url: subscription.url,
+                    wwwurl: subscription.htmlUrl,
+                    title: subscription.title,
+                    categories: subscription.categories,
+                    image: subscription.iconUrl};
+            }
+            onGetSubscriptionList(result);
+        });
     });
 };
 
@@ -84,7 +110,7 @@ TheOldReader.prototype.getItemIdsForFolder = function(email, password,
 //};
 
 
-TheOldReader.prototype.retrieveOldReaderSubscriptionItems= function(email, password, subscriptionid,
+TheOldReader.prototype.retrieveOldReaderSubscriptionItems = function(email, password, subscriptionid,
         onGetAllItemIds) {
     var self = this;
     this.__retrieveTokenIfNecessary(email, password, function() {

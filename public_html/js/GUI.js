@@ -255,9 +255,9 @@ Gui.prototype.showTheOldReaderSubscriptions = function(headerName, subscription)
 
                 var categoryElement = dom("header", {id: category.id},
                 dom("A", {href: "#"},
-                dom("ASIDE", null,
-                        dom("IMG", {src: "img/ListItemIsExpanded@8.png"})),
-                        dom("P", null, category.label)));
+//                dom("ASIDE", null,
+//                        dom("IMG", {src: "img/ListItemIsExpanded@8.png"})),
+                dom("P", null, "+ " + category.label)));
                 insertAfter($(headerName), categoryElement);
             }
 
@@ -279,7 +279,59 @@ Gui.prototype.showTheOldReaderSubscriptions = function(headerName, subscription)
     else {
 
         var li = dom("LI", {"data-subscription-url": subscription.url, "data-subscription-id": subscription.id},
-        dom("P", subscription.title));
+        dom("P", null, subscription.title));
+
+        insertAfter($(headerName), li);
+
+        li.onclick = function showFeedEntry() {
+            var clickedFeedUrl = li.getAttribute("data-subscription-id");
+            self.onSubscriptionClick(clickedFeedUrl);
+        };
+    }
+};
+
+
+// new method.
+Gui.prototype.showGoogleReaderSubscriptions = function(headerName, subscription) {
+    var self = this;
+
+    if (!$(headerName)) {
+        header = dom("li", {id: headerName, "data-role": "cloudlocation"},
+        dom("h2", null, headerName));
+        $(SUBSCRIPTIONS_LIST).appendChild(header);
+    }
+    if (subscription.categories !== undefined && subscription.categories.length > 0) {
+        for (var i = 0; i < subscription.categories.length; i++) {
+            var category = subscription.categories[i];
+            if (!$(category.id)) {
+
+                var categoryElement = dom("header", {id: category.id},
+                dom("A", {href: "#"},
+//                dom("ASIDE", null,
+//                        dom("IMG", {src: "img/ListItemIsExpanded@8.png"})),
+                dom("P", null, " > " + category.label)));
+                insertAfter($(headerName), categoryElement);
+            }
+
+            var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
+            dom("A", {href: "#"},
+            dom("ASIDE", null,
+                    dom("IMG", {width: "35px", height: "35px", src: subscription.image})),
+                    dom("P", null, subscription.title)
+                    ));
+            $(category.id).appendChild(li);
+
+            li.onclick = function showFeedEntry() {
+                var clickedFeedId = li.getAttribute("data-subscription-id");
+
+                self.onSubscriptionClick(clickedFeedId);
+            };
+        }
+    }
+    else {
+
+        var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
+        dom("P", null, subscription.title));
 
         insertAfter($(headerName), li);
 

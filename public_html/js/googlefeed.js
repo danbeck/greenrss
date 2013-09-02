@@ -15,26 +15,15 @@ GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
 GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
     var self = this;
 
-    var feedsToLoad;
     if (!localStorage["google-subscriptions"]) {
         var subscription = {};
 
         var amountOfFeedsToShow = this.__DEFAULT_FEEDS.length;
 
-        for (var i = 0; this.__DEFAULT_FEEDS.length; i++) {
+        for (var i = 0; i < this.__DEFAULT_FEEDS.length; i++) {
 
             self.__loadFeedsFromGoogle(this.__DEFAULT_FEEDS[i], function(googlefeed) {
-                var feedurl = feed.feedUrl;
-//                var subscriptionItems = self.__asSubscriptionItems(feedurl, googlefeed.entries);
-
-                __addSubscription(subscription, feedurl, googlefeed);
-//                subscription[feedurl] = {
-//                    wwwurl: feed.link,
-//                    title: feed.title,
-//                    categories: undefined,
-//                    image: undefined,
-//                    items: subscriptionItems
-//                };
+                self.__addSubscription(subscription, googlefeed);
                 amountOfFeedsToShow--;
                 if (amountOfFeedsToShow === 0)
                     onGetSubscriptionList(subscription);
@@ -42,21 +31,23 @@ GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
         }
     }
     else {
-        feedsToLoad = JSON.parse(localStorage["google-subscriptions"]);
+    var feedsToLoad = JSON.parse(localStorage["google-subscriptions"]);
         onGetSubscriptionList(feedsToLoad);
     }
-
 };
 
 
 
-GoogleFeed.prototype.__addSubscription = function(subscription, feedurl, googleFeed) {
-    subscription[feedurl] = {
-        wwwurl: googlefeed.link,
-        title: googlefeed.title,
+GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
+    var subscriptionid = "feed-" + Math.random();
+    subscription["feed-" + Math.random()] = {
+        id: subscriptionid,
+        url: googleFeed.url,        
+        wwwurl: googleFeed.link,
+        title: googleFeed.title,
         categories: undefined,
         image: undefined,
-        items: this.__asSubscriptionItems(feedurl, googleFeed.entries)
+        items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
     };
 };
 
