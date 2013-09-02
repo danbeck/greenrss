@@ -146,7 +146,7 @@ function dom(name, attributes) {
 
     for (var i = 2; i < arguments.length; i++) {
         var child = arguments[i];
-        if (typeof child == "string")
+        if (typeof child === "string")
             child = document.createTextNode(child);
         node.appendChild(child);
     }

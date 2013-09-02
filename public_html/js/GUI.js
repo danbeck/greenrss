@@ -292,50 +292,21 @@ Gui.prototype.showTheOldReaderSubscriptions = function(headerName, subscription)
         for (var i = 0; i < subscription.categories.length; i++) {
             var category = subscription.categories[i];
             if (!$(category.id)) {
-//                var categoryElement = document.createElement("header");
-//
-//                var a = document.createElement("a");
-//                a.setAttribute("href", "#");
-//
-//                var p = document.createElement("p");
-//                p.innerHTML = category.label;
-//                categoryElement.id = category.id;
-////                categoryElement.innerHTML = category.label;
-//
-//                var iconAside = document.createElement("aside");
-//                var icon = document.createElement("img");
-////                icon.setAttribute("width", "25px");
-////                icon.setAttribute("height", "25px");
-//                icon.setAttribute("src", "img/ListItemIsExpanded@8.png");
-//                iconAside.appendChild(icon);
-//                a.appendChild(iconAside);
-//                a.appendChild(p);
-//                categoryElement.appendChild(a);
 
                 var categoryElement = dom("header", {id: category.id},
                 dom("A", {href: "#"},
                 dom("ASIDE", null,
                         dom("IMG", {src: "img/ListItemIsExpanded@8.png"})),
                         dom("P", null, category.label)));
-//                var iconAside = document.createElement("p");
                 insertAfter($(headerName), categoryElement);
-
             }
-            var iconAside = document.createElement("aside");
-            var icon = document.createElement("img");
-            icon.setAttribute("width", "35px");
-            icon.setAttribute("height", "35px");
-            icon.setAttribute("src", subscription.iconUrl);
-            iconAside.appendChild(icon);
-            var a = document.createElement("a");
-            a.setAttribute("href", "#");
-            a.appendChild(iconAside);
-            var p = createP(subscription.title);
-            a.appendChild(p);
-            var li = createLi(a);
-            li.setAttribute("data-subscription-url", subscription.url);
-            li.setAttribute("data-subscription-id", subscription.id);
 
+            var li = dom("LI", {"data-subscription-url": subscription.url, "data-subscription-id": subscription.id},
+            dom("A", {href: "#"},
+            dom("ASIDE", null,
+                    dom("IMG", {width: "35px", height: "35px", src: subscription.iconUrl})),
+                    dom("P", null, subscription.title)
+                    ));
             $(category.id).appendChild(li);
 
             li.onclick = function showFeedEntry() {
@@ -346,10 +317,9 @@ Gui.prototype.showTheOldReaderSubscriptions = function(headerName, subscription)
         }
     }
     else {
-        var pa = createP(subscription.title);
-        var li = createLi(pa);
-        li.setAttribute("data-subscription-url", subscription.url);
-        li.setAttribute("data-subscription-id", subscription.id);
+
+        var li = dom("LI", {"data-subscription-url": subscription.url, "data-subscription-id": subscription.id},
+        dom("P", subscription.title));
 
         insertAfter($(headerName), li);
 
@@ -393,15 +363,10 @@ Gui.prototype.__showTheOldReaderFeedItem = function(item) {
 //updated: 1377898200
 
     var self = this;
-    var a = document.createElement("a");
-    var p1 = createP(item.title);
+
     var text = stripHTML(item.summary.content);
 
-    var p2 = createP(text);
-
-    a.appendChild(p1);
-    a.appendChild(p2);
-    var li = createLi(a);
+    var li = dom("LI", null, dom("A", null, dom("P", null, item.title), dom("P", null, text)));
 
     li.onclick = new function() {
         var id = li.getAttribute("id");
@@ -414,11 +379,6 @@ Gui.prototype.__showTheOldReaderFeedItem = function(item) {
 
 Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     var that = this;
-
-//	var pa = createP(feedTitle);
-//    var li = createLi(pa);
-//    li.setAttribute("data-rss-link", feedUrl);
-
 
     var li = dom("LI", {"data-rss-link": feedUrl}, dom("P", null, feedTitle));
     $(SUBSCRIPTIONS_LIST).appendChild(li);
@@ -453,7 +413,6 @@ Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     function showGoogleFeedEntriesInGUI(clickedFeedUrl, feedRecord, that) {
         var feedInfo = feedRecord[clickedFeedUrl];
 
-//        var feedElements = $(SUBSCRIPTION_ITEMS_LIST);
         var fragment = document.createDocumentFragment();
 
         $(SUBSCRIPTION_ITEMS_LIST).innerHTML = '';
@@ -463,9 +422,6 @@ Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
         }
         $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
 
-
-//        SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST
-//        var feedElements = $(SUBSCRIPTION_ITEMS_LIST);
         var fragment = document.createDocumentFragment();
 
         $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = '';
@@ -477,13 +433,6 @@ Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
     }
 
     function addGoogleFeedEntriesToFragment(feedEntry, fragment, that) {
-//        var a = document.createElement("a");
-//        var p1 = createP(feedEntry.title);
-//        var p2 = createP(feedEntry.contentSnippet);
-//        p1["data-article"] = feedEntry;
-//        a.appendChild(p1);
-//        a.appendChild(p2);
-//        var li = createLi(a);
 
         var li = dom("LI", null,
                 dom("A", null,
