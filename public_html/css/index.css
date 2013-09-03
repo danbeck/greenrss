@@ -1,4 +1,4 @@
-@media screen and (max-width: 599px) {
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,latin-ext);@media screen and (max-width: 599px) {
     #subscriptionPane {
         float: left;
         width: 100%;
@@ -147,6 +147,17 @@ nav.tabs div.tabs-inner .active > a{
     color:gray;
 }
 
+
+
+[data-role="list"].normalList li a.read p:first-child {
+    font-weight: bold;
+    /*color:red;*/
+}
+
+[data-role="list"].normalList li a.read p {
+    font-weight: bold;
+    /*color:red;*/
+}
 
 li.feedlocation  h2 {
     /*     color: #ea7140; */
