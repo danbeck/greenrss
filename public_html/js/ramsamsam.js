@@ -75,7 +75,7 @@ function onDeviceReady() {
     googleFeed.getSubscriptionList(function(subscriptions) {
 //        gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
         for (var subscriptionid in subscriptions)
-            this.gui.showGoogleReaderSubscriptions("local", subscriptions[subscriptionid]);
+            this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
     });
     /*  if (feedsNotInLocalStorage()) {
      retrieveDefaultFeeds();
@@ -91,8 +91,8 @@ function onDeviceReady() {
     gui.onSubscriptionClick = function(clickedFeedDataSource, clickedFeedID) {
 
         if (clickedFeedDataSource === "local") {
-            googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(response) {
-                gui.showTheOldReaderFeedItems(response.items);
+            googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(subscriptionItemObject) {
+                gui.showTheOldReaderFeedItems(subscriptionItemObject);
             });
 
         }
@@ -134,7 +134,7 @@ function showSubscriptionList(subscriptionList) {
 //         var htmlUrl = subscriptionListJSON[i].htmlUrl;
 //         var iconUrl = subscriptionListJSON[i].iconUrl;
 //         showSubscriptions(subscriptionListJSON[i]);
-        this.gui.showGoogleReaderSubscriptions("theOldReader", subscriptionList[id]);
+        this.gui.showSubscriptions("theOldReader", subscriptionList[id]);
     }
 }
 function showFeedItemsInGUI() {

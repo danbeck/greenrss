@@ -5,6 +5,8 @@ function GoogleFeed() {
     this.__DEFAULT_FEEDS = ["http://daniel-beck.org/feed/",
         "http://planet.ubuntu.com/rss20.xml",
         "http://planetkde.org/rss20.xml"];
+
+    this.__SUBSCRIPTIONS_LOCAL_STORAGE = "google-subscriptions";
 }
 
 GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
@@ -15,32 +17,38 @@ GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
 GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
     var self = this;
 
-    if (!localStorage["google-subscriptions"]) {
-        var subscription = {};
+    if (!localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]) {
+        var subscriptions = {};
 
         var amountOfFeedsToShow = this.__DEFAULT_FEEDS.length;
 
         for (var i = 0; i < this.__DEFAULT_FEEDS.length; i++) {
 
             self.__loadFeedsFromGoogle(this.__DEFAULT_FEEDS[i], function(googlefeed) {
-                self.__addSubscription(subscription, googlefeed);
+                self.__addSubscription(subscriptions, googlefeed);
                 amountOfFeedsToShow--;
-                if (amountOfFeedsToShow === 0)
-                    onGetSubscriptionList(subscription);
+                if (amountOfFeedsToShow === 0) {
+                    localStorage[self.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
+                    onGetSubscriptionList(subscriptions);
+                }
             });
         }
     }
     else {
-        var feedsToLoad = JSON.parse(localStorage["google-subscriptions"]);
+        var feedsToLoad = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
         onGetSubscriptionList(feedsToLoad);
     }
 };
 
+GoogleFeed.prototype.retrieveSubscriptionItems = function(notUsed1, notUsed2, clickedFeedID, onRetrieveSubscriptionItems) {
+    var feedsToLoad = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
+    onRetrieveSubscriptionItems(feedsToLoad[clickedFeedID].items);
+};
 
 
 GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
     var subscriptionid = "feed-" + Math.random();
-    subscription["feed-" + Math.random()] = {
+    subscription[subscriptionid] = {
         id: subscriptionid,
         url: googleFeed.url,
         wwwurl: googleFeed.link,
@@ -53,17 +61,19 @@ GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
 
 GoogleFeed.prototype.__asSubscriptionItems = function(subscriptionId, googleFeedEntries) {
 
-    var subscriptionItems = [];
+    var subscriptionItems = {};
     for (var i = 0; i < googleFeedEntries.length; i++) {
-        var item = this.__asSubscriptionItem(subscriptionId, googleFeedEntries[i]);
-        subscriptionItems.push(item);
+        var googleFeedEntry = googleFeedEntries[i];
+        var item = this.__asSubscriptionItem(subscriptionId, googleFeedEntry);
+        subscriptionItems[googleFeedEntry.link] = item;
     }
     return subscriptionItems;
 };
 
 GoogleFeed.prototype.__asSubscriptionItem = function(subscriptionId, googleFeedEntry) {
 
-    var subscriptionItem = {title: googleFeedEntry.title,
+    var subscriptionItem = {id: googleFeedEntry.link,
+        title: googleFeedEntry.title,
         "subscriptionId": subscriptionId,
         "contentSnippet": googleFeedEntry.contentSnippet,
         "content": googleFeedEntry.content,

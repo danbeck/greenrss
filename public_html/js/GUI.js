@@ -240,7 +240,7 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
 };
 
 // new method.
-Gui.prototype.showGoogleReaderSubscriptions = function(headerName, subscription) {
+Gui.prototype.showSubscriptions = function(headerName, subscription) {
     var self = this;
 
     if (!headerName) {
