@@ -294,3 +294,7 @@ li.feedlocation  h2 {
 label input[type="checkbox"][data-type="switch"]:checked + span.toggle > span.toggle-handle {
     background: #016A1D;
 }
+
+label:not([for]) input[type="checkbox"]:checked + span {
+    background: #016A1D;
+}
