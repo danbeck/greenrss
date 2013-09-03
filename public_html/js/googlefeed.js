@@ -31,7 +31,7 @@ GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
         }
     }
     else {
-    var feedsToLoad = JSON.parse(localStorage["google-subscriptions"]);
+        var feedsToLoad = JSON.parse(localStorage["google-subscriptions"]);
         onGetSubscriptionList(feedsToLoad);
     }
 };
@@ -42,7 +42,7 @@ GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
     var subscriptionid = "feed-" + Math.random();
     subscription["feed-" + Math.random()] = {
         id: subscriptionid,
-        url: googleFeed.url,        
+        url: googleFeed.url,
         wwwurl: googleFeed.link,
         title: googleFeed.title,
         categories: undefined,
@@ -81,5 +81,3 @@ GoogleFeed.prototype.__loadFeedsFromGoogle = function(feedUrl, onFeedLoad) {
         }
     });
 };
-
-

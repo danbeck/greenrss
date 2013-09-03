@@ -88,13 +88,22 @@ function onDeviceReady() {
      } */
 
 
-    gui.onSubscriptionClick = function(clickedFeedID) {
-        theOldReader.retrieveOldReaderSubscriptionItems(
-                configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password,
-                clickedFeedID,
-                function(response) {
-                    var feedItemsContainer = JSON.parse(response);
+    gui.onSubscriptionClick = function(clickeFeedDataSource, clickedFeedID) {
+
+        if (clickeFeedDataSource === "local") {
+//    		googleFeed.retrieveOldReaderSubscriptionItems(){
+//    			
+//    		}
+
+        }
+        if (clickeFeedDataSource === "theOldReader") {
+
+            theOldReader.retrieveOldReaderSubscriptionItems(
+                    configuration.theoldReader_sync.theoldreader_username,
+                    configuration.theoldReader_sync.theoldreader_password,
+                    clickedFeedID,
+                    function(response) {
+                        var feedItemsContainer = JSON.parse(response);
 //alternate: Object
 // - href: "http://blog.getpaint.net"
 //-  type: "text/html"
@@ -106,9 +115,12 @@ function onDeviceReady() {
 //title: "Paint.NET Blog"
 //updated: 1376904314
 //                    for (var i = 0; i < feedItemsContainer.items.length; i++)
-                    gui.showTheOldReaderFeedItems(feedItemsContainer.items);
-                }
-        );
+                        gui.showTheOldReaderFeedItems(feedItemsContainer.items);
+                    }
+            );
+        }
+
+
     };
 
 
@@ -123,7 +135,7 @@ function onDeviceReady() {
 }
 
 function showSubscriptionList(subscriptionList) {
-   
+
     for (var id in subscriptionList) {
 //         showAlert(JSON.stringify(subscriptionListJSON[i]));
 //         var id = subscriptionListJSON[i].id;
@@ -262,6 +274,7 @@ function resetLocalStore() {
 function addNewSubscriptionInGUI(feedUrl) {
     var feedInfo = feedRecordsShownInGUI[feedUrl];
     gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
+//    showGoogleReaderSubscriptions
 }
 
 function loadFeedsFromLocalStorage() {

@@ -15,147 +15,158 @@
         width: 33%;
     }
     #subscriptionItemsPane {
-        margin-left: 35%;
-        width: 65%;
+        margin-left: 33%;
+        width: 67%;
     }
 }
 
-/* .popover[data-gravity="s"]:after { */
-/*     background-attachment: scroll; */
-/*     background-clip: border-box; */
-/*     background-color: transparent; */
-/*     background-image: url("../img/DownArrow@18.png"); */
-/*     background-origin: padding-box; */
-/*     background-position: 1.6rem 0.5rem; */
-/*     z-index: 200; */
-/*     background-repeat: no-repeat; */
-/*     background-size: 50% 50%; */
-/*     bottom: -9px; */
-/*     height: 18px; */
-/*     margin-left: -18px; */
-/*     width: 37px; */
-/* } */
-/* .popover[data-gravity="s"]{ */
-/*     background-attachment: scroll; */
-/*     background-clip: border-box; */
-/*     background-color: transparent; */
-/*     background-image: url("../img/DownArrow@18.png"); */
-/*     background-origin: padding-box; */
-/*     background-position: 1.6rem 0.5rem; */
-/*     z-index: 200; */
-/*     background-repeat: no-repeat; */
-/*     background-size: 50% 50%; */
-/*     bottom: -9px; */
-/*     height: 18px; */
-/*     margin-left: -18px; */
-/*     width: 37px; */
-/* } */
 .leftpopover[data-gravity="s"]:before,.leftpopover[data-gravity="s"]:after
 {
     left: 90%;
 }
-/*@media screen and (min-width: 481px) and (max-width: 1000px), screen and (orientation:landscape) and (max-width: 1000px) {
-    #subscriptionPane{
-        float:left;
-        width:33%;
-    }
-    #subscriptionItemsList{
-        margin-left: 35%;
-        width: 65%;
-    }
-}*/
+body {
+    background: white;
+}
 
-/*@media screen and (min-width: 1001px) , screen and (orientation:landscape)  {
-    #subscriptionPane{
-        float:left;
-        width:330px;
-    }
-    #subscriptionItemsList{
-        margin-left: 350px;
-        width:65%;
-    }
-}*/
+.popover, [data-role="list"]{
+    cursor:pointer;
+}
+
 [data-role="header"] {
     position: fixed;
     width: 100%;
+    background: #4A5357;
+    border-color:black;
 }
 
+nav.tabs {
+    border-bottom-color:black;
+}
+nav.tabs div.tabs-inner {
+    border-color:black;
+}
+nav.tabs div.tabs-inner .active > a{
+    color: white;
+}
 /*[data-role="footer"] nav ul li a:active{
     background-color: #CC4400;
     color: white;
 }*/
 [data-role="footer"] nav ul li a:hover {
-    background-color: #ea7140;
+    background-color: #016A1D;
     color: white;
 }
 
 [data-role="footer"] nav ul li a.tapped {
-    background-color: #eb7f55;
+    background-color: #016A1D;
     color: white;
 }
 
-/*[data-role="list"] header{*/
-/*background-color: ;*/
-/*}*/
-[data-role="list"] header h1 {
-    /*background-color: #ea7140;*/
-    color: #ea7140;
-    /*color:white;*/
+[data-role="list"].darkList{
+    background: #4A5357;
+    /* 	background: #182125; */
+    color:white;	
+    border-top-color: black;
 }
 
-[data-role="list"] header > a {
+[data-role="list"].darkList li, [data-role="list"].darkList a, [data-role="list"].darkList header {
+    border: none;
+}
+
+[data-role="list"].darkList [data-subscription-id], [data-role="list"].darkList [data-category-id]{
+    /* 	border: none; */
+    border-bottom-width: 1px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    /* 	background: #182125; */
+}
+
+[data-role="list"].darkList .feedlocation{
+    background: #4A5357;
+    /* 	background: #182125; */
+}
+
+
+[data-role="list"].darkList .feedlocation h2{
+    text-align: center;
+    text-transform: uppercase;
+    color:white;	
+    padding-top:1em;
+}
+
+
+[data-role="list"].darkList p{
+    color:white;	
+}
+
+
+/* The categories subscriptions*/
+[data-role="list"].darkList header{
+    padding-left: 0px;
+}
+
+[data-role="list"].darkList [data-category-id]{
+    display: block;
+    height: 3.4em;
+    background: #2C3539;
+    padding-left:1em;
     text-decoration: none;
-    color: #787878;
-    display: block;
-    height: 3.4rem;
-    position: relative;
-    border: none;
-    line-height: 3.4rem;
-    /*padding-left: 0.5rem;*/
-    border-bottom: 0.1rem solid #C9C9C9;
-    padding-right: 1.5rem;
-    border-top: 1px solid #ebebeb;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* 	background: #2C3539; */
+    text-transform: uppercase;
 }
 
-[data-role="list"] header p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border: none;
-    display: block;
-    /*color: #787878;*/
-    font-size: 0.9rem;
-    padding-left: 1rem;
-    padding-top: 0.5rem;
-    line-height: 1rem;
+[data-role="list"].darkList [data-category-id] p {
+    padding-top:1em;
 }
 
-li[data-role="cloudlocation"]  h2 {
-    /*background-color: #ea7140;*/
-    color: #ea7140;
-    /*text-align: center;*/
-    padding-left: 1rem;
-    background-color: white;
-    /*color:white;*/
+[data-role="list"].darkList [data-category-id] p:before {
+    content: "> ";
 }
 
-li[data-role="cloudlocation"]{
-    background-color: white;
-    padding-top: 0.5rem;
+/*The subscriptions*/
+[data-role="list"].darkList [data-subscription-id] {
+    background: #222B2F;
+    /* 	background: #4A5357; */
+    padding-left: 1em;
+    /* 	font-weight: bold; */
+    /* 	color:white;	 */
+}
+
+/*The active subscription*/
+[data-role="list"].darkList [data-subscription-id].active {
+    background: #016A1D;
 }
 
 
-/*#feedsAbo,#feedEntries,#showArticlePage,#extendedConfigurationPage {*/
+
+[data-role="list"].normalList li p:first-child {
+    color:black;
+}
+
+[data-role="list"].normalList li p {
+    color:gray;
+}
+
+
+li.feedlocation  h2 {
+    /*     color: #ea7140; */
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    color: white;
+}
+
+
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
     position: fixed;
     overflow-y: auto;
-    top: 75px;
+    top: 74px;
     bottom: 70px;
 }
+/*#subscriptionItemsPane{
+    background-color: #606060;
+}*/
 
 #configurePopover .list {
     max-height: 400px;
@@ -165,26 +176,8 @@ li[data-role="cloudlocation"]{
     height: auto;
 }
 
-#subscriptionsList li,.subscriptionItemsList li, #subscriptionsList section {
-    cursor: pointer;
-}
-
-#subscriptionsList li.active {
-    background-color: #ea7140;
-}
-
-/*#subscriptionsList section h1{
-    color: #ea7140;   
-}*/
-
 .tapped {
     background-color: #eb7f55;
-}
-
-#subscriptionsList li.active p {
-    /*background-color: #c2c2c2;*/
-    color: white;
-    /*fo: white;*/
 }
 
 #addfeeddialog {
@@ -222,10 +215,6 @@ li[data-role="cloudlocation"]{
 
 #articleContent h3 {
     margin: 0.6rem 0;
-}
-
-.subscriptionItemsList p:first-child {
-    color: #333333;
 }
 
 #articleContent ul {
@@ -300,13 +289,3 @@ li[data-role="cloudlocation"]{
 .clear {
     clear: both;
 }
-
-/*#subscriptionItemsList p {
-    color: #333333;
-    font:0.9rem "Ubuntu Light";
-}
-
-#subscriptionItemsList p:first-child{
-    color: #333333;
-    font:0.9rem "Ubuntu";
-}*/
