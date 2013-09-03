@@ -348,9 +348,9 @@ Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
 //    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 //    for (var i = 0; i < feedItems.length; i++)
 //        this.__showTheOldReaderFeedItem(feedItems[i]);
-    
-    
-    
+
+
+
     for (var feedItem in  feedItems)
         this.__showTheOldReaderFeedItem(feedItems[feedItem]);
 
@@ -363,7 +363,10 @@ Gui.prototype.__showTheOldReaderFeedItem = function(subscriptionItem) {
 
     var self = this;
 
-    var li = dom("LI", {"data-subscriptionitem-id":subscriptionItem.id}, dom("A", null, dom("P", null, subscriptionItem.title), dom("P", null, subscriptionItem.contentSnippet)));
+    var itemWasReadClass = null;
+    if (subscriptionItem.read===true)
+        itemWasReadClass = {class: "read"};
+    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), dom("P", null, subscriptionItem.contentSnippet)));
 
     li.onclick = new function() {
         var id = li.getAttribute("data-subscriptionitem-id");
