@@ -377,7 +377,7 @@ Gui.prototype.__showTheOldReaderFeedItem = function(subscriptionItem) {
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
 };
 
-Gui.prototype.showGoogleArticle = function(subscriptionItem) {
+Gui.prototype.showArticle = function(subscriptionItem) {
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
     var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);

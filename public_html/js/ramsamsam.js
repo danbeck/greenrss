@@ -113,7 +113,7 @@ function onDeviceReady() {
 
 
     gui.onSubscriptionItemClicked = function(subscriptionItem) {
-        gui.showGoogleArticle(subscriptionItem);
+        gui.showArticle(subscriptionItem);
     };
 
     gui.onConnectToTheOldReader = function() {
@@ -140,23 +140,6 @@ function showSubscriptionList(subscriptionList) {
 //         showSubscriptions(subscriptionListJSON[i]);
         this.gui.showSubscriptions("theOldReader", subscriptionList[id]);
     }
-}
-function showFeedItemsInGUI() {
-    theOldReader.getAllItemIds(configuration.theoldReader_sync.theoldreader_username, configuration.theoldReader_sync.theoldreader_password, function(allItemIds) {
-
-        var allItemIdsAsJSON = JSON.parse(allItemIds);
-        var items = allItemIdsAsJSON.items;
-        for (var i = 0; i < items.length; i++) {
-            var item = {"id": items[i].id,
-                "title": items[i].title,
-                "feedURL": items[i].canonical[i],
-                "summary": items[i].summary.content,
-                "published": items[i].published,
-                "updated": items[i].updated};
-            gui.showFeedItem(item, onFeedClick);
-        }
-
-    });
 }
 
 function onFeedClick(feedid) {

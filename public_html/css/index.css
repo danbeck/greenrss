@@ -141,19 +141,21 @@ nav.tabs div.tabs-inner .active > a{
 
 [data-role="list"].subscriptionItemsList li p:first-child {
     color:black;
+    font-weight: bold;
 }
 
 [data-role="list"].subscriptionItemsList li p {
     color:gray;
+    font-weight: bold;
 }
 
 [data-role="list"].subscriptionItemsList li a.read p:first-child {
-    font-weight: bold;
+    font-weight: normal;
     /*color:red;*/
 }
 
 [data-role="list"].subscriptionItemsList li a.read p {
-    font-weight: bold;
+    font-weight: normal;
     /*color:red;*/
 }
 
