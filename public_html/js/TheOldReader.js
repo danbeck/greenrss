@@ -110,7 +110,7 @@ TheOldReader.prototype.getItemIdsForFolder = function(email, password,
 //};
 
 
-TheOldReader.prototype.retrieveOldReaderSubscriptionItems = function(email, password, subscriptionid,
+TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, subscriptionid,
         onGetAllItemIds) {
     var self = this;
     this.__retrieveTokenIfNecessary(email, password, function() {
@@ -118,7 +118,11 @@ TheOldReader.prototype.retrieveOldReaderSubscriptionItems = function(email, pass
         getHttpRequest(self.__THEOLDREADER_ITEM_IDS_FOR_FEED_URL + subscriptionid, function(itemIds) {
             var itemRefs = JSON.parse(itemIds).itemRefs;
             var urlParameter = createUrlParamerters(itemRefs);
-            postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL, urlParameter, onGetAllItemIds);
+            postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL, urlParameter, function(response) {
+                var feedItemsContainer = JSON.parse(response);
+                var result = convertToSubscriptionItems(subscriptionid, feedItemsContainer);
+                onGetAllItemIds(result);
+            });
 
             function createUrlParamerters(itemRefs) {
                 if (itemRefs.length === 0)
@@ -131,6 +135,31 @@ TheOldReader.prototype.retrieveOldReaderSubscriptionItems = function(email, pass
                 }
                 urlParameter += newArray.join("&i=");
                 return urlParameter;
+            }
+
+            function convertToSubscriptionItems(subscriptionid, theOldReaderFeedItems) {
+                var items = theOldReaderFeedItems.items;
+                var result = {};
+                for (var i = 0; i < items.length; i++) {
+                    result[items[i].id] = convertToSubscriptionItem(subscriptionid, items[i]);
+                }
+                return result;
+            }
+
+
+            function convertToSubscriptionItem(subscriptionid, theOldReaderFeedItem) {
+                var text = stripHTML(theOldReaderFeedItem.summary.content);
+                var itemWasRead = false;
+                if (theOldReaderFeedItem.categories.indexOf("user/-/state/com.google/read") !== -1)
+                    itemWasRead = true;
+
+                var result = {id: theOldReaderFeedItem.id,
+                    title: theOldReaderFeedItem.title,
+                    subscriptionId: subscriptionid,
+                    contentSnippet: text,
+                    content: theOldReaderFeedItem.summary.content,
+                    read: itemWasRead};
+                return result;
             }
         });
     });
