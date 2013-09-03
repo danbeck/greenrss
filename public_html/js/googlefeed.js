@@ -74,6 +74,7 @@ GoogleFeed.prototype.__asSubscriptionItem = function(subscriptionId, googleFeedE
 
     var subscriptionItem = {id: googleFeedEntry.link,
         title: googleFeedEntry.title,
+        url: googleFeedEntry.link,
         "subscriptionId": subscriptionId,
         "contentSnippet": googleFeedEntry.contentSnippet,
         "content": googleFeedEntry.content,

@@ -278,7 +278,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
             li.onclick = function showFeedEntry() {
 
-                self.__markItemActiveAndNotifyObserver(li);
+                self.__markItemActiveAndCallOnSubscriptionClick(li);
             };
         }
     }
@@ -291,13 +291,13 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
         li.onclick = function showFeedEntry() {
 
-            self.__markItemActiveAndNotifyObserver(li);
+            self.__markItemActiveAndCallOnSubscriptionClick(li);
         };
     }
 };
 
 
-Gui.prototype.__markItemActiveAndNotifyObserver = function(li) {
+Gui.prototype.__markItemActiveAndCallOnSubscriptionClick = function(li) {
 
 //	var subscriptionElement = $(SUBSCRIPTIONS_LIST).childNodes;
 //	for ( var i = 0; i < subscriptionElement.length; i++) {
@@ -342,20 +342,16 @@ Gui.prototype.__markItemChildrenInactive = function(element) {
 Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
-//    for (var i = 0; i < feedItems.length; i++)
-//        this.__showTheOldReaderFeedItem(feedItems[i]);
-//
-//    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
-//    for (var i = 0; i < feedItems.length; i++)
-//        this.__showTheOldReaderFeedItem(feedItems[i]);
-
-
 
     for (var feedItem in  feedItems)
         this.__showTheOldReaderFeedItem(feedItems[feedItem]);
 
-//    for (var i = 0; i < feedItems.length; i++)
-//        this.__showTheOldReaderFeedItem(feedItems[i]);
+    if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
+
+        this.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
+            subtitle: 'subscription items'
+        });
+    }
 };
 
 // works for the old reader
@@ -364,110 +360,36 @@ Gui.prototype.__showTheOldReaderFeedItem = function(subscriptionItem) {
     var self = this;
 
     var itemWasReadClass = null;
-    if (subscriptionItem.read===true)
+    if (subscriptionItem.read === true)
         itemWasReadClass = {class: "read"};
     var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), dom("P", null, subscriptionItem.contentSnippet)));
 
-    li.onclick = new function() {
-        var id = li.getAttribute("data-subscriptionitem-id");
-        self.onFeedItemClicked(id);
+    li.onclick = function() {
+        self.onSubscriptionItemClicked(subscriptionItem);
+    };
+
+    var mobileLi = li.cloneNode(true);
+
+    mobileLi.onclick = function() {
+        self.onSubscriptionItemClicked(subscriptionItem);
     };
     $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
-    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(li.cloneNode(true));
-
+    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
 };
 
-Gui.prototype.addGoogleFeedInGui = function(feedTitle, feedUrl, feedRecord) {
-    var that = this;
+Gui.prototype.showGoogleArticle = function(subscriptionItem) {
+    var articleTitle = $("articleTitle");
+    articleTitle.innerHTML = '';
+    var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
+    articleTitle.appendChild(titleLink);
+    var contentBlock = $("articleContent");
+    contentBlock.innerHTML = subscriptionItem.content;
+    var showArticlePage = $("showArticlePage");
+    showArticlePage.innerHTML = "";
+    showArticlePage.appendChild(articleTitle);
+    showArticlePage.appendChild(contentBlock);
 
-    var li = dom("LI", {"data-rss-link": feedUrl}, dom("P", null, feedTitle));
-    $(SUBSCRIPTIONS_LIST).appendChild(li);
-
-    li.addEventListener('touchstart', function() {
-        li.className += " tapped";
+    this.UI.pagestack.push('showArticlePage', {
+        subtitle: 'show Article'
     });
-    li.addEventListener('touchend', function() {
-        li.className = "";
-    });
-
-
-    li.onclick = function showFeedEntry() {
-        var clickedFeedUrl = li.getAttribute("data-rss-link");
-
-        var feedsAboListElement = $(SUBSCRIPTIONS_LIST);
-        var allFeeds = feedsAboListElement.childNodes;
-        for (var i = 0; i < allFeeds.length; i++) {
-            allFeeds[i].removeAttribute("class");
-        }
-        li["className"] = "active";
-
-        if (that.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
-            that.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
-                subtitle: 'show FeedItem'
-            });
-        }
-
-        showGoogleFeedEntriesInGUI(clickedFeedUrl, feedRecord, that);
-    };
-
-    function showGoogleFeedEntriesInGUI(clickedFeedUrl, feedRecord, that) {
-        var feedInfo = feedRecord[clickedFeedUrl];
-
-        var fragment = document.createDocumentFragment();
-
-        $(SUBSCRIPTION_ITEMS_LIST).innerHTML = '';
-        for (var i = 0; i < feedInfo.entries.length; i++) {
-            var feedEntry = feedInfo.entries[i];
-            addGoogleFeedEntriesToFragment(feedEntry, fragment, that);
-        }
-        $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
-
-        var fragment = document.createDocumentFragment();
-
-        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = '';
-        for (var i = 0; i < feedInfo.entries.length; i++) {
-            var feedEntry = feedInfo.entries[i];
-            addGoogleFeedEntriesToFragment(feedEntry, fragment, that);
-        }
-        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(fragment);
-    }
-
-    function addGoogleFeedEntriesToFragment(feedEntry, fragment, that) {
-
-        var li = dom("LI", null,
-                dom("A", null,
-                dom("P", {"data-article": feedEntry}, feedEntry.title),
-                dom("P", null, feedEntry.contentSnippet)));
-
-        fragment.appendChild(li);
-
-        li.addEventListener('touchstart', function() {
-            li.className += " tapped";
-        });
-        li.addEventListener('touchend', function() {
-            li.className = "";
-        });
-
-        li.onclick = function() {
-            showGoogleArticle(feedEntry, that);
-        };
-    }
-
-    function showGoogleArticle(feedEntry, that) {
-        var articleTitle = $("articleTitle");
-        articleTitle.innerHTML = '';
-        var titleLink = linkOpenInNewWindow(feedEntry.link, feedEntry.title);
-        articleTitle.appendChild(titleLink);
-        var contentBlock = $("articleContent");
-        contentBlock.innerHTML = feedEntry.content;
-        var showArticlePage = $("showArticlePage");
-        showArticlePage.innerHTML = "";
-        showArticlePage.appendChild(articleTitle);
-        showArticlePage.appendChild(contentBlock);
-
-        that.UI.pagestack.push('showArticlePage', {
-            subtitle: 'show Article',
-        });
-    }
-
 };

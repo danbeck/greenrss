@@ -112,6 +112,10 @@ function onDeviceReady() {
     };
 
 
+    gui.onSubscriptionItemClicked = function(subscriptionItem) {
+        gui.showGoogleArticle(subscriptionItem);
+    };
+
     gui.onConnectToTheOldReader = function() {
         theOldReader.getSubscriptionList(
                 configuration.theoldReader_sync.theoldreader_username,

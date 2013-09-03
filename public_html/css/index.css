@@ -139,22 +139,20 @@ nav.tabs div.tabs-inner .active > a{
 
 
 
-[data-role="list"].normalList li p:first-child {
+[data-role="list"].subscriptionItemsList li p:first-child {
     color:black;
 }
 
-[data-role="list"].normalList li p {
+[data-role="list"].subscriptionItemsList li p {
     color:gray;
 }
 
-
-
-[data-role="list"].normalList li a.read p:first-child {
+[data-role="list"].subscriptionItemsList li a.read p:first-child {
     font-weight: bold;
     /*color:red;*/
 }
 
-[data-role="list"].normalList li a.read p {
+[data-role="list"].subscriptionItemsList li a.read p {
     font-weight: bold;
     /*color:red;*/
 }
