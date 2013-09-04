@@ -202,7 +202,10 @@ li.feedlocation  h2 {
 }
 
 #articleTitle a,#articleContent a {
-    color: #cc3818;
+    /*color: #cc3818;*/
+    color: #016A1D;
+    font-weight: bold;
+    
     /*color:yellowgreen;*/
 }
 
@@ -212,10 +215,12 @@ li.feedlocation  h2 {
 
 #articleContent {
     padding: 0 1rem;
+    color:black;
 }
 
 #articleContent p {
     margin: 1rem 0;
+    color:black;
 }
 
 #articleContent img {
