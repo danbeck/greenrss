@@ -253,7 +253,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         $(SUBSCRIPTIONS_LIST).appendChild(header);
     }
 
-//    subscription.categories = [{id: "c1", label: "test"}];
     if (subscription.categories !== undefined && subscription.categories.length > 0) {
         for (var i = 0; i < subscription.categories.length; i++) {
             var category = subscription.categories[i];
@@ -265,15 +264,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
                 insertAfter($(headerName), categoryElement);
             }
 
-            var image = null;
-            if (!subscription.image) {
-                image = dom("IMG", {width: "35px", height: "35px", src: subscription.image});
-            }
-
-            var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-            dom("A", {href: "#"},
-            dom("ASIDE", null, image), dom("P", null, subscription.title)
-                    ));
+            var li = createSubscriptionElement(subscription);
             $(category.id).appendChild(li);
 
             li.onclick = function showFeedEntry() {
@@ -293,6 +284,25 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
             self.__markItemActiveAndCallOnSubscriptionClick(li);
         };
+    }
+
+    function createSubscriptionElement(subscription) {
+        var aside;
+        if (subscription.image) {
+            aside = dom("ASIDE", null, dom("IMG", {width: "35px", height: "35px", src: subscription.image}));
+        }
+        else {
+            aside = dom("ASIDE", null);
+        }
+        var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
+        dom("A", {href: "#"}, aside, dom("P", null, subscription.title)));
+
+        li.onclick = function showFeedEntry() {
+
+            self.__markItemActiveAndCallOnSubscriptionClick(li);
+        };
+
+        return li;
     }
 };
 
