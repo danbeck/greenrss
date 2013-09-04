@@ -275,8 +275,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     }
     else {
 
-        var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-        dom("P", null, subscription.title));
+        var li = createSubscriptionElement(subscription);
 
         insertAfter($(headerName), li);
 
