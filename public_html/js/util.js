@@ -96,6 +96,15 @@ function isDisplayed(element) {
     return false;
 }
 
+function isEmpty(map) {
+    for (var key in map) {
+        if (map.hasOwnProperty(key)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function show(element) {
     element.style.display = 'block';
 }

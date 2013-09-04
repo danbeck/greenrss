@@ -285,7 +285,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         dom("A", {href: "#"}, aside, dom("P", null, subscription.title)));
 
         li.onclick = function showFeedEntry() {
-            self.__markItemActiveAndCallOnSubscriptionClick(li);
+            self.__addSelectClassAndCallOnSubscriptionClick(li);
         };
 
         return li;
@@ -293,7 +293,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 };
 
 
-Gui.prototype.__markItemActiveAndCallOnSubscriptionClick = function(li) {
+Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
 
     var subscriptions = document.querySelectorAll("[data-subscription-id]");
     for (var i = 0; i < subscriptions.length; i++) {
@@ -311,29 +311,36 @@ Gui.prototype.__markItemActiveAndCallOnSubscriptionClick = function(li) {
 
     this.onSubscriptionClick(clickedFeedDataSource, clickedFeedId);
 };
-
-Gui.prototype.__markItemChildrenInactive = function(element) {
-    var children = element.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.getAttribute("data-subscription-id"))
-            child.removeAttribute("class");
-        if (child.childNodes) {
-            for (var j = 0; j < child.childNodes.length; j++) {
-                this.__markItemChildrenInactive(child.childNodes[j]);
-            }
-        }
-    }
-};
+//
+//Gui.prototype.__markItemChildrenInactive = function(element) {
+//    var children = element.childNodes;
+//    for (var i = 0; i < children.length; i++) {
+//        var child = children[i];
+//        if (child.getAttribute("data-subscription-id"))
+//            child.removeAttribute("class");
+//        if (child.childNodes) {
+//            for (var j = 0; j < child.childNodes.length; j++) {
+//                this.__markItemChildrenInactive(child.childNodes[j]);
+//            }
+//        }
+//    }
+//};
 
 // works for the old reader
 Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
-    for (var feedItem in  feedItems)
-        this.__showTheOldReaderFeedItem(feedItems[feedItem]);
-
+    if (isEmpty(feedItems)) {
+        var li = dom("LI", {class: "noItems"}, "There are no items in this subscription");
+        var mobileLi = li.cloneNode(true);
+        $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
+        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
+    } else {
+        for (var feedItem in  feedItems)
+            this.__showTheOldReaderFeedItem(feedItems[feedItem]);
+    }
+    
     if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
 
         this.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
