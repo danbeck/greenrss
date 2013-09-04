@@ -77,16 +77,6 @@ function onDeviceReady() {
         for (var subscriptionid in subscriptions)
             this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
     });
-    /*  if (feedsNotInLocalStorage()) {
-     retrieveDefaultFeeds();
-     } else {
-     var feedsLoadedFromLocalStorage = loadFeedsFromLocalStorage();
-     
-     for (var url in feedsLoadedFromLocalStorage) {
-     retrieveFeedPersistAndShowSubscriptionInGUI(url);
-     }
-     } */
-
 
     gui.onSubscriptionClick = function(clickedFeedDataSource, clickedFeedID) {
 
@@ -124,6 +114,14 @@ function onDeviceReady() {
                     showSubscriptionList(response);
                 });
     };
+
+    if (configuration.theoldReader_sync.useTheOldReader === true)
+        theOldReader.getSubscriptionList(
+                configuration.theoldReader_sync.theoldreader_username,
+                configuration.theoldReader_sync.theoldreader_password,
+                function(response) {
+                    showSubscriptionList(response);
+                });
 }
 
 function showSubscriptionList(subscriptionList) {
