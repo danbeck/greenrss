@@ -20,7 +20,7 @@ GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
     );
 };
 
-GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
+GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
     var self = this;
 
     if (!localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]) {

@@ -72,7 +72,7 @@ function onDeviceReady() {
 
     gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
 
-    googleFeed.getSubscriptionList(function(subscriptions) {
+    googleFeed.retrieveSubscriptions(function(subscriptions) {
 //        gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
         for (var subscriptionid in subscriptions)
             this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
@@ -107,7 +107,7 @@ function onDeviceReady() {
     };
 
     gui.onConnectToTheOldReader = function() {
-        theOldReader.getSubscriptionList(
+        theOldReader.retrieveSubscriptions(
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
                 function(response) {
@@ -116,7 +116,7 @@ function onDeviceReady() {
     };
 
     if (configuration.theoldReader_sync.useTheOldReader === true)
-        theOldReader.getSubscriptionList(
+        theOldReader.retrieveSubscriptions(
                 configuration.theoldReader_sync.theoldreader_username,
                 configuration.theoldReader_sync.theoldreader_password,
                 function(response) {

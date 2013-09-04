@@ -22,7 +22,7 @@ TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) 
 };
 
 
-TheOldReader.prototype.getSubscriptionList = function(email, password,
+TheOldReader.prototype.retrieveSubscriptions = function(email, password,
         onGetSubscriptionList) {
     var self = this;
 
