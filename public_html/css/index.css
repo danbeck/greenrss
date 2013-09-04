@@ -39,6 +39,12 @@ body {
     border-color:black;
 }
 
+[data-role="header"] .roundy {
+    background: white;
+    border-radius: 2rem 2rem 2rem 2rem;
+    padding: 0rem 0.6rem;
+    color: #222B2F;
+}
 nav.tabs {
     border-bottom-color:black;
 }
@@ -197,6 +203,7 @@ li.feedlocation  h2 {
 
 #articleTitle a,#articleContent a {
     color: #cc3818;
+    /*color:yellowgreen;*/
 }
 
 #articleTitle {
