@@ -248,7 +248,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     }
 
     if (!$(headerName)) {
-        header = dom("li", {id: headerName, "class": "feedlocation"},
+        var header = dom("li", {id: headerName, "class": "feedlocation"},
         dom("h2", null, headerName));
         $(SUBSCRIPTIONS_LIST).appendChild(header);
     }
@@ -259,14 +259,11 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
     }
     for (var i = 0; i < subscriptionCategories.length; i++) {
-        var category = subscriptionCategories[i];
-
-        createSubscriptionElementUnderCategory(category, subscription);
+        createSubscriptionElementUnderCategory(subscriptionCategories[i], subscription);
     }
 
     function createSubscriptionElementUnderCategory(category, subscription) {
         if (!$(category.id)) {
-
             var categoryElement = dom("header", {id: category.id},
             dom("A", {href: "#", "data-category-id": category.id},
             dom("P", null, category.label)));
@@ -275,11 +272,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
         var li = createSubscriptionElement(subscription);
         $(category.id).appendChild(li);
-
-        li.onclick = function showFeedEntry() {
-
-            self.__markItemActiveAndCallOnSubscriptionClick(li);
-        };
     }
     function createSubscriptionElement(subscription) {
         var aside;
@@ -293,7 +285,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         dom("A", {href: "#"}, aside, dom("P", null, subscription.title)));
 
         li.onclick = function showFeedEntry() {
-
             self.__markItemActiveAndCallOnSubscriptionClick(li);
         };
 
@@ -304,12 +295,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
 Gui.prototype.__markItemActiveAndCallOnSubscriptionClick = function(li) {
 
-//	var subscriptionElement = $(SUBSCRIPTIONS_LIST).childNodes;
-//	for ( var i = 0; i < subscriptionElement.length; i++) {
-//		if (subscriptionElement[i].getAttribute("data-subscription-id"))
-//			subscriptionElement[i].removeAttribute("class");
-//	}
-
     var subscriptions = document.querySelectorAll("[data-subscription-id]");
     for (var i = 0; i < subscriptions.length; i++) {
         subscriptions[i].removeAttribute("class");
@@ -319,8 +304,6 @@ Gui.prototype.__markItemActiveAndCallOnSubscriptionClick = function(li) {
     for (var i = 0; i < subscriptions.length; i++) {
         subscriptions[i].removeAttribute("class");
     }
-//		this.__markItemChildrenInactive( $(SUBSCRIPTIONS_LIST));
-
 
     li["className"] = "active";
     var clickedFeedId = li.getAttribute("data-subscription-id");
