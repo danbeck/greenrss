@@ -20,6 +20,13 @@ GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
     );
 };
 
+GoogleFeed.prototype.setRead = function(subscriptionItem, callback) {
+    var allSubscriptions = localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
+    var persistedSubscriptionItem = allSubscriptions[subscriptionItem.subscription.id];
+    persistedSubscriptionItem["read"] = true;
+    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(persistedSubscriptionItem);
+};
+
 GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
     var self = this;
 

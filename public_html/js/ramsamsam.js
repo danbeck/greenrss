@@ -82,7 +82,7 @@ function onDeviceReady() {
 
         if (clickedFeedDataSource === "local") {
             googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(subscriptionItemObject) {
-                gui.showFeedItems(subscriptionItemObject);
+                gui.showFeedItems("local", subscriptionItemObject);
             });
 
         }
@@ -93,7 +93,7 @@ function onDeviceReady() {
                     configuration.theoldReader_sync.theoldreader_password,
                     clickedFeedID,
                     function(subscriptionItemObject) {
-                        gui.showFeedItems(subscriptionItemObject);
+                        gui.showFeedItems("theOldReader", subscriptionItemObject);
                     }
             );
         }
@@ -102,8 +102,19 @@ function onDeviceReady() {
     };
 
 
-    gui.onSubscriptionItemClicked = function(subscriptionItem) {
-        gui.showArticle(subscriptionItem);
+    gui.onSubscriptionItemClicked = function(source, subscriptionItem) {
+        if (source === "local") {
+            googleFeed.setRead(subscriptionItem, function() {
+                gui.showArticle(subscriptionItem);
+            });
+        }
+        if (source === "theOldReader") {
+//            theOldReader.setRead(subscriptionItem, function() {
+            gui.showArticle(subscriptionItem);
+
+//            });
+
+        }
     };
 
     gui.onConnectToTheOldReader = function() {

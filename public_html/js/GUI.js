@@ -312,7 +312,7 @@ Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
     this.onSubscriptionClick(clickedFeedDataSource, clickedFeedId);
 };
 
-Gui.prototype.showFeedItems = function(feedItems) {
+Gui.prototype.showFeedItems = function(source, feedItems) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
@@ -323,7 +323,7 @@ Gui.prototype.showFeedItems = function(feedItems) {
         $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
     } else {
         for (var feedItem in  feedItems)
-            this.__showFeedItem(feedItems[feedItem]);
+            this.__showFeedItem(source, feedItems[feedItem]);
     }
 
     if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
@@ -334,7 +334,7 @@ Gui.prototype.showFeedItems = function(feedItems) {
     }
 };
 
-Gui.prototype.__showFeedItem = function(subscriptionItem) {
+Gui.prototype.__showFeedItem = function(source, subscriptionItem) {
 
     var self = this;
 
@@ -344,13 +344,13 @@ Gui.prototype.__showFeedItem = function(subscriptionItem) {
     var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), dom("P", null, subscriptionItem.contentSnippet)));
 
     li.onclick = function() {
-        self.onSubscriptionItemClicked(subscriptionItem);
+        self.onSubscriptionItemClicked(source, subscriptionItem);
     };
 
     var mobileLi = li.cloneNode(true);
 
     mobileLi.onclick = function() {
-        self.onSubscriptionItemClicked(subscriptionItem);
+        self.onSubscriptionItemClicked(source, subscriptionItem);
     };
     $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
