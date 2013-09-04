@@ -10,8 +10,14 @@ function GoogleFeed() {
 }
 
 GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
-    localStorage["feeds"].feedUrl = "null";
-    onSubscriptionAdded.apply(undefined, onSubscriptionAdded.arguments);
+    var persistedsubscriptions = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
+    var self = this;
+    self.__loadFeedsFromGoogle(feedUrl, function(googlefeed) {
+        var addedSubscription = self.__addSubscription(persistedsubscriptions, googlefeed);
+        localStorage[self.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(persistedsubscriptions);
+        onSubscriptionAdded(addedSubscription);
+    }
+    );
 };
 
 GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
@@ -24,8 +30,8 @@ GoogleFeed.prototype.getSubscriptionList = function(onGetSubscriptionList) {
 
         for (var i = 0; i < this.__DEFAULT_FEEDS.length; i++) {
 
-            self.__loadFeedsFromGoogle(this.__DEFAULT_FEEDS[i], function(googlefeed) {
-                self.__addSubscription(subscriptions, googlefeed);
+            self.__loadFeedsFromGoogle(this.__DEFAULT_FEEDS[i], function(subscription) {
+                self.__addSubscription(subscriptions, subscription);
                 amountOfFeedsToShow--;
                 if (amountOfFeedsToShow === 0) {
                     localStorage[self.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
@@ -57,6 +63,8 @@ GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
         image: undefined,
         items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
     };
+    
+    return subscription[subscriptionid];
 };
 
 GoogleFeed.prototype.__asSubscriptionItems = function(subscriptionId, googleFeedEntries) {

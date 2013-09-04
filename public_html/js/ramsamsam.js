@@ -175,18 +175,12 @@ function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {
         feedURL += "&rss=1";
         feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
     }
-    retrieveFeedPersistAndShowInGUI(feedURL);
-}
-
-function retrieveFeedPersistAndShowInGUI(feedURL) {
-    var feed = new google.feeds.Feed(feedURL);
-    feed.setNumEntries(100);
-    feed.load(function(retrievedFeed) {
-        if (!retrievedFeed.error) {
-            persistFeedAndAddFeedAndShowFeedEntriesInGUI(retrievedFeed);
-        }
+    googleFeed.addSubscription(feedURL, function(subscription) {
+        gui.showSubscriptions("local", subscription);
+//        gui.showFeedItems(subscription.items);
     });
 }
+
 
 function retrieveFeedPersistAndShowSubscriptionInGUI(feedURL) {
     var feed = new google.feeds.Feed(feedURL);
