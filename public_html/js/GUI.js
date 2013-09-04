@@ -253,38 +253,34 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         $(SUBSCRIPTIONS_LIST).appendChild(header);
     }
 
-    if (subscription.categories !== undefined && subscription.categories.length > 0) {
-        for (var i = 0; i < subscription.categories.length; i++) {
-            var category = subscription.categories[i];
-            if (!$(category.id)) {
+    var subscriptionCategories = subscription.categories;
+    if (subscriptionCategories === undefined || subscription.categories.length === 0) {
+        subscriptionCategories = [{label: "No Category", id: headerName + "NoCategory"}];
 
-                var categoryElement = dom("header", {id: category.id},
-                dom("A", {href: "#", "data-category-id": category.id},
-                dom("P", null, category.label)));
-                insertAfter($(headerName), categoryElement);
-            }
-
-            var li = createSubscriptionElement(subscription);
-            $(category.id).appendChild(li);
-
-            li.onclick = function showFeedEntry() {
-
-                self.__markItemActiveAndCallOnSubscriptionClick(li);
-            };
-        }
     }
-    else {
+    for (var i = 0; i < subscriptionCategories.length; i++) {
+        var category = subscriptionCategories[i];
+
+        createSubscriptionElementUnderCategory(category, subscription);
+    }
+
+    function createSubscriptionElementUnderCategory(category, subscription) {
+        if (!$(category.id)) {
+
+            var categoryElement = dom("header", {id: category.id},
+            dom("A", {href: "#", "data-category-id": category.id},
+            dom("P", null, category.label)));
+            insertAfter($(headerName), categoryElement);
+        }
 
         var li = createSubscriptionElement(subscription);
-
-        insertAfter($(headerName), li);
+        $(category.id).appendChild(li);
 
         li.onclick = function showFeedEntry() {
 
             self.__markItemActiveAndCallOnSubscriptionClick(li);
         };
     }
-
     function createSubscriptionElement(subscription) {
         var aside;
         if (subscription.image) {
