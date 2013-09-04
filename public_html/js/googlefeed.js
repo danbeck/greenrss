@@ -53,17 +53,19 @@ GoogleFeed.prototype.retrieveSubscriptionItems = function(notUsed1, notUsed2, cl
 
 
 GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
-    var subscriptionid = "feed-" + Math.random();
+    var subscriptionid = googleFeed.feedUrl.replace(/:/g, "");
+    subscriptionid = subscriptionid.replace(/\//g, "");
+
     subscription[subscriptionid] = {
         id: subscriptionid,
-        url: googleFeed.url,
+        url: googleFeed.feedUrl,
         wwwurl: googleFeed.link,
         title: googleFeed.title,
         categories: undefined,
         image: undefined,
         items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
     };
-    
+
     return subscription[subscriptionid];
 };
 
