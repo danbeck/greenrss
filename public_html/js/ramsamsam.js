@@ -92,7 +92,7 @@ function onDeviceReady() {
 
         if (clickedFeedDataSource === "local") {
             googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(subscriptionItemObject) {
-                gui.showTheOldReaderFeedItems(subscriptionItemObject);
+                gui.showFeedItems(subscriptionItemObject);
             });
 
         }
@@ -103,7 +103,7 @@ function onDeviceReady() {
                     configuration.theoldReader_sync.theoldreader_password,
                     clickedFeedID,
                     function(subscriptionItemObject) {
-                        gui.showTheOldReaderFeedItems(subscriptionItemObject);
+                        gui.showFeedItems(subscriptionItemObject);
                     }
             );
         }

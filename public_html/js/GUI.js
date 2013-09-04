@@ -311,23 +311,8 @@ Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
 
     this.onSubscriptionClick(clickedFeedDataSource, clickedFeedId);
 };
-//
-//Gui.prototype.__markItemChildrenInactive = function(element) {
-//    var children = element.childNodes;
-//    for (var i = 0; i < children.length; i++) {
-//        var child = children[i];
-//        if (child.getAttribute("data-subscription-id"))
-//            child.removeAttribute("class");
-//        if (child.childNodes) {
-//            for (var j = 0; j < child.childNodes.length; j++) {
-//                this.__markItemChildrenInactive(child.childNodes[j]);
-//            }
-//        }
-//    }
-//};
 
-// works for the old reader
-Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
+Gui.prototype.showFeedItems = function(feedItems) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
@@ -338,9 +323,9 @@ Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
         $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
     } else {
         for (var feedItem in  feedItems)
-            this.__showTheOldReaderFeedItem(feedItems[feedItem]);
+            this.__showFeedItem(feedItems[feedItem]);
     }
-    
+
     if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
 
         this.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
@@ -349,8 +334,7 @@ Gui.prototype.showTheOldReaderFeedItems = function(feedItems) {
     }
 };
 
-// works for the old reader
-Gui.prototype.__showTheOldReaderFeedItem = function(subscriptionItem) {
+Gui.prototype.__showFeedItem = function(subscriptionItem) {
 
     var self = this;
 

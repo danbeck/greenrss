@@ -24,9 +24,6 @@ TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) 
 
 TheOldReader.prototype.getSubscriptionList = function(email, password,
         onGetSubscriptionList) {
-//    this.__retrieveTokenIfNecessary(email, password, onGetSubscriptionList);
-//    var url = this.__THEOLDREADER_SUBSCRIPTIONLIST_URL;
-//    getHttpRequest(url, onGetSubscriptionList);
     var self = this;
 
     this.__retrieveTokenIfNecessary(email, password, function() {
@@ -38,15 +35,6 @@ TheOldReader.prototype.getSubscriptionList = function(email, password,
             for (var i = 0; i < subscriptionList.length; i++) {
                 var subscription = subscriptionList[i];
                 var subscriptionid = subscription.id;
-//         showAlert(JSON.stringify(subscriptionListJSON[i]));
-//         var id = subscriptionListJSON[i].id;
-//         var title = subscriptionListJSON[i].title;
-//         var categories = subscriptionListJSON[i].categories;
-//         var sortid = subscriptionListJSON[i].sortid;
-//         var url = subscriptionListJSON[i].url;
-//         var htmlUrl = subscriptionListJSON[i].htmlUrl;
-//         var iconUrl = subscriptionListJSON[i].iconUrl;
-//         showSubscriptions(subscriptionListJSON[i]);
                 result[subscriptionid] = {
                     id: subscriptionid,
                     url: subscription.url,
