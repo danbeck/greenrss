@@ -19,25 +19,15 @@
         margin-left: 33%;
         width: 67%;
     }
-
-#extendedConfigurationPage .configurationLeft {
-    float: left;
-    width: 65%;
-}
-
-#extendedConfigurationPage .configurationRight {
-    margin-left: 66%
-}
-    
 }
 
 .leftpopover[data-gravity="s"]:before,.leftpopover[data-gravity="s"]:after
 {
     left: 90%;
 }
-body {
-    background: white;
-}
+/* body { */
+/*     background: white; */
+/* } */
 
 .popover, [data-role="list"]{
     cursor:pointer;
@@ -46,60 +36,60 @@ body {
 [data-role="header"] {
     position: fixed;
     width: 100%;
-    background: #4A5357;
-    border-color:black;
+/*     background: #4A5357; */
+/*     border-color:black; */
 }
 
-[data-role="header"] .roundy {
-    background: white;
-    border-radius: 2rem 2rem 2rem 2rem;
-    padding: 0rem 0.6rem;
-    color: #222B2F;
-}
-nav.tabs {
-    border-bottom-color:black;
-}
-nav.tabs div.tabs-inner {
-    border-color:black;
-}
-nav.tabs div.tabs-inner .active > a{
-    color: white;
-}
+/* [data-role="header"] .roundy { */
+/*     background: white; */
+/*     border-radius: 2rem 2rem 2rem 2rem; */
+/*     padding: 0rem 0.6rem; */
+/* /*     color: #222B2F; */ */
+/* } */
+/* nav.tabs { */
+/*     border-bottom-color:black; */
+/* } */
+/* nav.tabs div.tabs-inner { */
+/*     border-color:black; */
+/* } */
+/* nav.tabs div.tabs-inner .active > a{ */
+/*     color: white; */
+/* } */
 /*[data-role="footer"] nav ul li a:active{
     background-color: #CC4400;
     color: white;
 }*/
-[data-role="footer"] nav ul li a:hover {
-    background-color: #016A1D;
-    color: white;
-}
+/* [data-role="footer"] nav ul li a:hover { */
+/*     background-color: #016A1D; */
+/*     color: white; */
+/* } */
 
-[data-role="footer"] nav ul li a.tapped {
-    background-color: #016A1D;
-    color: white;
-}
+/* [data-role="footer"] nav ul li a.tapped { */
+/*     background-color: #016A1D; */
+/*     color: white; */
+/* } */
 
 [data-role="list"].darkList{
-    background: #4A5357;
+/*     background: #4A5357; */
     /* 	background: #182125; */
-    color:white;	
-    border-top-color: black;
+/*     color:white;	 */
+/*     border-top-color: black; */
 }
 
 [data-role="list"].darkList li, [data-role="list"].darkList a, [data-role="list"].darkList header {
-    border: none;
+/*     border: none; */
 }
 
-[data-role="list"].darkList [data-subscription-id], [data-role="list"].darkList [data-category-id]{
-    /* 	border: none; */
-    border-bottom-width: 1px;
-    border-bottom-color: black;
-    border-bottom-style: solid;
-    /* 	background: #182125; */
-}
+/* [data-role="list"].darkList [data-subscription-id], [data-role="list"].darkList [data-category-id]{ */
+/*     	border: none; */
+/*     border-bottom-width: 1px; */
+/*     border-bottom-color: black; */
+/*     border-bottom-style: solid; */
+/*     	background: #182125; */
+/* } */
 
 [data-role="list"].darkList .feedlocation{
-    background: #4A5357;
+/*     background: #4A5357; */
     /* 	background: #182125; */
 }
 
@@ -107,22 +97,13 @@ nav.tabs div.tabs-inner .active > a{
 [data-role="list"].darkList .feedlocation h2{
     text-align: center;
     text-transform: uppercase;
-    color:white;	
+/*     color:white;	 */
     padding-top:1em;
 }
 
 
 [data-role="list"].darkList p{
-    color:white;	
-}
-
-/*For the configuration menu*/
-[data-role="list"] li p {
-	color: gray;
-}
-
-[data-role="content"] h1, [data-role="content"] h2, [data-role="content"] h3{
-	color: black;
+/*     color:white;	 */
 }
 
 
@@ -134,7 +115,7 @@ nav.tabs div.tabs-inner .active > a{
 [data-role="list"].darkList [data-category-id]{
     display: block;
     height: 3.4em;
-    background: #2C3539;
+/*     background: #2C3539; */
     padding-left:1em;
     text-decoration: none;
     /* 	background: #2C3539; */
@@ -151,7 +132,7 @@ nav.tabs div.tabs-inner .active > a{
 
 /*The subscriptions*/
 [data-role="list"].darkList [data-subscription-id] {
-    background: #222B2F;
+/*     background: #222B2F; */
     /* 	background: #4A5357; */
     padding-left: 1em;
     /* 	font-weight: bold; */
@@ -159,19 +140,20 @@ nav.tabs div.tabs-inner .active > a{
 }
 
 /*The active subscription*/
-[data-role="list"].darkList [data-subscription-id].active {
-    background: #016A1D;
+[data-role="list"].darkList [data-subscription-id].active,[data-role="list"].darkList [data-subscription-id].active p {
+    background: #ea7140;
+    color: white;
 }
 
 
 
 [data-role="list"].subscriptionItemsList li p:first-child {
-    color:black;
+/*     color:black; */
     font-weight: bold;
 }
 
 [data-role="list"].subscriptionItemsList li p {
-    color:gray;
+/*     color:gray; */
     font-weight: bold;
 }
 
@@ -187,7 +169,7 @@ nav.tabs div.tabs-inner .active > a{
 
 [data-role="list"].subscriptionItemsList .noItems {
     text-align: center;
-    color: black;
+/*     color: black; */
 }
 
 li.feedlocation  h2 {
@@ -196,7 +178,7 @@ li.feedlocation  h2 {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-right: 1rem;
-    color: white;
+/*     color: white; */
 }
 
 
@@ -228,7 +210,7 @@ li.feedlocation  h2 {
 
 #articleTitle a,#articleContent a {
     /*color: #cc3818;*/
-    color: #016A1D;
+/*     color: #016A1D; */
     font-weight: bold;
 
     /*color:yellowgreen;*/
@@ -240,12 +222,12 @@ li.feedlocation  h2 {
 
 #articleContent {
     padding: 0 1rem;
-    color:black;
+/*     color:black; */
 }
 
 #articleContent p {
     margin: 1rem 0;
-    color:black;
+/*     color:black; */
 }
 
 #articleContent img {
@@ -275,8 +257,8 @@ li.feedlocation  h2 {
 }
 
 #articleContent pre {
-    background-color: #CCCCCC;
-    color: #444444;
+/*     background-color: #CCCCCC; */
+/*     color: #444444; */
     font-family: Fixedsys, Courier, monospace;
     padding: 10px;
     margin: 8px;
@@ -325,6 +307,14 @@ li.feedlocation  h2 {
     background-image: none;
 }
 
+#extendedConfigurationPage .configurationLeft {
+    float: left;
+    width: 65%;
+}
+
+#extendedConfigurationPage .configurationRight {
+    margin-left: 66%
+}
 
 .clear {
     clear: both;
@@ -332,9 +322,9 @@ li.feedlocation  h2 {
 
 /*Toggles*/
 label input[type="checkbox"][data-type="switch"]:checked + span.toggle > span.toggle-handle {
-    background: #016A1D;
+/*     background: #016A1D; */
 }
 
 label:not([for]) input[type="checkbox"]:checked + span {
-    background: #016A1D;
+/*     background: #016A1D; */
 }

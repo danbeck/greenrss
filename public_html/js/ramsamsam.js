@@ -6,6 +6,7 @@ if (cordovaUsed()) {
 } else {
 // This is the event that then the browser window is loaded
     window.onload = onDeviceReady;
+    addGoogleAnalyticsToHTML();
 }
 
 var gui;
@@ -50,18 +51,11 @@ function addGoogleAnalyticsToHTML() {
  * and connects events to handlers
  */
 function onDeviceReady() {
-    configuration = loadRecordFromLocalStorage("configuration");
-
-    if (!configuration) {
-        configuration = DEFAULT_CONFIGURATION;
-    }
+    configuration = loadConfigurationOrCreateDefault();
 
     gui = new Gui(configuration);
     gui.onConfigurationChanged = function(config) {
         saveConfigInLocalStore("configuration", configuration);
-
-        if (configuration.theoldReader_sync.useTheOldReader) {
-        }
 
         if (configuration.useNightMode) {
             showNightMode(configuration.useNightMode);
@@ -87,7 +81,6 @@ function onDeviceReady() {
 
         }
         if (clickedFeedDataSource === "theOldReader") {
-
             theOldReader.retrieveSubscriptionItems(
                     configuration.theoldReader_sync.theoldreader_username,
                     configuration.theoldReader_sync.theoldreader_password,
@@ -97,8 +90,6 @@ function onDeviceReady() {
                     }
             );
         }
-
-
     };
 
 
@@ -133,20 +124,20 @@ function onDeviceReady() {
                 function(response) {
                     showSubscriptionList(response);
                 });
+
+}
+
+function loadConfigurationOrCreateDefault() {
+    var configuration = loadRecordFromLocalStorage("configuration");
+    if (!configuration) {
+        configuration = DEFAULT_CONFIGURATION;
+    }
+    return configuration;
 }
 
 function showSubscriptionList(subscriptionList) {
 
     for (var id in subscriptionList) {
-//         showAlert(JSON.stringify(subscriptionListJSON[i]));
-//         var id = subscriptionListJSON[i].id;
-//         var title = subscriptionListJSON[i].title;
-//         var categories = subscriptionListJSON[i].categories;
-//         var sortid = subscriptionListJSON[i].sortid;
-//         var url = subscriptionListJSON[i].url;
-//         var htmlUrl = subscriptionListJSON[i].htmlUrl;
-//         var iconUrl = subscriptionListJSON[i].iconUrl;
-//         showSubscriptions(subscriptionListJSON[i]);
         this.gui.showSubscriptions("theOldReader", subscriptionList[id]);
     }
 }

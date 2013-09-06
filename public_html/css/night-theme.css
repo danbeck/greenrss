@@ -6,10 +6,6 @@ body {
 	background: black;
 }
 
-[data-role="header"] {
-	background: black;
-}
-
 #feedEntries p:first-child {
 	color: white;
 }
@@ -26,6 +22,13 @@ body {
 nav.tabs {
 	border-bottom: 14px solid #444444;
 }
+
+
+[data-role="list"].subscriptionItemsList li p:first-child{
+	color:white;
+}
+
+
 
 [data-role="list"] li p {
 	color: #BBBBBB;
@@ -52,6 +55,15 @@ nav.tabs {
 	color: #CCCCCC;
 }
 
+#articleContent p, #articleContent {
+	color: white;
+}
+
+.white{
+	color: black;
+	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#000000));
+	background: -moz-linear-gradient(top, #aaa, #000000);
+}
 
 /* [data-role="list"] li p { */
 /*     color: #BBBBBB; */

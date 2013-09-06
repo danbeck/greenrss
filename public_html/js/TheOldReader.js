@@ -8,6 +8,7 @@ function TheOldReader() {
     this.__THEOLDREADER_READITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&s=user/-/state/com.google/read";
     this.__THEOLDREADER_UNREADITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&xt=user/-/state/com.google/read";
     this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
+    this.__THEOLDREADER_UNREADCOUNT_URL = this.__THEOLDREADER_API_URL + "unread-count?output=json";
 //    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
 }
 
@@ -48,7 +49,19 @@ TheOldReader.prototype.retrieveSubscriptions = function(email, password,
     });
 };
 
+TheOldReader.prototype.retrieveUnreadCount = function(email, password,
+        onRetrieveUnreadCound) {
+    var self = this;
 
+    this.__retrieveTokenIfNecessary(email, password, function() {
+        getHttpRequest(self.__THEOLDREADER_UNREADCOUNT_URL, function(result) {
+            var resultObject = JSON.parse(result);
+            ;
+
+            onRetrieveUnreadCound(result);
+        });
+    });
+};
 
 TheOldReader.prototype.getAllItemIds = function(email, password,
         onGetAllItemIds) {

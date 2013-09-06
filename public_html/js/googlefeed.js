@@ -10,21 +10,24 @@ function GoogleFeed() {
 }
 
 GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
-    var persistedsubscriptions = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
     var self = this;
+    var persistedsubscriptions = this.__getAllSubscriptionsFromLocalStorage();
     self.__loadFeedsFromGoogle(feedUrl, function(googlefeed) {
         var addedSubscription = self.__addSubscription(persistedsubscriptions, googlefeed);
-        localStorage[self.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(persistedsubscriptions);
+        self.__saveSubscriptionsInLocalStorage(persistedsubscriptions);
         onSubscriptionAdded(addedSubscription);
     }
     );
 };
 
-GoogleFeed.prototype.setRead = function(subscriptionItem, callback) {
-    var allSubscriptions = localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
-    var persistedSubscriptionItem = allSubscriptions[subscriptionItem.subscription.id];
+GoogleFeed.prototype.setRead = function(subscriptionItem, dummyCallback) {
+    var allSubscriptions = this.__getAllSubscriptionsFromLocalStorage();
+    var persistedSubscription = allSubscriptions[subscriptionItem.subscriptionId];
+    var persistedSubscriptionItems = persistedSubscription["items"];
+    var persistedSubscriptionItem = persistedSubscriptionItems[subscriptionItem.id];
     persistedSubscriptionItem["read"] = true;
-    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(persistedSubscriptionItem);
+    this.__saveSubscriptionsInLocalStorage(allSubscriptions);
+    dummyCallback();
 };
 
 GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
@@ -41,27 +44,26 @@ GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
                 self.__addSubscription(subscriptions, subscription);
                 amountOfFeedsToShow--;
                 if (amountOfFeedsToShow === 0) {
-                    localStorage[self.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
+                    self.__saveSubscriptionsInLocalStorage(subscriptions);
                     onGetSubscriptionList(subscriptions);
                 }
             });
         }
     }
     else {
-        var feedsToLoad = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
+        var feedsToLoad = self.__getAllSubscriptionsFromLocalStorage();
         onGetSubscriptionList(feedsToLoad);
     }
 };
 
 GoogleFeed.prototype.retrieveSubscriptionItems = function(notUsed1, notUsed2, clickedFeedID, onRetrieveSubscriptionItems) {
-    var feedsToLoad = JSON.parse(localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE]);
-    onRetrieveSubscriptionItems(feedsToLoad[clickedFeedID].items);
+    var items = this.__getSubscriptionItemsFromLocalStorage(clickedFeedID);
+    onRetrieveSubscriptionItems(items);
 };
 
 
 GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
-    var subscriptionid = googleFeed.feedUrl.replace(/:/g, "");
-    subscriptionid = subscriptionid.replace(/\//g, "");
+    var subscriptionid = encodeURI(googleFeed.feedUrl);
 
     subscription[subscriptionid] = {
         id: subscriptionid,
@@ -74,6 +76,29 @@ GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
     };
 
     return subscription[subscriptionid];
+};
+
+
+GoogleFeed.prototype.__getSubscriptionItemsFromLocalStorage = function(subscriptionId) {
+    var subscription = this.__getSubscriptionFromLocalStorage(subscriptionId);
+    return subscription["items"];
+};
+
+GoogleFeed.prototype.__getSubscriptionFromLocalStorage = function(subscriptionId) {
+    var subscriptions = this.__getAllSubscriptionsFromLocalStorage();
+    return subscriptions[subscriptionId];
+};
+
+GoogleFeed.prototype.__getAllSubscriptionsFromLocalStorage = function() {
+    var subscriptionString = localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
+    if (subscriptionString)
+        return JSON.parse(subscriptionString);
+    else
+        return {};
+};
+
+GoogleFeed.prototype.__saveSubscriptionsInLocalStorage = function(subscriptions) {
+    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
 };
 
 GoogleFeed.prototype.__asSubscriptionItems = function(subscriptionId, googleFeedEntries) {
@@ -89,7 +114,8 @@ GoogleFeed.prototype.__asSubscriptionItems = function(subscriptionId, googleFeed
 
 GoogleFeed.prototype.__asSubscriptionItem = function(subscriptionId, googleFeedEntry) {
 
-    var subscriptionItem = {id: googleFeedEntry.link,
+    var subscriptionItemId = encodeURI(googleFeedEntry.link);
+    var subscriptionItem = {id: subscriptionItemId,
         title: googleFeedEntry.title,
         url: googleFeedEntry.link,
         "subscriptionId": subscriptionId,

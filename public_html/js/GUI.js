@@ -25,6 +25,15 @@ function Gui(configuration) {
     this.UI.pagestack.push(MAIN_PAGE);
     // var backButton = document.querySelector("li a[data-role=\"back\"]");
 
+    if (configuration.useNightMode) {
+        that.__activateNightMode();
+    }
+    else {
+        that.__deactiveNightMode();
+    }
+
+
+
     this.UI.button('configureButton').click(function() {
         that.openConfigurePage(this, that.onConfigurationChanged);
     });
@@ -49,6 +58,9 @@ function Gui(configuration) {
         hide($("addfeeddialog"));
     });
 
+//    window.onpopstate = function(event) {
+//        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+//    };
     window.onresize = function() {
         var newConvergence = computeConvergence();
         if (that.convergence !== newConvergence) {
@@ -58,14 +70,17 @@ function Gui(configuration) {
             that.UI.pagestack.push(MAIN_PAGE, {
                 subtitle: 'mainpage'
             });
+            show($("addFeedButton").parentNode);
+            show($("reloadFeedsButton").parentNode);
+            show($("configureButton").parentNode);
         }
     };
 
     function computeConvergence() {
-        if (window.matchMedia("(max-width: 599px)").matches) {
+        if (window.matchMedia("(max-width: 479px)").matches) {
             return UI_CONVERGENCE_SMALL_DISPLAY;
         }
-        if (window.matchMedia("(min-width: 600px)").matches) {
+        if (window.matchMedia("(min-width: 480px)").matches) {
             return UI_CONVERGENCE_BIG_DISPLAY;
         }
     }
@@ -95,6 +110,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     var leftFloat = parseFloat(configurePopover.style.left);
     leftFloat = leftFloat - 130;
     configurePopover.style.left = leftFloat + "px";
+
 
 
     if (configuration.useNightMode) {
@@ -199,7 +215,10 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 };
 
 Gui.prototype.__activateNightMode = function() {
-//	var firstStyleSheet = document.getElementByName("stylesheet");;
+    var firstStyleSheet = document.querySelector("link[rel=stylesheet][href=\"css/index.css\"]");
+
+    var nightModeSytlesheet = dom("LINK", {rel: "stylesheet", href: "css/night-theme.css"});
+    insertAfter(firstStyleSheet, nightModeSytlesheet);
 //	
 //	var nightStyleSheet = document.createElement("stylesheet");
 //	nightStyleSheet.setAttribute("src", "css/night-theme.css");
@@ -207,6 +226,9 @@ Gui.prototype.__activateNightMode = function() {
 };
 Gui.prototype.__deactiveNightMode = function() {
 
+    var nightModeSytlesheet = document.querySelector("link[rel=stylesheet][href=\"css/night-theme.css\"]");
+    if (nightModeSytlesheet)
+        nightModeSytlesheet.remove();
 };
 
 
@@ -273,6 +295,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = createSubscriptionElement(subscription);
         $(category.id).appendChild(li);
     }
+
     function createSubscriptionElement(subscription) {
         var aside;
         if (subscription.image) {
@@ -341,7 +364,10 @@ Gui.prototype.__showFeedItem = function(source, subscriptionItem) {
     var itemWasReadClass = null;
     if (subscriptionItem.read === true)
         itemWasReadClass = {class: "read"};
-    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), dom("P", null, subscriptionItem.contentSnippet)));
+
+    var contentSnippetElement = dom("P", null);
+    contentSnippetElement.innerHTML = subscriptionItem.contentSnippet;
+    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id, "data-subscription-id": subscriptionItem.subscriptionId}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
 
     li.onclick = function() {
         self.onSubscriptionItemClicked(source, subscriptionItem);
@@ -357,6 +383,14 @@ Gui.prototype.__showFeedItem = function(source, subscriptionItem) {
 };
 
 Gui.prototype.showArticle = function(subscriptionItem) {
+    var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
+    var subscriptionItemElements = document.querySelectorAll(selector);
+
+    for (var i = 0; i < subscriptionItemElements.length; i++) {
+        var subscriptionItemElement = subscriptionItemElements[i];
+        subscriptionItemElement.firstChild.setAttribute("class", "read");
+    }
+
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
     var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
