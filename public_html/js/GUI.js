@@ -327,6 +327,11 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", null, subscription.title)));
 
+        li.addEventListener("mousedown",  function(e) {
+            e.preventDefault();
+            li["className"] = "touchBeforeActive";
+            e.target.click();
+        });
         li.addEventListener("touchstart", function(e) {
             e.preventDefault();
             e.target.click();

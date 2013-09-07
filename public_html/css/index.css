@@ -159,10 +159,9 @@ nav.tabs div.tabs-inner .active > a{
     background: #016A1D;
 }
 
-[data-role="list"].darkList [data-subscription-id].touchBeforeActive {
+[data-role="list"].darkList [data-subscription-id].touchBeforeActive,[data-role="list"].darkList li > a:active {
     background: #157E31;
 }
-
 
 
 [data-role="list"].subscriptionItemsList li p:first-child {
