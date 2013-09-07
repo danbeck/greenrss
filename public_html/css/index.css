@@ -152,10 +152,6 @@ nav.tabs div.tabs-inner .active > a{
 /*The subscriptions*/
 [data-role="list"].darkList [data-subscription-id] {
     background: #222B2F;
-    /* 	background: #4A5357; */
-    padding-left: 1em;
-    /* 	font-weight: bold; */
-    /* 	color:white;	 */
 }
 
 /*The active subscription*/
