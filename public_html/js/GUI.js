@@ -327,9 +327,14 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", null, subscription.title)));
 
-        li.onclick = function showFeedEntry() {
+        li.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            e.target.click();
+//            li["className"] = "touchBeforeActive";
+        });
+        li.addEventListener("click", function showFeedEntry() {
             self.__addSelectClassAndCallOnSubscriptionClick(li);
-        };
+        });
 
         return li;
     }
@@ -340,11 +345,10 @@ Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
 
     var subscriptions = document.querySelectorAll("#subscriptionPane [data-subscription-id]");
     for (var i = 0; i < subscriptions.length; i++) {
-        if (subscriptions[i].getAttribute("class"))
-            subscriptions[i].removeAttribute("class");
+        subscriptions[i].removeAttribute("class");
     }
 
-    var subscriptions = document.querySelectorAll("[data-category-id]");
+    var subscriptions = document.querySelectorAll("#subscriptionPane [data-category-id]");
     for (var i = 0; i < subscriptions.length; i++) {
         subscriptions[i].removeAttribute("class");
     }
