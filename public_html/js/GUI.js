@@ -304,7 +304,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     function createSubscriptionElementUnderCategory(category, subscription) {
         if (!$(category.id)) {
             var categoryElement = dom("header", {id: category.id},
-            dom("A", {href: "#", "data-category-id": category.id},
+            dom("A", {"data-category-id": category.id},
             dom("P", null, category.label)));
             insertAfter($(headerName), categoryElement);
         }
@@ -322,7 +322,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             aside = dom("ASIDE", null);
         }
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-        dom("A", {href: "#"}, aside, dom("P", null, subscription.title)));
+        dom("A", null, aside, dom("P", null, subscription.title)));
 
         li.onclick = function showFeedEntry() {
             self.__addSelectClassAndCallOnSubscriptionClick(li);
@@ -335,9 +335,10 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
 
 Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
 
-    var subscriptions = document.querySelectorAll("[data-subscription-id]");
+    var subscriptions = document.querySelectorAll("#subscriptionPane [data-subscription-id]");
     for (var i = 0; i < subscriptions.length; i++) {
-        subscriptions[i].removeAttribute("class");
+        if (subscriptions[i].getAttribute("class"))
+            subscriptions[i].removeAttribute("class");
     }
 
     var subscriptions = document.querySelectorAll("[data-category-id]");
