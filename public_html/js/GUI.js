@@ -70,7 +70,7 @@ function Gui(configuration) {
     window.onpopstate = function(event) {
         history.pushState("jiberrish", null, null);
         self.__back();
-        event.preventDefault();
+        showAllToolbarButtons();
 //        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
     };
     window.onresize = function() {
@@ -82,12 +82,16 @@ function Gui(configuration) {
             self.UI.pagestack.push(MAIN_PAGE, {
                 subtitle: 'mainpage'
             });
-            show($("addFeedButton").parentNode);
-            show($("reloadFeedsButton").parentNode);
-            show($("configureButton").parentNode);
+            showAllToolbarButtons();
         }
     };
 
+    function showAllToolbarButtons() {
+        show($("addFeedButton").parentNode);
+        show($("reloadFeedsButton").parentNode);
+        show($("configureButton").parentNode);
+    }
+    
     function computeConvergence() {
         if (window.matchMedia("(max-width: 479px)").matches) {
             return UI_CONVERGENCE_SMALL_DISPLAY;
