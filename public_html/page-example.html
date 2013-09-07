@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="lib/ubuntu-html5-theme/0.1/ambiance/css/appTemplate.css" rel="stylesheet"/>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/core.js"></script>
+        <script src="lib/ubuntu-html5-theme/0.1/ambiance/js/pagestacks.js"></script>
+        <script src="lib/cordova-ubuntu-2.8/www/cordova-2.8.js"></script>
+    </head>
+
+    <body>
+        <div data-role="pagestack">
+            <div data-role="page" id="firstpage">
+                <button id="button1">switch to page #2</button> 
+            </div>
+            <div data-role="page" id="secondpage">
+                <button id="button2">switch to page #1</button>
+            </div>
+        </div>
+        <script>
+            // initializes the Ubuntu HTML5 Theme 
+            var UI = new UbuntuUI();
+            UI.init();
+
+            var button1 = document.getElementById("button1");
+            button1.addEventListener("click", function() {
+                UI.pagestack.push("secondpage");
+            });
+
+            var button2 = document.getElementById("button2");
+            button2.addEventListener("click", function() {
+                UI.pagestack.push("firstpage");
+            });
+        </script>
+    </body>
+</html>

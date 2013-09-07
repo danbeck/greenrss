@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=RamSamSam Reader
+Comment=RamSamSam Reader is a RSS Reader which can synchronize feeds with theOldReader cloud
+Exec=/usr/bin/qmlscene $@ /usr/share/test/test.qml
+Icon=qmlscene
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+

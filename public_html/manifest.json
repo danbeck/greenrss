@@ -1,0 +1,14 @@
+{
+    "description": "RamSamSam reader is a RSS reader with cloud capabilities",
+    "framework": "ubuntu-sdk-13.10",
+    "hooks": {
+        "qrcodescanner": {
+            "apparmor": "qrcodescanner.json",
+            "desktop": "qrcodescanner.desktop"
+        }
+    },
+    "maintainer": "Daniel Beck",
+    "name": "de.beck.ramsamsamreader",
+    "title": "RamSamSam Reader",
+    "version": "0.1"
+}
