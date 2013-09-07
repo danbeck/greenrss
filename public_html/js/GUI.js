@@ -332,11 +332,11 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
             li["className"] = "touchBeforeActive";
             e.target.click();
         });
-//        li.addEventListener("touchstart", function(e) {
-//            e.preventDefault();
-//            e.target.click();
-////            li["className"] = "touchBeforeActive";
-//        });
+        li.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+//            li["className"] = "touchBeforeActive";
+            e.target.click();
+        });
         li.addEventListener("click", function showFeedEntry() {
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
