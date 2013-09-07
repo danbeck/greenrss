@@ -12,7 +12,7 @@ var SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST = "subscriptionItemsSmallDisplayList";
 
 
 function Gui(configuration) {
-    var that = this;
+    var self = this;
 
 
     this.UI = new UbuntuUI();
@@ -26,20 +26,20 @@ function Gui(configuration) {
     // var backButton = document.querySelector("li a[data-role=\"back\"]");
 
     if (configuration.useNightMode) {
-        that.__activateNightMode();
+        self.__activateNightMode();
     }
     else {
-        that.__deactiveNightMode();
+        self.__deactiveNightMode();
     }
 
 
 
     this.UI.button('configureButton').click(function() {
-        that.openConfigurePage(this, that.onConfigurationChanged);
+        self.openConfigurePage(this, self.onConfigurationChanged);
     });
 
     this.UI.button('connectToTheOldReader').click(function() {
-        that.onConnectToTheOldReader();
+        self.onConnectToTheOldReader();
     });
 
     // On clicking the scan button, show the scan page
@@ -50,7 +50,7 @@ function Gui(configuration) {
 
     this.UI.button('addfeedsuccess').click(function() {
         var feedSubscriptionURL = $("rssFeed").value;
-        that.onFeedAdded(feedSubscriptionURL);
+        self.onFeedAdded(feedSubscriptionURL);
         hide($("addfeeddialog"));
     });
 
@@ -58,16 +58,28 @@ function Gui(configuration) {
         hide($("addfeeddialog"));
     });
 
-//    window.onpopstate = function(event) {
-//        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+//    window.onhashchange = function() {
+//        self.__back();
 //    };
+
+//    window.onbeforeunload = function() {
+//        self.__back();
+//    };
+    history.pushState("jiberrish", null, null);
+
+    window.onpopstate = function(event) {
+        history.pushState("jiberrish", null, null);
+        self.__back();
+        event.preventDefault();
+//        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    };
     window.onresize = function() {
         var newConvergence = computeConvergence();
-        if (that.convergence !== newConvergence) {
-            that.convergence = newConvergence;
-            var pageStack = that.UI._pageStack;
+        if (self.convergence !== newConvergence) {
+            self.convergence = newConvergence;
+            var pageStack = self.UI._pageStack;
             pageStack._pages = new Array();
-            that.UI.pagestack.push(MAIN_PAGE, {
+            self.UI.pagestack.push(MAIN_PAGE, {
                 subtitle: 'mainpage'
             });
             show($("addFeedButton").parentNode);
@@ -99,6 +111,11 @@ Gui.prototype.onConnectToTheOldReader = function() {
 };
 
 Gui.prototype.reload = function() {
+};
+
+Gui.prototype.__back = function() {
+    if (this.UI._pageStack.depth() > 1)
+        this.UI._pageStack.pop();
 };
 Gui.prototype.openConfigurePage = function(openConfigButton) {
 
