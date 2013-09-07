@@ -67,11 +67,10 @@ function Gui(configuration) {
 //    };
     history.pushState("jiberrish", null, null);
 
-    window.onpopstate = function(event) {
+    window.onpopstate = function() {
         history.pushState("jiberrish", null, null);
         self.__back();
         showAllToolbarButtons();
-//        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
     };
     window.onresize = function() {
         var newConvergence = computeConvergence();
@@ -91,7 +90,7 @@ function Gui(configuration) {
         show($("reloadFeedsButton").parentNode);
         show($("configureButton").parentNode);
     }
-    
+
     function computeConvergence() {
         if (window.matchMedia("(max-width: 479px)").matches) {
             return UI_CONVERGENCE_SMALL_DISPLAY;
