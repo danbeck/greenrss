@@ -16,6 +16,8 @@ function Gui(configuration) {
 
 
     this.UI = new UbuntuUI();
+    //needed because of a bug with "toolbar"
+    UI = this.UI;
     this.UI.init();
     this.convergence = computeConvergence();
 
@@ -47,6 +49,11 @@ function Gui(configuration) {
         show($("addfeeddialog"));
 
     });
+//    var toolbar = this.UI.toolbar("footer");
+//    toolbar.touch(function() {
+//        toolbar.toggle();
+//    });
+
 
     this.UI.button('addfeedsuccess').click(function() {
         var feedSubscriptionURL = $("rssFeed").value;
@@ -327,7 +334,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", null, subscription.title)));
 
-        li.addEventListener("mousedown",  function(e) {
+        li.addEventListener("mousedown", function(e) {
             li["className"] = "touchBeforeActive";
             e.target.click();
         });
