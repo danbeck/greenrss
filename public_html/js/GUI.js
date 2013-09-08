@@ -34,9 +34,9 @@ function Gui(configuration) {
 
 
 
-    this.UI.button('configureButton').click(function() {
+    this.UI.button('configureButton').click = function() {
         self.openConfigurePage(this, self.onConfigurationChanged);
-    });
+    };
 
     this.UI.button('connectToTheOldReader').click(function() {
         self.onConnectToTheOldReader();
@@ -328,12 +328,6 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         dom("A", null, aside, dom("P", null, subscription.title)));
 
         li.addEventListener("mousedown",  function(e) {
-//            e.preventDefault();
-            li["className"] = "touchBeforeActive";
-            e.target.click();
-        });
-        li.addEventListener("touchstart", function(e) {
-//            e.preventDefault();
             li["className"] = "touchBeforeActive";
             e.target.click();
         });
