@@ -140,10 +140,11 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
 
             function convertToSubscriptionItems(subscriptionid, theOldReaderFeedItems) {
                 var items = theOldReaderFeedItems.items;
-                var result = {};
+                var itemsFromResult = {};
+                var result = {items: itemsFromResult, wwwurl: theOldReaderFeedItems["alternate"]["href"]};
                 if (items !== undefined)
                     for (var i = 0; i < items.length; i++) {
-                        result[items[i].id] = convertToSubscriptionItem(subscriptionid, items[i]);
+                        itemsFromResult[items[i].id] = convertToSubscriptionItem(subscriptionid, items[i]);
                     }
                 return result;
             }

@@ -1,5 +1,5 @@
 {
-    "description": "description of ramsamsamreader",
+    "description": "RamSamSam Reader is a RSS reader with synchronization capabilities with theOldReader cloud",
     "framework": "ubuntu-sdk-13.10",
     "hooks": {
         "ramsamsamreader": {
@@ -7,8 +7,8 @@
             "desktop": "ramsamsamreader.desktop"
         }
     },
-    "maintainer": "",
-    "name": "com.ubuntu.developer.username.ramsamsamreader",
+    "maintainer": "Daniel Beck",
+    "name": "de.beck.ramsamsamreader",
     "title": "ramsamsamreader",
     "version": "0.1"
 }

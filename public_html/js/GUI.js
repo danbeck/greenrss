@@ -432,13 +432,17 @@ Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
     articleTitle.appendChild(titleLink);
     var contentBlock = $("articleContent");
-    var base = document.getElementsByName("base")[0];
-    if (base)
-        base.remove();
-    var newbase = dom("BASE", {href: wwwurl, target: "_blank"});
-    var someTagFromHead = document.querySelector("meta[name=viewport]");
-    insertAfter(someTagFromHead, newbase);
-    contentBlock.innerHTML = subscriptionItem.content;
+//    var base = document.getElementsByName("base")[0];
+//    if (base)
+//        base.remove();
+//    var newbase = dom("BASE", {href: wwwurl, target: "_blank"});
+//    var someTagFromHead = document.querySelector("meta[name=viewport]");
+//    insertAfter(someTagFromHead, newbase);
+    var content = subscriptionItem.content.replace(/<a /g, "<a target=\"_blank\"");
+//    content = content.replace(/href="^(?!http)/g, "href=" + wwwurl);
+
+
+    contentBlock.innerHTML = content;
     var showArticlePage = $("showArticlePage");
     showArticlePage.innerHTML = "";
     showArticlePage.appendChild(articleTitle);

@@ -209,6 +209,10 @@ li.feedlocation  h2 {
     background-color: #606060;
 }*/
 
+[data-role="list"] aside {
+    z-index:2;
+}
+
 #configurePopover .list {
     max-height: 400px;
 }
