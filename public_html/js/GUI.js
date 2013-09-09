@@ -374,8 +374,14 @@ Gui.prototype.showFeedItems = function(source, feedItems) {
         $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
         $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
     } else {
-        for (var feedItem in  feedItems)
-            this.__showFeedItem(source, feedItems[feedItem]);
+        var fragment = document.createDocumentFragment();
+        var mobileFragment = document.createDocumentFragment();
+        for (var feedItem in  feedItems) {
+            this.__showFeedItem(fragment, mobileFragment, source, feedItems[feedItem]);
+
+        }
+        $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
+        $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileFragment);
     }
 
     if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
@@ -386,7 +392,7 @@ Gui.prototype.showFeedItems = function(source, feedItems) {
     }
 };
 
-Gui.prototype.__showFeedItem = function(source, subscriptionItem) {
+Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, subscriptionItem) {
 
     var self = this;
 
@@ -407,8 +413,8 @@ Gui.prototype.__showFeedItem = function(source, subscriptionItem) {
     mobileLi.onclick = function() {
         self.onSubscriptionItemClicked(source, subscriptionItem);
     };
-    $(SUBSCRIPTION_ITEMS_LIST).appendChild(li);
-    $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileLi);
+    fragment.appendChild(li);
+    mobileFragment.appendChild(mobileLi);
 };
 
 Gui.prototype.showArticle = function(subscriptionItem) {
