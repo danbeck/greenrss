@@ -57,8 +57,8 @@ GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
 };
 
 GoogleFeed.prototype.retrieveSubscriptionItems = function(notUsed1, notUsed2, clickedFeedID, onRetrieveSubscriptionItems) {
-    var items = this.__getSubscriptionItemsFromLocalStorage(clickedFeedID);
-    onRetrieveSubscriptionItems(items);
+    var itemContainer = this.__getSubscriptionFromLocalStorage(clickedFeedID);
+    onRetrieveSubscriptionItems(itemContainer);
 };
 
 

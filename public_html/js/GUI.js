@@ -364,10 +364,11 @@ Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
     this.onSubscriptionClick(clickedFeedDataSource, clickedFeedId);
 };
 
-Gui.prototype.showFeedItems = function(source, feedItems) {
+Gui.prototype.showFeedItems = function(source, feedItemContainer) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
+    var feedItems = feedItemContainer["items"];
     if (isEmpty(feedItems)) {
         var li = dom("LI", {class: "noItems"}, "There are no items in this subscription");
         var mobileLi = li.cloneNode(true);
@@ -377,7 +378,7 @@ Gui.prototype.showFeedItems = function(source, feedItems) {
         var fragment = document.createDocumentFragment();
         var mobileFragment = document.createDocumentFragment();
         for (var feedItem in  feedItems) {
-            this.__showFeedItem(fragment, mobileFragment, source, feedItems[feedItem]);
+            this.__showFeedItem(fragment, mobileFragment, source, feedItemContainer.wwwurl, feedItems[feedItem]);
 
         }
         $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
@@ -392,7 +393,7 @@ Gui.prototype.showFeedItems = function(source, feedItems) {
     }
 };
 
-Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, subscriptionItem) {
+Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl, subscriptionItem) {
 
     var self = this;
 
@@ -405,19 +406,19 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, subscr
     var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id, "data-subscription-id": subscriptionItem.subscriptionId}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
 
     li.onclick = function() {
-        self.onSubscriptionItemClicked(source, subscriptionItem);
+        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     };
 
     var mobileLi = li.cloneNode(true);
 
     mobileLi.onclick = function() {
-        self.onSubscriptionItemClicked(source, subscriptionItem);
+        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     };
     fragment.appendChild(li);
     mobileFragment.appendChild(mobileLi);
 };
 
-Gui.prototype.showArticle = function(subscriptionItem) {
+Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
     var subscriptionItemElements = document.querySelectorAll(selector);
 
@@ -431,10 +432,17 @@ Gui.prototype.showArticle = function(subscriptionItem) {
     var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
     articleTitle.appendChild(titleLink);
     var contentBlock = $("articleContent");
+    var base = document.getElementsByName("base")[0];
+    if (base)
+        base.remove();
+    var newbase = dom("BASE", {href: wwwurl, target: "_blank"});
+    var someTagFromHead = document.querySelector("meta[name=viewport]");
+    insertAfter(someTagFromHead, newbase);
     contentBlock.innerHTML = subscriptionItem.content;
     var showArticlePage = $("showArticlePage");
     showArticlePage.innerHTML = "";
     showArticlePage.appendChild(articleTitle);
+
     showArticlePage.appendChild(contentBlock);
 
     this.UI.pagestack.push('showArticlePage', {
