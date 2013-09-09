@@ -14,7 +14,10 @@ var SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST = "subscriptionItemsSmallDisplayList";
 function Gui(configuration) {
     var self = this;
 
-
+    var actionBar;
+    if (cordovaUsed()) {
+        actionBar = window.plugins.actionbar;
+    }
     this.UI = new UbuntuUI();
     //needed because of a bug with "toolbar"
     UI = this.UI;
@@ -34,11 +37,29 @@ function Gui(configuration) {
         self.__deactiveNightMode();
     }
 
-
-
-    this.UI.button('configureButton').click = function() {
+    this.UI.button('configureButton').click(function(e) {
+        e.stopImmediatePropagation();
         self.openConfigurePage(this, self.onConfigurationChanged);
+    });
+
+    $("useNightMode").onclick = function(e) {
+        e.stopPropagation();
+        configuration.useNightMode = !configuration.useNightMode;
+        if (configuration.useNightMode) {
+            self.__activateNightMode();
+        }
+        else {
+            self.__deactiveNightMode();
+        }
     };
+
+
+    $("footer").addEventListener("click", function(e) {
+        var el = e.srcElement || e.target;
+        if (el.id && /footer/i.test(el.id)) {
+            self.UI.toolbar("footer").toggle();
+        }
+    });
 
     this.UI.button('connectToTheOldReader').click(function() {
         self.onConnectToTheOldReader();
@@ -49,10 +70,6 @@ function Gui(configuration) {
         show($("addfeeddialog"));
 
     });
-//    var toolbar = this.UI.toolbar("footer");
-//    toolbar.touch(function() {
-//        toolbar.toggle();
-//    });
 
 
     this.UI.button('addfeedsuccess').click(function() {
@@ -65,13 +82,6 @@ function Gui(configuration) {
         hide($("addfeeddialog"));
     });
 
-//    window.onhashchange = function() {
-//        self.__back();
-//    };
-
-//    window.onbeforeunload = function() {
-//        self.__back();
-//    };
     history.pushState("jiberrish", null, null);
 
     window.onpopstate = function() {
@@ -99,10 +109,10 @@ function Gui(configuration) {
     }
 
     function computeConvergence() {
-        if (window.matchMedia("(max-width: 479px)").matches) {
+        if (window.matchMedia("(max-width: 639px)").matches) {
             return UI_CONVERGENCE_SMALL_DISPLAY;
         }
-        if (window.matchMedia("(min-width: 480px)").matches) {
+        if (window.matchMedia("(min-width: 640px)").matches) {
             return UI_CONVERGENCE_BIG_DISPLAY;
         }
     }
@@ -146,15 +156,6 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         $("useNightMode").removeAttribute("checked");
     }
 
-    $("useNightMode").onclick = function() {
-        configuration.useNightMode = !configuration.useNightMode;
-        if (configuration.useNightMode) {
-            that.__activateNightMode();
-        }
-        else {
-            that.__deactiveNightMode();
-        }
-    };
 
     $('extendConfigurationMenuItem').onclick = function() {
         that.UI.popover(this, "configurePopover").hide();
@@ -242,7 +243,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
 };
 
 Gui.prototype.__activateNightMode = function() {
-    var firstStyleSheet = document.querySelector("link[rel=stylesheet][href=\"css/index.css\"]");
+    var firstStyleSheet = document.querySelector("link[rel=stylesheet][href=\"css/ramsamsam-withoutscrolling.css\"]");
 
     var nightModeSytlesheet = dom("LINK", {rel: "stylesheet", href: "css/night-theme.css"});
     insertAfter(firstStyleSheet, nightModeSytlesheet);
@@ -334,11 +335,8 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", null, subscription.title)));
 
-        li.addEventListener("mousedown", function(e) {
-            li["className"] = "touchBeforeActive";
-            e.target.click();
-        });
         li.addEventListener("click", function showFeedEntry() {
+            li["className"] = "touchBeforeActive";
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
 

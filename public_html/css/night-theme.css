@@ -1,41 +1,45 @@
 nav.tabs div.tabs-inner .active>a {
-	color: white;
+    color: white;
 }
 
 body {
-	background: black;
+    background: black;
 }
 
 #feedEntries p:first-child {
-	color: white;
+    color: white;
 }
 
 [data-role="footer"] nav {
-	background: #222222;
+    background: #222222;
 }
 
 .popover {
-	background: #333333;
-	color: white;
+    background: #333333;
+    color: white;
 }
 
 nav.tabs {
-	border-bottom: 14px solid #444444;
+    border-bottom: 14px solid #444444;
 }
 
 
 [data-role="list"].subscriptionItemsList li p:first-child{
-	color:white;
+    color:white;
 }
 
-
+#mainPage, [data-role="list"] #subscriptionItemsPane,
+[data-role="list"] #subscriptionItemsList, [data-role="list"].darkList,*
+#extendedConfigurationPage{
+    background:  black;
+}
 
 [data-role="list"] li p {
-	color: #BBBBBB;
+    color: #BBBBBB;
 }
 
 #feedsAboList li p {
-	color: white;
+    color: white;
 }
 
 [data-role="content"] p {
@@ -51,18 +55,18 @@ nav.tabs {
 }
 
 #articleContent pre {
-	background-color: #444444;
-	color: #CCCCCC;
+    background-color: #444444;
+    color: #CCCCCC;
 }
 
 #articleContent p, #articleContent {
-	color: white;
+    color: white;
 }
 
 .white{
-	color: black;
-	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#000000));
-	background: -moz-linear-gradient(top, #aaa, #000000);
+    color: black;
+    background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#000000));
+    background: -moz-linear-gradient(top, #aaa, #000000);
 }
 
 /* [data-role="list"] li p { */
