@@ -30,7 +30,8 @@ nav.tabs {
 
 #mainPage, [data-role="list"] #subscriptionItemsPane,
 [data-role="list"] #subscriptionItemsList, [data-role="list"].darkList,*
-#extendedConfigurationPage{
+#extendedConfigurationPage,#subscriptionItemsSmallDisplayList, 
+#articleContent, #showArticlePage{
     background:  black;
 }
 
