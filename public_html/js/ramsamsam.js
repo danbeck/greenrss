@@ -40,7 +40,8 @@ function addGoogleAnalyticsToHTML() {
     var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);\
   })();';
 
-    var ga = script(html);
+    var ga = dom("SCRIPT", null);
+    ga.innerHTML = html; 
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 

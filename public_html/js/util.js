@@ -113,6 +113,10 @@ function hide(element) {
     element.style.display = 'none';
 }
 
+function removeNode(element) {
+	 element.parentNode.removeChild(element);
+}
+
 function toggle_visibility(e) {
     if (e.style.display === 'block')
         e.style.display = 'none';
@@ -122,12 +126,6 @@ function toggle_visibility(e) {
 
 function insertAfter(referenceNode, newNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-}
-
-function linkOpenInNewWindow(href, innerHTML) {
-    var a = link(href, innerHTML);
-    a["target"] = "_blank";
-    return a;
 }
 
 function setNodeAttribute(node, attribute, value) {
@@ -160,30 +158,4 @@ function dom(name, attributes) {
         node.appendChild(child);
     }
     return node;
-}
-
-
-function link(href, innerHTML) {
-    var a = document.createElement("a");
-    a["href"] = href;
-    a.innerHTML = innerHTML;
-    return a;
-}
-
-function script(innerHtml) {
-    var script = document.createElement('script');
-    script.innerHTML = innerHtml;
-    return script;
-}
-
-function createLi(element) {
-    var li = document.createElement("li");
-    li.appendChild(element);
-    return li;
-}
-
-function createP(innnerHTML) {
-    var p = document.createElement("p");
-    p.innerHTML = innnerHTML;
-    return p;
 }
