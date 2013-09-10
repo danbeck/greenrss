@@ -256,7 +256,7 @@ Gui.prototype.__deactiveNightMode = function() {
 
     var nightModeSytlesheet = document.querySelector("link[rel=stylesheet][href=\"css/night-theme.css\"]");
     if (nightModeSytlesheet)
-    	removeNode(nightModeSytlesheet);
+        nightModeSytlesheet.remove();
 };
 
 
@@ -407,8 +407,8 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
         itemWasReadClass = {class: "read"};
 
     var contentSnippetElement = dom("P", null);
-    contentSnippetElement.innerHTML = subscriptionItem.contentSnippet.substring(0,300);
-    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
+    contentSnippetElement.innerHTML = subscriptionItem.contentSnippet;
+    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id, "data-subscription-id": subscriptionItem.subscriptionId}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
 
     li.onclick = function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
@@ -425,17 +425,16 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
 
 Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
-    var subscriptionItemElement = document.querySelector(selector);
+    var subscriptionItemElements = document.querySelectorAll(selector);
 
-//    for (var i = 0; i < subscriptionItemElements.length; i++) {
-//        var subscriptionItemElement = subscriptionItemElements[i];
+    for (var i = 0; i < subscriptionItemElements.length; i++) {
+        var subscriptionItemElement = subscriptionItemElements[i];
         subscriptionItemElement.firstChild.setAttribute("class", "read");
-//    }
+    }
 
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
-    
-    var titleLink = dom("A", {href: subscriptionItem.url,target:"_blank"},subscriptionItem.title);
+    var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
     articleTitle.appendChild(titleLink);
     var contentBlock = $("articleContent");
 //    var base = document.getElementsByName("base")[0];
