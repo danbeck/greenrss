@@ -58,9 +58,9 @@ function onDeviceReady() {
     gui.onConfigurationChanged = function(config) {
         saveConfigInLocalStore("configuration", configuration);
 
-        if (configuration.useNightMode) {
-            showNightMode(configuration.useNightMode);
-        }
+//        if (configuration.useNightMode) {
+//            showNightMode(configuration.useNightMode);
+//        }
 
     };
 
@@ -82,7 +82,16 @@ function onDeviceReady() {
 
         }
         if (clickedFeedDataSource === "theOldReader") {
-            theOldReader.retrieveSubscriptionItems(
+//            theOldReader.retrieveSubscriptionItems(
+//                    configuration.theoldReader_sync.theoldreader_username,
+//                    configuration.theoldReader_sync.theoldreader_password,
+//                    clickedFeedID,
+//                    function(subscriptionItemObject) {
+//                        gui.showFeedItems("theOldReader", subscriptionItemObject);
+//                    }
+//            );
+            
+            theOldReader.getSubscriptionItems(
                     configuration.theoldReader_sync.theoldreader_username,
                     configuration.theoldReader_sync.theoldreader_password,
                     clickedFeedID,
@@ -110,22 +119,41 @@ function onDeviceReady() {
     };
 
     gui.onConnectToTheOldReader = function() {
-        theOldReader.retrieveSubscriptions(
-                configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password,
-                function(response) {
-                    showSubscriptionList(response);
-                });
-    };
+//		retrieveSubscriptionsForTheOldReader();
+    	setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+	};
 
-    if (configuration.theoldReader_sync.useTheOldReader === true)
-        theOldReader.retrieveSubscriptions(
-                configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password,
-                function(response) {
-                    showSubscriptionList(response);
-                });
+	if (configuration.theoldReader_sync.useTheOldReader === true){
+		getSubscriptionsForTheOldReader();
+		retrieveSubscriptionsForTheOldReader();
+		setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+	}
+}
 
+function retrieveSubscriptionsForTheOldReader(){
+	var username= configuration.theoldReader_sync.theoldreader_username;
+	var password =  configuration.theoldReader_sync.theoldreader_password;
+    theOldReader.retrieveSubscriptions(username, password,
+            
+    		function(subscriptions) {
+                showSubscriptionList(subscriptions);
+                
+                for (var subscriptionid in subscriptions){
+                	theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer){
+//                		gui.addFeedItemsToHTML("theOldReader", subscriptionItemContainer);
+                	});
+                	
+                }
+            });
+}
+
+function getSubscriptionsForTheOldReader(){
+    theOldReader.getSubscriptions(
+            configuration.theoldReader_sync.theoldreader_username,
+            configuration.theoldReader_sync.theoldreader_password,
+            function(response) {
+                showSubscriptionList(response);
+            });
 }
 
 function loadConfigurationOrCreateDefault() {
@@ -147,20 +175,20 @@ function onFeedClick(feedid) {
 //    feedidAsJSON JSON.parse(feedid);
     console.log(feedid);
 }
-function showNightMode(nightMode) {
-    if (nightMode) {
-        var head = document.getElementsByName("head");
-        var link = document.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        link.setAttribute("href", "css/night-theme.css");
-        head.appendChild(link);
-    }
-    else
-    {
-        var styleSheet = document.querySelector('link[rel=stylesheet][href="css/night-theme.css"]');
-        styleSheet.remove();
-    }
-}
+//function showNightMode(nightMode) {
+//    if (nightMode) {
+//        var head = document.getElementsByName("head");
+//        var link = document.createElement("link");
+//        link.setAttribute("rel", "stylesheet");
+//        link.setAttribute("href", "css/night-theme.css");
+//        head.appendChild(link);
+//    }
+//    else
+//    {
+//        var styleSheet = document.querySelector('link[rel=stylesheet][href="css/night-theme.css"]');
+//        styleSheet.remove();
+//    }
+//}
 
 function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");

@@ -6,7 +6,7 @@ function GoogleFeed() {
         "http://planet.ubuntu.com/rss20.xml",
         "http://planetkde.org/rss20.xml"];
 
-    this.__SUBSCRIPTIONS_LOCAL_STORAGE = "google-subscriptions";
+    this.localStorageService = new LocalStorageService("google-subscriptions");
 }
 
 GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
@@ -21,12 +21,12 @@ GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
 };
 
 GoogleFeed.prototype.setRead = function(subscriptionItem, dummyCallback) {
-    var allSubscriptions = this.__getAllSubscriptionsFromLocalStorage();
+    var allSubscriptions = this.localStorageService.getAllSubscriptionsFromLocalStorage();
     var persistedSubscription = allSubscriptions[subscriptionItem.subscriptionId];
     var persistedSubscriptionItems = persistedSubscription["items"];
     var persistedSubscriptionItem = persistedSubscriptionItems[subscriptionItem.id];
     persistedSubscriptionItem["read"] = true;
-    this.__saveSubscriptionsInLocalStorage(allSubscriptions);
+    this.localStorageService.saveSubscriptionsInLocalStorage(allSubscriptions);
     dummyCallback();
 };
 
@@ -44,20 +44,20 @@ GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
                 self.__addSubscription(subscriptions, subscription);
                 amountOfFeedsToShow--;
                 if (amountOfFeedsToShow === 0) {
-                    self.__saveSubscriptionsInLocalStorage(subscriptions);
+                    self.localStorageService.saveSubscriptionsInLocalStorage(subscriptions);
                     onGetSubscriptionList(subscriptions);
                 }
             });
         }
     }
     else {
-        var feedsToLoad = self.__getAllSubscriptionsFromLocalStorage();
+        var feedsToLoad = self.localStorageService.getAllSubscriptionsFromLocalStorage();
         onGetSubscriptionList(feedsToLoad);
     }
 };
 
 GoogleFeed.prototype.retrieveSubscriptionItems = function(notUsed1, notUsed2, clickedFeedID, onRetrieveSubscriptionItems) {
-    var itemContainer = this.__getSubscriptionFromLocalStorage(clickedFeedID);
+    var itemContainer = this.localStorageService.getSubscriptionFromLocalStorage(clickedFeedID);
     onRetrieveSubscriptionItems(itemContainer);
 };
 
@@ -76,29 +76,6 @@ GoogleFeed.prototype.__addSubscription = function(subscription, googleFeed) {
     };
 
     return subscription[subscriptionid];
-};
-
-
-GoogleFeed.prototype.__getSubscriptionItemsFromLocalStorage = function(subscriptionId) {
-    var subscription = this.__getSubscriptionFromLocalStorage(subscriptionId);
-    return subscription["items"];
-};
-
-GoogleFeed.prototype.__getSubscriptionFromLocalStorage = function(subscriptionId) {
-    var subscriptions = this.__getAllSubscriptionsFromLocalStorage();
-    return subscriptions[subscriptionId];
-};
-
-GoogleFeed.prototype.__getAllSubscriptionsFromLocalStorage = function() {
-    var subscriptionString = localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
-    if (subscriptionString)
-        return JSON.parse(subscriptionString);
-    else
-        return {};
-};
-
-GoogleFeed.prototype.__saveSubscriptionsInLocalStorage = function(subscriptions) {
-    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
 };
 
 GoogleFeed.prototype.__asSubscriptionItems = function(subscriptionId, googleFeedEntries) {

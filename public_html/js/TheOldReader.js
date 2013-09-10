@@ -9,7 +9,11 @@ function TheOldReader() {
     this.__THEOLDREADER_UNREADITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&xt=user/-/state/com.google/read";
     this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
     this.__THEOLDREADER_UNREADCOUNT_URL = this.__THEOLDREADER_API_URL + "unread-count?output=json";
-//    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
+
+
+    this.__SUBSCRIPTIONS_LOCAL_STORAGE = "theoldreader-subscriptions";
+    this.localStorageService =  new LocalStorageService(this.__SUBSCRIPTIONS_LOCAL_STORAGE);   
+    //    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
 }
 
 TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) {
@@ -21,7 +25,6 @@ TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) 
         gotToken.apply(undefined, gotToken.arguments);
     });
 };
-
 
 TheOldReader.prototype.retrieveSubscriptions = function(email, password,
         onGetSubscriptionList) {
@@ -44,10 +47,22 @@ TheOldReader.prototype.retrieveSubscriptions = function(email, password,
                     categories: subscription.categories,
                     image: subscription.iconUrl};
             }
+            self.localStorageService.saveSubscriptionsInLocalStorage(result);
             onGetSubscriptionList(result);
         });
     });
 };
+
+
+TheOldReader.prototype.getSubscriptions = function(email, password,
+		onGetSubscriptionList) {
+	var self = this;
+
+	var subscriptions = self.localStorageService
+			.getAllSubscriptionsFromLocalStorage();
+	onGetSubscriptionList(subscriptions);
+};
+
 
 TheOldReader.prototype.retrieveUnreadCount = function(email, password,
         onRetrieveUnreadCound) {
@@ -122,6 +137,9 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
             postUrlEncodedHttpRequest(self.__THEOLDREADER_ITEM_CONTENT_URL, urlParameter, function(response) {
                 var feedItemsContainer = JSON.parse(response);
                 var result = convertToSubscriptionItems(subscriptionid, feedItemsContainer);
+                var allSubscriptions = self.localStorageService.getAllSubscriptionsFromLocalStorage();
+                allSubscriptions[subscriptionid]["items"] = result["items"];
+                self.localStorageService.saveSubscriptionsInLocalStorage(allSubscriptions);
                 onGetAllItemIds(result);
             });
 
@@ -168,6 +186,12 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
     });
 };
 
+TheOldReader.prototype.getSubscriptionItems = function(email, password,
+		subscriptionid, onGetAllItemIds) {
+	var subscriptions = this.localStorageService
+			.getSubscriptionFromLocalStorage(subscriptionid);
+	onGetAllItemIds(subscriptions);
+};
 
 TheOldReader.prototype.getUnreadItemIds = function(email, password,
         onGetSubscriptionList) {

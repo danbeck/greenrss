@@ -293,6 +293,8 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
 Gui.prototype.showSubscriptions = function(headerName, subscription) {
     var self = this;
 
+    if(document.querySelector("li[data-subscription-id=\"" + subscription.id + "\"]" ))
+    	return;
     if (!headerName) {
         headerName = "local";
     }
@@ -364,7 +366,7 @@ Gui.prototype.__addSelectClassAndCallOnSubscriptionClick = function(li) {
     this.onSubscriptionClick(clickedFeedDataSource, clickedFeedId);
 };
 
-Gui.prototype.showFeedItems = function(source, feedItemContainer) {
+Gui.prototype.addFeedItemsToHTML = function(source, feedItemContainer) {
     $(SUBSCRIPTION_ITEMS_LIST).innerHTML = "";
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
@@ -384,8 +386,11 @@ Gui.prototype.showFeedItems = function(source, feedItemContainer) {
         $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
         $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).appendChild(mobileFragment);
     }
+};
 
-    if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
+Gui.prototype.showFeedItems = function(source, feedItemContainer) {
+	this.addFeedItemsToHTML(source,feedItemContainer);
+	if (this.convergence === UI_CONVERGENCE_SMALL_DISPLAY) {
 
         this.UI.pagestack.push(SUBSCRIPTION_ITEMS_SMALLDISPLAY_PANE, {
             subtitle: 'subscription items'
