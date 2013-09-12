@@ -9,7 +9,7 @@ function TheOldReader() {
     this.__THEOLDREADER_UNREADITEM_IDS_URL = this.__THEOLDREADER_API_URL + "stream/items/ids?output=json&xt=user/-/state/com.google/read";
     this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/items/contents?output=json";
     this.__THEOLDREADER_UNREADCOUNT_URL = this.__THEOLDREADER_API_URL + "unread-count?output=json";
-
+    this.__THEOLDREADER_UPDATEITEM_URL = this.__THEOLDREADER_API_URL + "edit-tag";
 
     this.__SUBSCRIPTIONS_LOCAL_STORAGE = "theoldreader-subscriptions";
     this.localStorageService = new LocalStorageService(this.__SUBSCRIPTIONS_LOCAL_STORAGE);
@@ -159,6 +159,7 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
             function convertToSubscriptionItems(subscriptionid, theOldReaderFeedItems) {
                 var items = theOldReaderFeedItems.items;
                 var itemsFromResult = {};
+                
                 var result = {items: itemsFromResult, wwwurl: theOldReaderFeedItems["alternate"]["href"]};
                 if (items !== undefined)
                     for (var i = 0; i < items.length; i++) {
@@ -198,6 +199,16 @@ TheOldReader.prototype.getUnreadItemIds = function(email, password,
     this.__retrieveTokenIfNecessary(email, password, onGetSubscriptionList);
     var url = this.__THEOLDREADER_UNREADITEM_IDS_URL;
     getHttpRequest(url, onGetSubscriptionList);
+};
+
+
+TheOldReader.prototype.setRead = function(email, password, subscriptionitem) {
+    var url = this.__THEOLDREADER_UPDATEITEM_URL;
+    var data = "i=" + subscriptionitem.id + "&a=user/-/state/com.google/read";
+    this.__retrieveTokenIfNecessary(email, password, function() {
+        postUrlEncodedHttpRequest(url, data, function(){}, function(){});
+    });
+
 };
 
 

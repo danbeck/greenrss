@@ -110,6 +110,9 @@ function onDeviceReady() {
             });
         }
         if (source === "theOldReader") {
+            theOldReader.setRead(
+                    configuration.theoldReader_sync.theoldreader_username,
+                    configuration.theoldReader_sync.theoldreader_password, subscriptionItem);
 //            theOldReader.setRead(subscriptionItem, function() {
             gui.showArticle(wwwurl, subscriptionItem);
 

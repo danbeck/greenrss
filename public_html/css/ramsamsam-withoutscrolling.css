@@ -239,6 +239,7 @@ li.feedlocation  h2 {
 
 
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
+    /*bottom: 70px;*/
 /*    position: fixed;
     overflow-y: auto;
     top: 74px;
