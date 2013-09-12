@@ -15,16 +15,16 @@
     </head>
 
     <body>
-<!--         <header data-role="header"> -->
-<!--             <nav data-role="navbar" class="tabs" > -->
-<!--                 <div class="tabs-inner"> -->
-<!--                     <ul> -->
-<!--                         <li class="active" role="tab"> -->
-<!--                             <a href="#item1" class="tab-item"><span class="roundy">R</span>amSamSam Reader</a> -->
-<!--                         </li></ul> -->
-<!--                 </div> -->
-<!--             </nav> -->
-<!--         </header> -->
+        <!--         <header data-role="header"> -->
+        <!--             <nav data-role="navbar" class="tabs" > -->
+        <!--                 <div class="tabs-inner"> -->
+        <!--                     <ul> -->
+        <!--                         <li class="active" role="tab"> -->
+        <!--                             <a href="#item1" class="tab-item"><span class="roundy">R</span>amSamSam Reader</a> -->
+        <!--                         </li></ul> -->
+        <!--                 </div> -->
+        <!--             </nav> -->
+        <!--         </header> -->
 
         <div data-role="content">
             <div data-role="pagestack">
@@ -57,7 +57,7 @@
                     <div id="configurePopover" class="popover leftpopover" data-gravity="s" style="margin-bottom: 30px; top: 400px;">
                         <ul class="list">
                             <li id="extendConfigurationMenuItem">Extended Configuration</li>
-                            <li><p>Night mode</p>
+                            <li>Night mode: 
                                 <label>
                                     <input id="useNightMode" type="checkbox" data-type="switch">
                                     <span class="toggle">
@@ -65,8 +65,8 @@
                                         <span class="toggle-bg"></span>
                                     </span>
                                 </label></li>
-                            <li id="refreshButton"><a>Refresh now</a></li>
-                            <li id="deleteLocalStorage"><a>Delete local-storage</a></li>
+                            <li id="refreshButton">Refresh now</li>
+                            <li id="deleteLocalStorage">Delete local-storage</li>
                         </ul>
                     </div>
                 </footer>
@@ -74,8 +74,12 @@
                 <div data-role="dialog" id="addfeeddialog">
                     <section>
                         <h1>Add a new feed</h1>
-                        <p>Type the url feed you want to add</p>
+                        <p>Type the url feed or the url ebay search you want to add.</p><p> You can also search for feeds.</p>
                         <input type="url" id="rssFeed" placeholder="http://">
+                        <section data-role="list" id="foundfeeds">
+                            <ul id="foundfeedsList">
+                            </ul>
+                        </section>
                         <menu>
                             <button data-role="button" id="addfeedcancel">Cancel</button>
                             <button data-role="button" id="addfeedsuccess" class="success" >Add</button>

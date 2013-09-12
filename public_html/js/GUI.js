@@ -60,6 +60,14 @@ function Gui(configuration) {
             self.UI.toolbar("footer").toggle();
         }
     });
+    
+    $("rssFeed").addEventListener("keyup", function(){
+    	var input = $("rssFeed").value;
+    	
+    	if (input.length>2){
+    		self.feedSearch(input);
+    	}
+    });
 
     this.UI.button('connectToTheOldReader').click(function() {
         self.onConnectToTheOldReader();
@@ -118,7 +126,40 @@ function Gui(configuration) {
     }
 }
 
+Gui.prototype.showFoundFeeds = function (foundFeeds){
+	var self = this;
+	
+	feeds = foundFeeds.entries;
+	var ubuntuList = this.UI.list("#foundfeeds");
+	ubuntuList.removeAllItems();
+	for(var i = 0; i <  feeds.length; i++){
+		
+//		var feedcheckbox = dom("P", null, feeds[i].title);
+		// feeds[i].url;
+		
+		var p = dom("P");
+		p.innerHTML = feeds[i].title;
+		var content = dom("P", {"style":"text-overflow: ellipsis;margin-right:4.5rem;"});
+		content.innerHTML = feeds[i].title;
+//		var label = 
+		var newListItem=dom("LI", null, content, dom("LABEL", null, dom("INPUT", {type:"checkbox"}), dom("SPAN",null)));
+//		checkboxFragment = document.createDocumentFragment();
+//		checkboxFragment.appendChild(dom("INPUT", {type:"checkbox"}));
+//		checkboxFragment.appendChild(dom("SPAN", null));
+		$("foundfeedsList").appendChild(newListItem);
+		
+//		ubuntuList.append("kde", "<p>test</p>", null, function(){
+//			self.onFeedAdded(feeds[i].url);
+////			hide($("addfeeddialog"));
+//		} );
+	}
+};
+
 Gui.prototype.onConfigurationChanged = function() {
+};
+
+
+Gui.prototype.feedSearch = function() {
 };
 
 Gui.prototype.onFeedAdded = function() {
@@ -256,7 +297,7 @@ Gui.prototype.__deactiveNightMode = function() {
 
     var nightModeSytlesheet = document.querySelector("link[rel=stylesheet][href=\"css/night-theme.css\"]");
     if (nightModeSytlesheet)
-        nightModeSytlesheet.remove();
+    	removeNode(nightModeSytlesheet);
 };
 
 
@@ -327,6 +368,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
     }
 
     function createSubscriptionElement(subscription) {
+    	var numberOfUnreadItems = numberOfUnreadItems(subscription);
         var aside;
         if (subscription.image) {
             aside = dom("ASIDE", null, dom("IMG", {width: "35px", height: "35px", src: subscription.image}));
@@ -334,8 +376,11 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         else {
             aside = dom("ASIDE", null);
         }
+        
+        var titleSpan = dom("SPAN", {"class": "title"}, subscription.title);
+        var numberOfUnreadItemsSpan = dom("SPAN", {"class":"unread"}, ""+ numberOfUnreadItems);
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-        dom("A", null, aside, dom("P", null, subscription.title)));
+        dom("A", null, aside, dom("P", null, titleSpan, numberOfUnreadItemsSpan)));
 
         li.addEventListener("click", function showFeedEntry() {
             li["className"] = "touchBeforeActive";
@@ -343,6 +388,17 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         });
 
         return li;
+        
+        
+        function numberOfUnreadItems(subscription){
+        	var number = 0;
+        	var items = subscription["items"];
+        	for (itemKey in items){
+        		if(items[itemKey]["read"] ===false)
+        		number ++;
+        	}
+        	return number;
+        }
     }
 };
 
@@ -371,6 +427,16 @@ Gui.prototype.addFeedItemsToHTML = function(source, feedItemContainer) {
     $(SUBSCRIPTION_ITEMS_SMALLDISPLAY_LIST).innerHTML = "";
 
     var feedItems = feedItemContainer["items"];
+    
+    var sortedFeedItems = new Array();
+    for(var feedItem in feedItems){
+    	sortedFeedItems.push(feedItems[feedItem]); 
+    }
+    sortedFeedItems.sort(function(a,b){
+    	 var dateA=new Date(a.publishedDate), dateB=new Date(b.publishedDate);
+    	 return dateB-dateA;//sort by date ascending
+    });
+    
     if (isEmpty(feedItems)) {
         var li = dom("LI", {class: "noItems"}, "There are no items in this subscription");
         var mobileLi = li.cloneNode(true);
@@ -379,8 +445,10 @@ Gui.prototype.addFeedItemsToHTML = function(source, feedItemContainer) {
     } else {
         var fragment = document.createDocumentFragment();
         var mobileFragment = document.createDocumentFragment();
-        for (var feedItem in  feedItems) {
-            this.__showFeedItem(fragment, mobileFragment, source, feedItemContainer.wwwurl, feedItems[feedItem]);
+//        for (var feedItem in  feedItems) {
+        for (var i =0; i< sortedFeedItems.length; i++) {
+        	var feedItemObj = sortedFeedItems[i];
+            this.__showFeedItem(fragment, mobileFragment, source, feedItemContainer.wwwurl, feedItemObj);
 
         }
         $(SUBSCRIPTION_ITEMS_LIST).appendChild(fragment);
@@ -407,8 +475,8 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
         itemWasReadClass = {class: "read"};
 
     var contentSnippetElement = dom("P", null);
-    contentSnippetElement.innerHTML = subscriptionItem.contentSnippet;
-    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id, "data-subscription-id": subscriptionItem.subscriptionId}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
+    contentSnippetElement.innerHTML = subscriptionItem.contentSnippet.substring(0,300);
+    var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
 
     li.onclick = function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
@@ -425,16 +493,17 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
 
 Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
-    var subscriptionItemElements = document.querySelectorAll(selector);
+    var subscriptionItemElement = document.querySelector(selector);
 
-    for (var i = 0; i < subscriptionItemElements.length; i++) {
-        var subscriptionItemElement = subscriptionItemElements[i];
+//    for (var i = 0; i < subscriptionItemElements.length; i++) {
+//        var subscriptionItemElement = subscriptionItemElements[i];
         subscriptionItemElement.firstChild.setAttribute("class", "read");
-    }
+//    }
 
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
-    var titleLink = linkOpenInNewWindow(subscriptionItem.url, subscriptionItem.title);
+    
+    var titleLink = dom("A", {href: subscriptionItem.url,target:"_blank"},subscriptionItem.title);
     articleTitle.appendChild(titleLink);
     var contentBlock = $("articleContent");
 //    var base = document.getElementsByName("base")[0];

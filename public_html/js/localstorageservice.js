@@ -8,6 +8,11 @@ function LocalStorageService(localStoragekey){
 //    return subscription["items"];
 //};
 
+
+LocalStorageService.prototype.keyExist = function() {
+	return localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
+};
+
 LocalStorageService.prototype.getSubscriptionFromLocalStorage = function(subscriptionId) {
     var subscriptions = this.getAllSubscriptionsFromLocalStorage();
     return subscriptions[subscriptionId];

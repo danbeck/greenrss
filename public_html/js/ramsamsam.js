@@ -40,7 +40,8 @@ function addGoogleAnalyticsToHTML() {
     var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);\
   })();';
 
-    var ga = script(html);
+    var ga = dom("SCRIPT", null);
+    ga.innerHTML = html; 
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 
@@ -117,6 +118,13 @@ function onDeviceReady() {
         }
     };
 
+    gui.feedSearch = function(query){
+    	googleFeed.searchSubscriptions(query, function(foundFeeds){
+    		gui.showFoundFeeds(foundFeeds);
+    		
+    	});
+    };
+    
     gui.onConnectToTheOldReader = function() {
 //		retrieveSubscriptionsForTheOldReader();
     	setInterval(retrieveSubscriptionsForTheOldReader, 60000);

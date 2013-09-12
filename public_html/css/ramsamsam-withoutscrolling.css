@@ -10,7 +10,7 @@
     }
 }
 
-@media screen and (min-width:640px) {
+@media screen and (min-width:640px) and (max-width:999px) {
     #subscriptionPane {
         float: left;
         width: 33%;
@@ -29,6 +29,34 @@
     margin-left: 66%
 }
     
+}
+
+@media screen and (min-width:1000px) {
+    #subscriptionPane {
+        float: left;
+        width: 330px;
+    }
+    #subscriptionItemsPane {
+        margin-left: 330px;
+        /*width: 67%;*/
+    }
+
+#extendedConfigurationPage .configurationLeft {
+    float: left;
+    width: 650px;
+}
+
+#extendedConfigurationPage .configurationRight {
+    margin-left: 660px;
+}
+    
+}
+[data-role="list"] {
+border-top: none;
+}
+
+[data-role="list"] li > a {
+	border-top: none;
 }
 
 .leftpopover[data-gravity="s"]:before,.leftpopover[data-gravity="s"]:after
@@ -50,34 +78,34 @@ body {
     border-color:black;
 }
 
-[data-role="header"] .roundy {
-    background: white;
-    border-radius: 2rem 2rem 2rem 2rem;
-    padding: 0rem 0.6rem;
-    color: #222B2F;
-}
-nav.tabs {
-    border-bottom-color:black;
-}
-nav.tabs div.tabs-inner {
-    border-color:black;
-}
-nav.tabs div.tabs-inner .active > a{
-    color: white;
-}
+/* [data-role="header"] .roundy { */
+/*     background: white; */
+/*     border-radius: 2rem 2rem 2rem 2rem; */
+/*     padding: 0rem 0.6rem; */
+/*     color: #222B2F; */
+/* } */
+/* nav.tabs { */
+/*     border-bottom-color:black; */
+/* } */
+/* nav.tabs div.tabs-inner { */
+/*     border-color:black; */
+/* } */
+/* nav.tabs div.tabs-inner .active > a{ */
+/*     color: white; */
+/* } */
 /*[data-role="footer"] nav ul li a:active{
     background-color: #CC4400;
     color: white;
 }*/
-[data-role="footer"] nav ul li a:hover {
-    background-color: #016A1D;
+[data-role="footer"] nav ul li a:active {
+    background-color: #157E31;
     color: white;
 }
 
-[data-role="footer"] nav ul li a.tapped {
-    background-color: #016A1D;
-    color: white;
-}
+/* [data-role="footer"] nav ul li a.tapped { */
+/*     background-color: #016A1D; */
+/*     color: white; */
+/* } */
 
 [data-role="list"].darkList{
     background: #4A5357;
@@ -85,6 +113,15 @@ nav.tabs div.tabs-inner .active > a{
     color:white;	
     border-top-color: black;
 }
+
+[data-role="list"].darkList span.unread{
+	margin-left: 1rem;
+	background: white; 
+     border-radius: 2rem 2rem 2rem 2rem; 
+     padding: 0rem 0.6rem; 
+     color: #222B2F; 
+ } 
+
 
 [data-role="list"].darkList li, [data-role="list"].darkList a, [data-role="list"].darkList header {
     border: none;
@@ -125,6 +162,9 @@ nav.tabs div.tabs-inner .active > a{
 	color: black;
 }
 
+[data-role="content"] {
+	background: white;
+}
 
 /* The categories subscriptions*/
 [data-role="list"].darkList header{
@@ -158,7 +198,6 @@ nav.tabs div.tabs-inner .active > a{
 [data-role="list"].darkList [data-subscription-id].active {
     background: #016A1D;
 }
-
 [data-role="list"].darkList [data-subscription-id].touchBeforeActive,[data-role="list"].darkList li > a:active {
     background: #157E31;
 }
@@ -214,6 +253,11 @@ li.feedlocation  h2 {
 
 #configurePopover .list {
     max-height: 400px;
+}
+
+#configurePopover.popover li:ACTIVE{
+	 background: #016A1D;
+	 color: white;
 }
 
 #showArticlePage {
@@ -323,6 +367,20 @@ li.feedlocation  h2 {
     box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }
 
+
+/* a.button.white:HOVER, */
+ a.button.white:ACTIVE{
+	color: black;
+/*     border: solid 1px #016A1D; */
+     background: #fff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+    background: -moz-linear-gradient(top, #ededed,#fff);
+    
+/*     text-shadow: 0 1px 1px rgba(0,0,0,.5); */
+/*     text-shadow: none; */
+}
+
+
 #connectToTheOldReader:after {
     background-image: none;
 }
@@ -338,5 +396,7 @@ label input[type="checkbox"][data-type="switch"]:checked + span.toggle > span.to
 }
 
 label:not([for]) input[type="checkbox"]:checked + span {
-    background: #016A1D;
+/*     background: #016A1D; */
+   background: #016A1D url("../img/CheckMark@18.png") no-repeat 0.5rem 0.5rem;
+   background-size: 53% 53%;
 }
