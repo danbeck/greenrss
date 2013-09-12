@@ -16,10 +16,10 @@ GoogleFeed.prototype.searchSubscriptions = function(query, findDone) {
 
 GoogleFeed.prototype.addSubscription = function(feedUrl, onSubscriptionAdded) {
     var self = this;
-    var persistedsubscriptions = this.__getAllSubscriptionsFromLocalStorage();
+    var persistedsubscriptions = this.localStorageService.getAllSubscriptionsFromLocalStorage();
     self.__loadFeedsFromGoogle(feedUrl, function(googlefeed) {
         var addedSubscription = self.__addSubscription(persistedsubscriptions, googlefeed);
-        self.__saveSubscriptionsInLocalStorage(persistedsubscriptions);
+        self.localStorageService.saveSubscriptionsInLocalStorage(persistedsubscriptions);
         onSubscriptionAdded(addedSubscription);
     }
     );
