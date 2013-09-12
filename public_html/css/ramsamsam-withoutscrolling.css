@@ -237,6 +237,16 @@ li.feedlocation  h2 {
     color: white;
 }
 
+#subscriptionPane p.title{
+    width:55%;
+    padding-top: 1.5rem;
+    float:left;
+}
+
+#subscriptionPane p.unread{
+    margin-left:60%;
+    padding-top: 1.5rem;
+}
 
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
     /*bottom: 70px;*/

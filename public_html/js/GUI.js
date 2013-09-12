@@ -383,7 +383,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var titleSpan = dom("SPAN", {"class": "title"}, subscription.title);
         var numberOfUnreadItemsSpan = dom("SPAN", {"class": "unread"}, "" + numberOfUnreadItems);
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-        dom("A", null, aside, dom("P", null, titleSpan, numberOfUnreadItemsSpan)));
+        dom("A", null, aside, dom("P", {class:"title"}, titleSpan), dom("P", {class:"unread"}, numberOfUnreadItemsSpan)));
 
         li.addEventListener("click", function showFeedEntry() {
             li["className"] = "touchBeforeActive";
