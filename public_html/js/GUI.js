@@ -64,8 +64,11 @@ function Gui(configuration) {
     $("rssFeed").addEventListener("keyup", function() {
         var input = $("rssFeed").value;
 
-        if (input.length > 2) {
+        if (input && input.length > 2 && input !== "htt"
+                && input !== "http" && input.substring(0, 5) !== "http:") {
             self.feedSearch(input);
+        } else {
+            self.UI.list("#foundfeeds").removeAllItems();
         }
     });
 
