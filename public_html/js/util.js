@@ -114,7 +114,7 @@ function hide(element) {
 }
 
 function removeNode(element) {
-	 element.parentNode.removeChild(element);
+    element.parentNode.removeChild(element);
 }
 
 function toggle_visibility(e) {
