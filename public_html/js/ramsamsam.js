@@ -41,7 +41,7 @@ function addGoogleAnalyticsToHTML() {
   })();';
 
     var ga = dom("SCRIPT", null);
-    ga.innerHTML = html; 
+    ga.innerHTML = html;
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 
@@ -90,7 +90,7 @@ function onDeviceReady() {
 //                        gui.showFeedItems("theOldReader", subscriptionItemObject);
 //                    }
 //            );
-            
+
             theOldReader.getSubscriptionItems(
                     configuration.theoldReader_sync.theoldreader_username,
                     configuration.theoldReader_sync.theoldreader_password,
@@ -118,43 +118,42 @@ function onDeviceReady() {
         }
     };
 
-    gui.feedSearch = function(query){
-    	googleFeed.searchSubscriptions(query, function(foundFeeds){
-    		gui.showFoundFeeds(foundFeeds);
-    		
-    	});
+    gui.feedSearch = function(query) {
+        googleFeed.searchSubscriptions(query, function(foundFeeds) {
+            gui.showFoundFeeds(foundFeeds);
+
+        });
     };
-    
+
     gui.onConnectToTheOldReader = function() {
 //		retrieveSubscriptionsForTheOldReader();
-    	setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-	};
+        setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+    };
 
-	if (configuration.theoldReader_sync.useTheOldReader === true){
-		getSubscriptionsForTheOldReader();
-		retrieveSubscriptionsForTheOldReader();
-		setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-	}
+    if (configuration.theoldReader_sync.useTheOldReader === true) {
+        getSubscriptionsForTheOldReader();
+        retrieveSubscriptionsForTheOldReader();
+        setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+    }
 }
 
-function retrieveSubscriptionsForTheOldReader(){
-	var username= configuration.theoldReader_sync.theoldreader_username;
-	var password =  configuration.theoldReader_sync.theoldreader_password;
+function retrieveSubscriptionsForTheOldReader() {
+    var username = configuration.theoldReader_sync.theoldreader_username;
+    var password = configuration.theoldReader_sync.theoldreader_password;
     theOldReader.retrieveSubscriptions(username, password,
-            
-    		function(subscriptions) {
+            function(subscriptions) {
                 showSubscriptionList(subscriptions);
-                
-                for (var subscriptionid in subscriptions){
-                	theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer){
+
+                for (var subscriptionid in subscriptions) {
+                    theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer) {
 //                		gui.addFeedItemsToHTML("theOldReader", subscriptionItemContainer);
-                	});
-                	
+                    });
+
                 }
             });
 }
 
-function getSubscriptionsForTheOldReader(){
+function getSubscriptionsForTheOldReader() {
     theOldReader.getSubscriptions(
             configuration.theoldReader_sync.theoldreader_username,
             configuration.theoldReader_sync.theoldreader_password,

@@ -1,6 +1,6 @@
-function LocalStorageService(localStoragekey){
-	this.__SUBSCRIPTIONS_LOCAL_STORAGE = localStoragekey;	
-} 
+function LocalStorageService(localStoragekey) {
+    this.__SUBSCRIPTIONS_LOCAL_STORAGE = localStoragekey;
+}
 
 
 //LocalStorageService.prototype.__getSubscriptionItemsFromLocalStorage = function(subscriptionId) {
@@ -10,7 +10,7 @@ function LocalStorageService(localStoragekey){
 
 
 LocalStorageService.prototype.keyExist = function() {
-	return localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
+    return localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];
 };
 
 LocalStorageService.prototype.getSubscriptionFromLocalStorage = function(subscriptionId) {

@@ -12,7 +12,7 @@ function TheOldReader() {
 
 
     this.__SUBSCRIPTIONS_LOCAL_STORAGE = "theoldreader-subscriptions";
-    this.localStorageService =  new LocalStorageService(this.__SUBSCRIPTIONS_LOCAL_STORAGE);   
+    this.localStorageService = new LocalStorageService(this.__SUBSCRIPTIONS_LOCAL_STORAGE);
     //    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
 }
 
@@ -55,12 +55,12 @@ TheOldReader.prototype.retrieveSubscriptions = function(email, password,
 
 
 TheOldReader.prototype.getSubscriptions = function(email, password,
-		onGetSubscriptionList) {
-	var self = this;
+        onGetSubscriptionList) {
+    var self = this;
 
-	var subscriptions = self.localStorageService
-			.getAllSubscriptionsFromLocalStorage();
-	onGetSubscriptionList(subscriptions);
+    var subscriptions = self.localStorageService
+            .getAllSubscriptionsFromLocalStorage();
+    onGetSubscriptionList(subscriptions);
 };
 
 
@@ -187,10 +187,10 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
 };
 
 TheOldReader.prototype.getSubscriptionItems = function(email, password,
-		subscriptionid, onGetAllItemIds) {
-	var subscriptions = this.localStorageService
-			.getSubscriptionFromLocalStorage(subscriptionid);
-	onGetAllItemIds(subscriptions);
+        subscriptionid, onGetAllItemIds) {
+    var subscriptions = this.localStorageService
+            .getSubscriptionFromLocalStorage(subscriptionid);
+    onGetAllItemIds(subscriptions);
 };
 
 TheOldReader.prototype.getUnreadItemIds = function(email, password,

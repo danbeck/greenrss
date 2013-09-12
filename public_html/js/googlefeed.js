@@ -10,7 +10,7 @@ function GoogleFeed() {
 }
 
 GoogleFeed.prototype.searchSubscriptions = function(query, findDone) {
-	google.feeds.findFeeds(query, findDone);
+    google.feeds.findFeeds(query, findDone);
 };
 
 
@@ -57,42 +57,42 @@ GoogleFeed.prototype.retrieveSubscriptions = function(onGetSubscriptionList) {
     }
     else {
         var persistedSubscriptions = self.localStorageService.getAllSubscriptionsFromLocalStorage();
-        for(var feedUrl in persistedSubscriptions){
-        	self.__loadFeedsFromGoogle(feedUrl, function(googleFeed){
-        		var retrievedSubscription = self.__asSubscriptionValue(googleFeed);
-        		persistedSubscriptions = updateGoogleFeed(persistedSubscriptions, retrievedSubscription);
-        		 self.localStorageService.saveSubscriptionsInLocalStorage(persistedSubscriptions);
-        		 onGetSubscriptionList(persistedSubscriptions);
-        	});
-        	
+        for (var feedUrl in persistedSubscriptions) {
+            self.__loadFeedsFromGoogle(feedUrl, function(googleFeed) {
+                var retrievedSubscription = self.__asSubscriptionValue(googleFeed);
+                persistedSubscriptions = updateGoogleFeed(persistedSubscriptions, retrievedSubscription);
+                self.localStorageService.saveSubscriptionsInLocalStorage(persistedSubscriptions);
+                onGetSubscriptionList(persistedSubscriptions);
+            });
+
         }
     }
-    
-    function updateGoogleFeed(persitedSubscriptions, retrievedSubscription){
-		var feedUrl = retrievedSubscription["url"];
-    	var persistedSubscription = persitedSubscriptions[feedUrl];
-		if(!persistedSubscription){
-			persitedSubscriptions[feedUrl] = retrievedSubscription;
-		} 
-		else {
-		
-			var retrievedSubscriptionItems = retrievedSubscription["items"];
-			var persistedSubscriptionItemsObj = persistedSubscription["items"];
-			for(subscriptionItemsUrl in retrievedSubscriptionItems){
-				if (!persistedSubscriptionItemsObj[subscriptionItemsUrl]){
-					persistedSubscriptionItemsObj[subscriptionItemsUrl] = retrievedSubscriptionItems[subscriptionItemsUrl];
-				} else {
-					var oldReadState= persistedSubscriptionItemsObj[subscriptionItemsUrl]["read"];
-					persistedSubscriptionItemsObj[subscriptionItemsUrl] = retrievedSubscriptionItems[subscriptionItemsUrl];
-					persistedSubscriptionItemsObj[subscriptionItemsUrl]["read"] = oldReadState;
-			}
-     		}
-		}
-		return persistedSubscriptions;		
-	}
-    
-    function addNewSubscriptionArticle(subscriptionItemsObj, url){
-    	
+
+    function updateGoogleFeed(persitedSubscriptions, retrievedSubscription) {
+        var feedUrl = retrievedSubscription["url"];
+        var persistedSubscription = persitedSubscriptions[feedUrl];
+        if (!persistedSubscription) {
+            persitedSubscriptions[feedUrl] = retrievedSubscription;
+        }
+        else {
+
+            var retrievedSubscriptionItems = retrievedSubscription["items"];
+            var persistedSubscriptionItemsObj = persistedSubscription["items"];
+            for (subscriptionItemsUrl in retrievedSubscriptionItems) {
+                if (!persistedSubscriptionItemsObj[subscriptionItemsUrl]) {
+                    persistedSubscriptionItemsObj[subscriptionItemsUrl] = retrievedSubscriptionItems[subscriptionItemsUrl];
+                } else {
+                    var oldReadState = persistedSubscriptionItemsObj[subscriptionItemsUrl]["read"];
+                    persistedSubscriptionItemsObj[subscriptionItemsUrl] = retrievedSubscriptionItems[subscriptionItemsUrl];
+                    persistedSubscriptionItemsObj[subscriptionItemsUrl]["read"] = oldReadState;
+                }
+            }
+        }
+        return persistedSubscriptions;
+    }
+
+    function addNewSubscriptionArticle(subscriptionItemsObj, url) {
+
     }
 };
 
@@ -114,13 +114,13 @@ GoogleFeed.prototype.__asSubscriptionValue = function(googleFeed) {
     var subscriptionid = encodeURI(googleFeed.feedUrl);
 
     var subscriptionObject = {
-    		 id: subscriptionid,
-    	        url: googleFeed.feedUrl,
-    	        wwwurl: googleFeed.link,
-    	        title: googleFeed.title,
-    	        categories: undefined,
-    	        image: undefined,
-    	        items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
+        id: subscriptionid,
+        url: googleFeed.feedUrl,
+        wwwurl: googleFeed.link,
+        title: googleFeed.title,
+        categories: undefined,
+        image: undefined,
+        items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
     };
     return subscriptionObject;
 };
