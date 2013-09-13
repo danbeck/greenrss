@@ -271,7 +271,7 @@ li.feedlocation  h2 {
     max-height: 400px;
 }
 
-#configurePopover.popover li:ACTIVE{
+#configurePopover.popover li:ACTIVE, #configurePopover.popover li:selected{
 	 background: #016A1D;
 	 color: white;
 }
