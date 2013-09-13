@@ -403,11 +403,15 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var numberOfUnreadItemsSpan = dom("SPAN", {"class": "unread"}, "" + numberOfUnreadItems);
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", {class:"title"}, titleSpan), dom("P", {class:"unread"}, numberOfUnreadItemsSpan)));
-
-        li.addEventListener("click", function showFeedEntry() {
+        
+        var fastElement = new FastButton(li, function showFeedEntry() {
             li["className"] = "touchBeforeActive";
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
+//        li.addEventListener("click", function showFeedEntry() {
+//            li["className"] = "touchBeforeActive";
+//            self.__addSelectClassAndCallOnSubscriptionClick(li);
+//        });
 
         return li;
 
