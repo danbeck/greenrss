@@ -33,9 +33,9 @@
     <!--<plugin name="Camera" value="com.cordova.Camera"/>-->
     <!--<plugin name="Contacts" value="com.cordova.Contacts"/>-->
     <!--<plugin name="Media" value="com.cordova.Media"/>-->
-    <plugin name="Globalization" value="com.cordova.Globalization"/>
+    <!--<plugin name="Globalization" value="com.cordova.Globalization"/>-->
     <!--<plugin name="Capture" value="com.cordova.Capture"/>-->
-    <plugin name="Splashscreen" value="com.cordova.Splashscreen"/>
+    <!--<plugin name="Splashscreen" value="com.cordova.Splashscreen"/>-->
     <plugin name="InAppBrowser" value="com.cordova.InAppBrowser"/>
 
 <!-- Non-standard -->
