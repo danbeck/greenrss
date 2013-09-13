@@ -237,15 +237,20 @@ li.feedlocation  h2 {
     color: white;
 }
 
+#subscriptionPane p.title, #subscriptionPane p.unread{
+    padding-top: 1.2rem;
+    padding-right: 1rem;
+    display:inline-block;
+}
+
 #subscriptionPane p.title{
-    width:55%;
-    padding-top: 1.5rem;
+	width:55%;
     float:left;
 }
 
 #subscriptionPane p.unread{
-    margin-left:60%;
-    padding-top: 1.5rem;
+/*     margin-left:60%; */
+		padding-right:0.5rem;
 }
 
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
@@ -281,6 +286,13 @@ li.feedlocation  h2 {
 
 #addfeeddialog {
     position: fixed;
+    top:0;
+    bottom:0;
+/*     text-overflow: ellipsis; */
+}
+
+#addfeeddialog > section {
+	width: 18.7rem;
 }
 
 #articleTitle a,#articleContent a {

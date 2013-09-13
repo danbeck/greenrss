@@ -123,8 +123,7 @@ function onDeviceReady() {
 
     gui.feedSearch = function(query) {
         googleFeed.searchSubscriptions(query, function(foundFeeds) {
-            gui.showFoundFeeds(foundFeeds);
-
+        	gui.showFoundFeeds(foundFeeds);
         });
     };
 

@@ -84,9 +84,26 @@ function Gui(configuration) {
 
 
     this.UI.button('addfeedsuccess').click(function() {
-        var feedSubscriptionURL = $("rssFeed").value;
-        self.onFeedAdded(feedSubscriptionURL);
-        hide($("addfeeddialog"));
+    	var feedsList = $("foundfeedsList");
+    	if(feedsList.childNodes.length==0){
+    	  var feedSubscriptionURL = $("rssFeed").value;
+          self.onFeedAdded(feedSubscriptionURL);
+//          if()
+          hide($("addfeeddialog"));
+    	}
+    	else {
+    		for(var i =0; i< feedsList.childNodes.length; i++){
+    			var checkbox = feedsList.childNodes[i].childNodes[1].firstChild;
+    			var feedSubscriptionURL = feedsList.childNodes[i].getAttribute("data-role-url");
+    			var checked = checkbox.checked;
+    			if (checked){
+    				self.onFeedAdded(feedSubscriptionURL);
+    			}
+    		}
+
+            hide($("addfeeddialog"));
+    		
+    	}
     });
 
     this.UI.button('addfeedcancel').click(function() {
@@ -132,7 +149,9 @@ function Gui(configuration) {
 Gui.prototype.showFoundFeeds = function(foundFeeds) {
     var self = this;
 
-    feeds = foundFeeds.entries;
+    if(!foundFeeds.entries)
+    	return;
+    feeds = foundFeeds.entries.slice(0,5);
     var ubuntuList = this.UI.list("#foundfeeds");
     ubuntuList.removeAllItems();
     for (var i = 0; i < feeds.length; i++) {
@@ -145,7 +164,7 @@ Gui.prototype.showFoundFeeds = function(foundFeeds) {
         var content = dom("P", {"style": "text-overflow: ellipsis;margin-right:4.5rem;"});
         content.innerHTML = feeds[i].title;
 //		var label = 
-        var newListItem = dom("LI", null, content, dom("LABEL", null, dom("INPUT", {type: "checkbox"}), dom("SPAN", null)));
+        var newListItem = dom("LI", {"data-role-url": feeds[i].url }, content, dom("LABEL", null, dom("INPUT", {type: "checkbox"}), dom("SPAN", null)));
 //		checkboxFragment = document.createDocumentFragment();
 //		checkboxFragment.appendChild(dom("INPUT", {type:"checkbox"}));
 //		checkboxFragment.appendChild(dom("SPAN", null));
