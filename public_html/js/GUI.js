@@ -404,7 +404,7 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", {class:"title"}, titleSpan), dom("P", {class:"unread"}, numberOfUnreadItemsSpan)));
         
-        var fastElement = new FastButton(li, function showFeedEntry() {
+        new FastButton(li, function showFeedEntry() {
             li["className"] = "touchBeforeActive";
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
@@ -507,11 +507,18 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     };
 
+    new FastButton(li, function() {
+        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
+    });
+
     var mobileLi = li.cloneNode(true);
 
-    mobileLi.onclick = function() {
+    new FastButton(mobileLi, function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
-    };
+    });
+//    mobileLi.onclick = function() {
+//        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
+//    };
     fragment.appendChild(li);
     mobileFragment.appendChild(mobileLi);
 };
