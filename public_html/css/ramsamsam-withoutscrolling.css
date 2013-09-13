@@ -10,14 +10,14 @@
     }
 }
 
-@media screen and (min-width:640px) and (max-width:999px) {
+@media screen and (min-width:640px) {
     #subscriptionPane {
         float: left;
-        width: 315px;
+        width: 335px;
     }
     #subscriptionItemsPane {
-        margin-left: 33%;
-        width: 318px;
+        margin-left: 335px;
+/*        width: 318px;*/
     }
 
 #extendedConfigurationPage .configurationLeft {
@@ -27,27 +27,6 @@
 
 #extendedConfigurationPage .configurationRight {
     margin-left: 66%
-}
-    
-}
-
-/*@media screen and (min-width:1000px) {
-    #subscriptionPane {
-        float: left;
-        width: 330px;
-    }
-    #subscriptionItemsPane {
-        margin-left: 330px;
-        width: 67%;
-    }*/
-
-#extendedConfigurationPage .configurationLeft {
-    float: left;
-    width: 650px;
-}
-
-#extendedConfigurationPage .configurationRight {
-    margin-left: 660px;
 }
     
 }
