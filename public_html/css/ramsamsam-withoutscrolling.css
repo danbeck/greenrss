@@ -13,11 +13,11 @@
 @media screen and (min-width:640px) and (max-width:999px) {
     #subscriptionPane {
         float: left;
-        width: 33%;
+        width: 315px;
     }
     #subscriptionItemsPane {
         margin-left: 33%;
-        width: 67%;
+        width: 318px;
     }
 
 #extendedConfigurationPage .configurationLeft {
@@ -31,15 +31,15 @@
     
 }
 
-@media screen and (min-width:1000px) {
+/*@media screen and (min-width:1000px) {
     #subscriptionPane {
         float: left;
         width: 330px;
     }
     #subscriptionItemsPane {
         margin-left: 330px;
-        /*width: 67%;*/
-    }
+        width: 67%;
+    }*/
 
 #extendedConfigurationPage .configurationLeft {
     float: left;
@@ -115,13 +115,21 @@ body {
 }
 
 [data-role="list"].darkList span.unread{
-	margin-left: 1rem;
+	/*margin-left: 1rem;*/
 	background: white; 
      border-radius: 2rem 2rem 2rem 2rem; 
      padding: 0rem 0.6rem; 
-     color: #222B2F; 
+     color: #222B2F;
  } 
 
+#subscriptionPane p.title, #subscriptionPane p.unread{
+    padding-top: 1.2rem;
+    /*padding-right: 1rem;*/
+    /*display:inline-block;*/
+    float:right;
+    margin-right:1em;
+		/*padding-right:0.5rem;*/
+}
 
 [data-role="list"].darkList li, [data-role="list"].darkList a, [data-role="list"].darkList header {
     border: none;
@@ -237,20 +245,9 @@ li.feedlocation  h2 {
     color: white;
 }
 
-#subscriptionPane p.title, #subscriptionPane p.unread{
-    padding-top: 1.2rem;
-    padding-right: 1rem;
-    display:inline-block;
-}
-
 #subscriptionPane p.title{
 	width:55%;
     float:left;
-}
-
-#subscriptionPane p.unread{
-/*     margin-left:60%; */
-		padding-right:0.5rem;
 }
 
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
