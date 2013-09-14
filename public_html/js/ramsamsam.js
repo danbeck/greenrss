@@ -28,6 +28,7 @@ var DEFAULT_CONFIGURATION = {
     refreshRateInSeconds: 600
 };
 
+var oldReaderSynchronizationActive;
 var configuration = {};
 
 function addGoogleAnalyticsToHTML() {
@@ -57,20 +58,33 @@ function onDeviceReady() {
     configuration = loadConfigurationOrCreateDefault();
 
     gui = new Gui(configuration);
-    gui.onConfigurationChanged = function(config) {
+    gui.onConfigurationChanged = function(newConfiguration) {
+        configuration = newConfiguration;
         saveConfigInLocalStore("configuration", configuration);
+        if (configuration.theoldReader_sync.useTheOldReader) {
+            if (!oldReaderSynchronizationActive)
+                oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+        } else {
+            if (oldReaderSynchronizationActive)
+                clearInterval(oldReaderSynchronizationActive);
+        }
+
+        if (!localStorageService.isVersionCompatible()) {
+            gui.showUpgradeWarning();
+            localStorageService.clearLocalStorage();
+            localStorageService.saveVersion();
+        }
     };
 
-    if (!localStorageService.isVersionCompatible()) {
-        gui.showUpgradeWarning();
-        localStorageService.clearLocalStorage();
-        localStorageService.saveVersion();
-    }
+    gui.tryConnectToTheOldReader = function(onConnectionDone) {
+        theOldReader.__retrieveTokenIfNecessary(
+                configuration.theoldReader_sync.theoldreader_username,
+                configuration.theoldReader_sync.theoldreader_password, onConnectionDone);
+    };
 
     gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
 
     googleFeed.retrieveSubscriptions(function(subscriptions) {
-//        gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
         for (var subscriptionid in subscriptions)
             this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
     });
@@ -116,9 +130,8 @@ function onDeviceReady() {
         });
     };
 
-    gui.onConnectToTheOldReader = function() {
-        setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-    };
+//    gui.configSaved = function() {
+//    };
 
     if (configuration.theoldReader_sync.useTheOldReader === true) {
         getSubscriptionsForTheOldReader();
@@ -179,7 +192,7 @@ function retrieveNormalizeFeedsPersistAndShowInGUI(feedURLs) {
 
     if (!feedURLs)
         return;
-    if(feedURLs.length===0)
+    if (feedURLs.length === 0)
         return;
 
     var feedURL = feedURLs[0];

@@ -23,7 +23,7 @@ LocalStorageService.prototype.saveVersion = function() {
 
 
 LocalStorageService.prototype.clearLocalStorage = function() {
-        localStorage.clear();
+    localStorage.clear();
 };
 
 LocalStorageService.prototype.keyExist = function() {
@@ -44,5 +44,5 @@ LocalStorageService.prototype.getAllSubscriptionsFromLocalStorage = function() {
 };
 
 LocalStorageService.prototype.saveSubscriptionsInLocalStorage = function(subscriptions) {
-    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] = JSON.stringify(subscriptions);
+    localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE] =JSON.stringify(subscriptions);
 };

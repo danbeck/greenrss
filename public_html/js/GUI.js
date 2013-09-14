@@ -23,7 +23,7 @@ function Gui(configuration) {
     UI = this.UI;
     this.UI.init();
     this.convergence = computeConvergence();
-
+    this.backButton = document.querySelector("li a[data-role=\"back\"]");
     this.configuration = configuration;
 
     // Set up the app by pushing the main view
@@ -51,6 +51,7 @@ function Gui(configuration) {
         else {
             self.__deactiveNightMode();
         }
+        self.onConfigurationChanged(configuration);
     });
 
 //
@@ -81,7 +82,13 @@ function Gui(configuration) {
     });
 
     this.UI.button('saveconfig').click(function() {
-        self.onConnectToTheOldReader();
+        self.configuration = self.__updateConfigurationFromConfigPage();
+        var connectToTheOldReader = self.UI.dialog("connectToOldReaderDialog");
+        connectToTheOldReader.show();
+        self.tryConnectToTheOldReader(function() {
+            connectToTheOldReader.hide();
+        });
+        self.onConfigurationChanged(self.configuration);
     });
 
     // On clicking the scan button, show the scan page
@@ -158,11 +165,10 @@ function Gui(configuration) {
 }
 
 Gui.prototype.showFoundFeeds = function(foundFeeds) {
-    var self = this;
 
     if (!foundFeeds.entries)
         return;
-    feeds = foundFeeds.entries.slice(0, 5);
+    var feeds = foundFeeds.entries.slice(0, 5);
     var ubuntuList = this.UI.list("#foundfeeds");
     ubuntuList.removeAllItems();
     for (var i = 0; i < feeds.length; i++) {
@@ -194,7 +200,7 @@ Gui.prototype.onFeedAdded = function() {
 Gui.prototype.onFeedItemClicked = function() {
 };
 
-Gui.prototype.onConnectToTheOldReader = function() {
+Gui.prototype.configSaved = function() {
 };
 
 Gui.prototype.reload = function() {
@@ -204,9 +210,17 @@ Gui.prototype.__back = function() {
     if (this.UI._pageStack.depth() > 1)
         this.UI._pageStack.pop();
 };
+
+Gui.prototype.__updateConfigurationFromConfigPage = function() {
+    this.configuration.theoldReader_sync.useTheOldReader = $("theoldreader_use_sync").checked;
+    this.configuration.theoldReader_sync.theoldreader_username = $("theoldreader_username").value;
+    this.configuration.theoldReader_sync.theoldreader_password = $("theoldreader_password").value;
+    return this.configuration;
+};
+
 Gui.prototype.openConfigurePage = function(openConfigButton) {
 
-    var that = this;
+    var self = this;
 
     this.UI.popover(openConfigButton, "configurePopover").toggle();
 
@@ -215,19 +229,13 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
     leftFloat = leftFloat - 130;
     configurePopover.style.left = leftFloat + "px";
 
-
-
-    if (configuration.useNightMode) {
-        $("useNightMode")["checked"] = true;
-    } else {
-        $("useNightMode").removeAttribute("checked");
-    }
-
+    restablishPopover(self.configuration);
+    restablishConfigurationPage(self.configuration);
 
     $('extendConfigurationMenuItem').onclick = function() {
-        that.UI.popover(this, "configurePopover").hide();
+        self.UI.popover(this, "configurePopover").hide();
 
-        that.UI.pagestack.push('extendedConfigurationPage', {
+        self.UI.pagestack.push('extendedConfigurationPage', {
             subtitle: 'Configuration'
         });
 
@@ -235,56 +243,24 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         hide($("reloadFeedsButton").parentNode);
         hide(openConfigButton.parentNode);
 
-        var oldReaderConf = configuration.theoldReader_sync;
-        if (oldReaderConf.useTheOldReader === true) {
-            $("theoldreader_use_sync").setAttribute("checked", true);
-            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", true);
-        }
-        else {
-
-            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", false);
-            $("theoldreader_username").setAttribute("disabled", true);
-            $("theoldreader_password").setAttribute("disabled", true);
-//            $("theoldreader_save_password").setAttribute("disabled", true);
-
-        }
-        if (oldReaderConf.theoldreader_username)
-            $("theoldreader_username").value = oldReaderConf.theoldreader_username;
-
 
         $("theoldreader_use_sync").onclick = function() {
-            var oldValue = $("theoldreader_use_sync").getAttribute("data-checkbox-enabled");
-            $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", oldValue !== "true");
-
-            if ($("theoldreader_use_sync").getAttribute("data-checkbox-enabled") === "true") {
+            if ($("theoldreader_use_sync").checked) {
                 $("theoldreader_username").removeAttribute("disabled");
                 $("theoldreader_password").removeAttribute("disabled");
-//                $("theoldreader_save_password").removeAttribute("disabled");
-                configuration.theoldReader_sync.useTheOldReader = true;
-            } else {
+            }
+            else {
                 $("theoldreader_username")["disabled"] = true;
                 $("theoldreader_password")["disabled"] = true;
-//                $("theoldreader_save_password")["disabled"] = true;
-                configuration.theoldReader_sync.useTheOldReader = false;
             }
-        };
-
-        $("theoldreader_username").onkeyup = function() {
-            configuration.theoldReader_sync.theoldreader_username = this.value;
-        };
-
-        $("theoldreader_password").onkeyup = function() {
-            configuration.theoldReader_sync.theoldreader_password = this.value;
         };
     };
 
-    var backButton = document.querySelector("li a[data-role=\"back\"]");
+    self.backButton.addEventListener("click", function(e) {
 
-    backButton.addEventListener("click", function(e) {
-
-        that.UI.popover(openConfigButton, "configurePopover").hide();
+        self.UI.popover(openConfigButton, "configurePopover").hide();
         if (isDisplayed($("extendedConfigurationPage")))
-            that.UI.pagestack.pop('extendedConfigurationPage', {
+            self.UI.pagestack.pop('extendedConfigurationPage', {
                 subtitle: 'Configuration'
             });
 
@@ -292,21 +268,26 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         show($("reloadFeedsButton").parentNode);
         show(openConfigButton.parentNode);
 
-        var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
-        var theoldreaderUsername = $("theoldreader_username").value;
-        var theoldreaderPassword = $("theoldreader_password").value;
-        if (useTheOldReader)
-            configuration.useTheOldReader = useTheOldReader;
-
-        if (theoldreaderUsername && theoldreaderUsername !== "")
-            configuration.theoldreaderUsername = theoldreaderUsername;
-
-        if (theoldreaderPassword && theoldreaderPassword !== "")
-            configuration.theoldreaderPassword = theoldreaderPassword;
-
-        return that.onConfigurationChanged(configuration);
-
+        self.configuration = self.__updateConfigurationFromConfigPage();
+        return self.onConfigurationChanged(self.configuration);
     });
+
+    function restablishPopover(configuration) {
+        if (configuration.useNightMode) {
+            $("useNightMode")["checked"] = true;
+        } else {
+            $("useNightMode").removeAttribute("checked");
+        }
+    }
+    function restablishConfigurationPage(configuration) {
+        if (configuration.theoldReader_sync.useTheOldReader === true) {
+            $("theoldreader_use_sync").checked = true;
+        }
+        else {
+            $("theoldreader_username").setAttribute("disabled", true);
+            $("theoldreader_password").setAttribute("disabled", true);
+        }
+    }
 };
 
 Gui.prototype.__activateNightMode = function() {
@@ -330,10 +311,10 @@ Gui.prototype.__deactiveNightMode = function() {
 Gui.prototype.onSubscriptionClick = function(datasource, subscriptionId) {
 
 };
-Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(that, openConfigButton) {
-    that.UI.popover(openConfigButton, "configurePopover").hide();
+Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(self, openConfigButton) {
+    self.UI.popover(openConfigButton, "configurePopover").hide();
     if (isDisplayed($("extendedConfigurationPage")))
-        that.UI.pagestack.pop('extendedConfigurationPage', {
+        self.UI.pagestack.pop('extendedConfigurationPage', {
             subtitle: 'Configuration'
         });
 
@@ -345,15 +326,15 @@ Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(th
     var theoldreaderUsername = $("theoldreader_username").value;
     var theoldreaderPassword = $("theoldreader_password").value;
     if (useTheOldReader)
-        that.configuration.useTheOldReader = useTheOldReader;
+        self.configuration.useTheOldReader = useTheOldReader;
 
     if (theoldreaderUsername && theoldreaderUsername !== "")
-        that.configuration.theoldreaderUsername = theoldreaderUsername;
+        self.configuration.theoldreaderUsername = theoldreaderUsername;
 
     if (theoldreaderPassword && theoldreaderPassword !== "")
-        that.configuration.theoldreaderPassword = theoldreaderPassword;
+        self.configuration.theoldreaderPassword = theoldreaderPassword;
 
-    return that.onConfigurationChanged(that.configuration);
+    return self.onConfigurationChanged(self.configuration);
 };
 
 // new method.

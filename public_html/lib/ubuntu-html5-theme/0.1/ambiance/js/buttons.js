@@ -23,6 +23,7 @@
 /* Buttons */
 var Button = function (id) {
     this.id =  id;
+    this.button = document.getElementById(this.id);
 };
 
 Button.prototype = {
