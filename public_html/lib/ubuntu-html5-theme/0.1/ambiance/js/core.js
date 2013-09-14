@@ -69,11 +69,12 @@ var UbuntuUI = (function () {
 	}
 
 	var a = li.querySelector('a');
-	a.onclick = function (e) {
+        new FastButton(a, function (e) {
             if (self._pageStack.depth() > 1)
 		self._pageStack.pop();
             e.preventDefault();
-	}.bind(self);
+	});
+//                .bind(self);
     };
 
     function UbuntuUI() {
