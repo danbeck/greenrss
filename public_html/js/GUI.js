@@ -53,13 +53,19 @@ function Gui(configuration) {
         }
     });
 
-
-    $("footer").addEventListener("click", function(e) {
+    UI.toolbar("footer").touch(function(e) {
         var el = e.srcElement || e.target;
         if (el.id && /footer/i.test(el.id)) {
             self.UI.toolbar("footer").toggle();
         }
     });
+
+//    $("footer").addEventListener("click", function(e) {
+//        var el = e.srcElement || e.target;
+//        if (el.id && /footer/i.test(el.id)) {
+//            self.UI.toolbar("footer").toggle();
+//        }
+//    });
 
     $("rssFeed").addEventListener("keyup", function() {
         var input = $("rssFeed").value;
