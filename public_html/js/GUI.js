@@ -513,13 +513,18 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
 };
 
 Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
-    var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
+ var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
     var subscriptionItemElement = document.querySelector(selector);
 
-//    for (var i = 0; i < subscriptionItemElements.length; i++) {
-//        var subscriptionItemElement = subscriptionItemElements[i];
+    var wasRead = subscriptionItemElement.firstChild.getAttribute("class") === "read";
+
     subscriptionItemElement.firstChild.setAttribute("class", "read");
-//    }
+
+    if (!wasRead) {
+        var unreadItemsElement = document.querySelector("#subscriptionsList li.active a p span.unread");
+        unreadItemsElement.innerText = unreadItemsElement.innerText - 1;
+    }
+  
 
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';
