@@ -42,7 +42,7 @@ function Gui(configuration) {
         self.openConfigurePage(this, self.onConfigurationChanged);
     });
 
-    $("useNightMode").onclick = function(e) {
+    new FastButton($("useNightMode"), function(e) {
         e.stopPropagation();
         configuration.useNightMode = !configuration.useNightMode;
         if (configuration.useNightMode) {
@@ -51,7 +51,7 @@ function Gui(configuration) {
         else {
             self.__deactiveNightMode();
         }
-    };
+    });
 
 
     $("footer").addEventListener("click", function(e) {
@@ -85,7 +85,7 @@ function Gui(configuration) {
 
     this.UI.button('addfeedsuccess').click(function() {
     	var feedsList = $("foundfeedsList");
-    	if(feedsList.childNodes.length==0){
+    	if(feedsList.childNodes.length===0){
     	  var feedSubscriptionURL = $("rssFeed").value;
           self.onFeedAdded(feedSubscriptionURL);
 //          if()
