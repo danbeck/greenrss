@@ -159,8 +159,10 @@ TheOldReader.prototype.retrieveSubscriptionItems = function(email, password, sub
             function convertToSubscriptionItems(subscriptionid, theOldReaderFeedItems) {
                 var items = theOldReaderFeedItems.items;
                 var itemsFromResult = {};
-                
-                var result = {items: itemsFromResult, wwwurl: theOldReaderFeedItems["alternate"]["href"]};
+
+                var result = {items: itemsFromResult};
+                if (theOldReaderFeedItems["alternate"] && theOldReaderFeedItems["alternate"]["href"])
+                    result["wwwurl"] = theOldReaderFeedItems["alternate"]["href"];
                 if (items !== undefined)
                     for (var i = 0; i < items.length; i++) {
                         itemsFromResult[items[i].id] = convertToSubscriptionItem(subscriptionid, items[i]);
@@ -206,7 +208,9 @@ TheOldReader.prototype.setRead = function(email, password, subscriptionitem) {
     var url = this.__THEOLDREADER_UPDATEITEM_URL;
     var data = "i=" + subscriptionitem.id + "&a=user/-/state/com.google/read";
     this.__retrieveTokenIfNecessary(email, password, function() {
-        postUrlEncodedHttpRequest(url, data, function(){}, function(){});
+        postUrlEncodedHttpRequest(url, data, function() {
+        }, function() {
+        });
     });
 
 };
