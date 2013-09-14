@@ -53,8 +53,16 @@ function Gui(configuration) {
         }
     });
 
-
-    $("footer").addEventListener("click", function(e) {
+//
+//    $("footer").addEventListener("click", function(e) {
+//        var el = e.srcElement || e.target;
+//        if (el.id && /footer/i.test(el.id)) {
+//            self.UI.toolbar("footer").toggle();
+//        }
+//    });
+    
+    
+    UI.toolbar("footer").touch(function(e) {
         var el = e.srcElement || e.target;
         if (el.id && /footer/i.test(el.id)) {
             self.UI.toolbar("footer").toggle();
@@ -85,7 +93,7 @@ function Gui(configuration) {
 
     this.UI.button('addfeedsuccess').click(function() {
         var feedsList = $("foundfeedsList");
-        if (feedsList.childNodes.length == 0) {
+        if (feedsList.childNodes.length === 0) {
             var feedSubscriptionURL = $("rssFeed").value;
             self.onFeedAdded(feedSubscriptionURL);
 //          if()
