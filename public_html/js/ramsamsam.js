@@ -23,7 +23,7 @@ var DEFAULT_CONFIGURATION = {
     useNightMode: false,
     refreshNow: false,
     deleteLocalStorage: false,
-    refreshRateInSeconds: 60
+    refreshRateInSeconds: 600
 };
 
 var configuration = {};
