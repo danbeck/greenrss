@@ -57,11 +57,6 @@ function onDeviceReady() {
     gui = new Gui(configuration);
     gui.onConfigurationChanged = function(config) {
         saveConfigInLocalStore("configuration", configuration);
-
-//        if (configuration.useNightMode) {
-//            showNightMode(configuration.useNightMode);
-//        }
-
     };
 
 
@@ -82,15 +77,6 @@ function onDeviceReady() {
 
         }
         if (clickedFeedDataSource === "theOldReader") {
-//            theOldReader.retrieveSubscriptionItems(
-//                    configuration.theoldReader_sync.theoldreader_username,
-//                    configuration.theoldReader_sync.theoldreader_password,
-//                    clickedFeedID,
-//                    function(subscriptionItemObject) {
-//                        gui.showFeedItems("theOldReader", subscriptionItemObject);
-//                    }
-//            );
-
             theOldReader.getSubscriptionItems(
                     configuration.theoldReader_sync.theoldreader_username,
                     configuration.theoldReader_sync.theoldreader_password,
@@ -113,11 +99,7 @@ function onDeviceReady() {
             theOldReader.setRead(
                     configuration.theoldReader_sync.theoldreader_username,
                     configuration.theoldReader_sync.theoldreader_password, subscriptionItem);
-//            theOldReader.setRead(subscriptionItem, function() {
             gui.showArticle(wwwurl, subscriptionItem);
-
-//            });
-
         }
     };
 
@@ -128,7 +110,6 @@ function onDeviceReady() {
     };
 
     gui.onConnectToTheOldReader = function() {
-//		retrieveSubscriptionsForTheOldReader();
         setInterval(retrieveSubscriptionsForTheOldReader, 60000);
     };
 
@@ -148,7 +129,6 @@ function retrieveSubscriptionsForTheOldReader() {
 
                 for (var subscriptionid in subscriptions) {
                     theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer) {
-//                		gui.addFeedItemsToHTML("theOldReader", subscriptionItemContainer);
                     });
 
                 }
@@ -179,29 +159,11 @@ function showSubscriptionList(subscriptionList) {
     }
 }
 
-function onFeedClick(feedid) {
-//    feedidAsJSON JSON.parse(feedid);
-    console.log(feedid);
-}
-//function showNightMode(nightMode) {
-//    if (nightMode) {
-//        var head = document.getElementsByName("head");
-//        var link = document.createElement("link");
-//        link.setAttribute("rel", "stylesheet");
-//        link.setAttribute("href", "css/night-theme.css");
-//        head.appendChild(link);
-//    }
-//    else
-//    {
-//        var styleSheet = document.querySelector('link[rel=stylesheet][href="css/night-theme.css"]');
-//        styleSheet.remove();
-//    }
-//}
-
 function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
+    retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");  
 }
 
 
@@ -214,7 +176,6 @@ function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {
     }
     googleFeed.addSubscription(feedURL, function(subscription) {
         gui.showSubscriptions("local", subscription);
-//        gui.showFeedItems(subscription.items);
     });
 }
 
