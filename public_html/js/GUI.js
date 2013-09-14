@@ -82,13 +82,7 @@ function Gui(configuration) {
     });
 
     this.UI.button('saveconfig').click(function() {
-        self.configuration = self.__updateConfigurationFromConfigPage();
-        var connectToTheOldReader = self.UI.dialog("connectToOldReaderDialog");
-        connectToTheOldReader.show();
-        self.tryConnectToTheOldReader(function() {
-            connectToTheOldReader.hide();
-        });
-        self.onConfigurationChanged(self.configuration);
+        self.__saveConfig();
     });
 
     // On clicking the scan button, show the scan page
@@ -164,6 +158,26 @@ function Gui(configuration) {
     }
 }
 
+Gui.prototype.__saveConfig = function() {
+    var self = this;
+    self.configuration = self.__updateConfigurationFromConfigPage();
+    var connectToTheOldReader = self.UI.dialog("connectToOldReaderDialog");
+    connectToTheOldReader.show();
+
+    self.tryConnectToTheOldReader(function(token) {
+        connectToTheOldReader.hide();
+        self.onConfigurationChanged(self.configuration);
+    }, function() {
+        connectToTheOldReader.hide();
+        var dialog = self.UI.dialog("couldNotConnectToTheOldReader");
+        dialog.show();
+//            self.
+        self.onConfigurationChanged(self.configuration);
+        self.UI.button("couldNotConnectPrompt").click(function() {
+            dialog.hide();
+        });
+    });
+};
 Gui.prototype.showFoundFeeds = function(foundFeeds) {
 
     if (!foundFeeds.entries)
@@ -268,8 +282,8 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         show($("reloadFeedsButton").parentNode);
         show(openConfigButton.parentNode);
 
-        self.configuration = self.__updateConfigurationFromConfigPage();
-        return self.onConfigurationChanged(self.configuration);
+//        self.configuration = self.__updateConfigurationFromConfigPage();
+//        return self.onConfigurationChanged(self.configuration);
     });
 
     function restablishPopover(configuration) {
@@ -287,6 +301,8 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
             $("theoldreader_username").setAttribute("disabled", true);
             $("theoldreader_password").setAttribute("disabled", true);
         }
+        $("theoldreader_username").value = configuration.theoldReader_sync.theoldreader_username;
+        $("theoldreader_password").value = configuration.theoldReader_sync.theoldreader_password;
     }
 };
 
@@ -311,32 +327,6 @@ Gui.prototype.__deactiveNightMode = function() {
 Gui.prototype.onSubscriptionClick = function(datasource, subscriptionId) {
 
 };
-Gui.prototype.__validateConfigurationAndCallOnConfigurationChanged = function(self, openConfigButton) {
-    self.UI.popover(openConfigButton, "configurePopover").hide();
-    if (isDisplayed($("extendedConfigurationPage")))
-        self.UI.pagestack.pop('extendedConfigurationPage', {
-            subtitle: 'Configuration'
-        });
-
-    show($("addFeedButton").parentNode);
-    show($("reloadFeedsButton").parentNode);
-    show(openConfigButton.parentNode);
-
-    var useTheOldReader = $("theoldreader_use_sync")["data-checkbox-enabled"];
-    var theoldreaderUsername = $("theoldreader_username").value;
-    var theoldreaderPassword = $("theoldreader_password").value;
-    if (useTheOldReader)
-        self.configuration.useTheOldReader = useTheOldReader;
-
-    if (theoldreaderUsername && theoldreaderUsername !== "")
-        self.configuration.theoldreaderUsername = theoldreaderUsername;
-
-    if (theoldreaderPassword && theoldreaderPassword !== "")
-        self.configuration.theoldreaderPassword = theoldreaderPassword;
-
-    return self.onConfigurationChanged(self.configuration);
-};
-
 // new method.
 Gui.prototype.showSubscriptions = function(headerName, subscription) {
     var self = this;

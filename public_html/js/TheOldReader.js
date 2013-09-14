@@ -16,14 +16,14 @@ function TheOldReader() {
     //    this.__THEOLDREADER_ITEM_CONTENT_URL = this.__THEOLDREADER_API_URL + "stream/contents?output=json";
 }
 
-TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken) {
+TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken, onError) {
     var self = this;
     var data = "output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email="
             + email + "&Passwd=" + password;
     postUrlEncodedHttpRequest(this.__THEOLDREADER_CLIENT_LOGIN_URL, data, function(response) {
         self.__saveToken(response);
         gotToken.apply(undefined, gotToken.arguments);
-    });
+    }, onError);
 };
 
 TheOldReader.prototype.retrieveSubscriptions = function(email, password,
@@ -213,10 +213,10 @@ TheOldReader.prototype.setRead = function(email, password, subscriptionitem) {
 
 
 TheOldReader.prototype.__retrieveTokenIfNecessary = function(email, password,
-        func) {
+        func, onError) {
     var self = this;
     if (!this.token)
-        self.retrieveLoginToken(email, password, func);
+        self.retrieveLoginToken(email, password, func, onError);
     else
         func.apply(undefined, func.arguments);
 };

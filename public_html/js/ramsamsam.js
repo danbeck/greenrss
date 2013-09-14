@@ -76,10 +76,10 @@ function onDeviceReady() {
         }
     };
 
-    gui.tryConnectToTheOldReader = function(onConnectionDone) {
+    gui.tryConnectToTheOldReader = function(onConnectionDone, onError) {
         theOldReader.__retrieveTokenIfNecessary(
                 configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password, onConnectionDone);
+                configuration.theoldReader_sync.theoldreader_password, onConnectionDone, onError);
     };
 
     gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
