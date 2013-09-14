@@ -42,7 +42,7 @@ function Gui(configuration) {
         self.openConfigurePage(this, self.onConfigurationChanged);
     });
 
-    new FastButton($("useNightMode"), function(e) {
+    new FastButton($("useNightMode"),function(e) {
         e.stopPropagation();
         configuration.useNightMode = !configuration.useNightMode;
         if (configuration.useNightMode) {
@@ -53,19 +53,13 @@ function Gui(configuration) {
         }
     });
 
-    UI.toolbar("footer").touch(function(e) {
+
+    $("footer").addEventListener("click", function(e) {
         var el = e.srcElement || e.target;
         if (el.id && /footer/i.test(el.id)) {
             self.UI.toolbar("footer").toggle();
         }
     });
-
-//    $("footer").addEventListener("click", function(e) {
-//        var el = e.srcElement || e.target;
-//        if (el.id && /footer/i.test(el.id)) {
-//            self.UI.toolbar("footer").toggle();
-//        }
-//    });
 
     $("rssFeed").addEventListener("keyup", function() {
         var input = $("rssFeed").value;
@@ -91,7 +85,7 @@ function Gui(configuration) {
 
     this.UI.button('addfeedsuccess').click(function() {
     	var feedsList = $("foundfeedsList");
-    	if(feedsList.childNodes.length===0){
+    	if(feedsList.childNodes.length==0){
     	  var feedSubscriptionURL = $("rssFeed").value;
           self.onFeedAdded(feedSubscriptionURL);
 //          if()
@@ -409,15 +403,11 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var numberOfUnreadItemsSpan = dom("SPAN", {"class": "unread"}, "" + numberOfUnreadItems);
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
         dom("A", null, aside, dom("P", {class:"title"}, titleSpan), dom("P", {class:"unread"}, numberOfUnreadItemsSpan)));
-        
-        new FastButton(li, function showFeedEntry() {
+
+        new FastButton(li,function showFeedEntry() {
             li["className"] = "touchBeforeActive";
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
-//        li.addEventListener("click", function showFeedEntry() {
-//            li["className"] = "touchBeforeActive";
-//            self.__addSelectClassAndCallOnSubscriptionClick(li);
-//        });
 
         return li;
 
@@ -509,22 +499,15 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
     contentSnippetElement.innerHTML = subscriptionItem.contentSnippet.substring(0, 300);
     var li = dom("LI", {"data-subscriptionitem-id": subscriptionItem.id}, dom("A", itemWasReadClass, dom("P", null, subscriptionItem.title), contentSnippetElement));
 
-    li.onclick = function() {
-        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
-    };
-
     new FastButton(li, function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     });
 
     var mobileLi = li.cloneNode(true);
 
-    new FastButton(mobileLi, function() {
+    new FastButton(mobileLi,function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     });
-//    mobileLi.onclick = function() {
-//        self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
-//    };
     fragment.appendChild(li);
     mobileFragment.appendChild(mobileLi);
 };
