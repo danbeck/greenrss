@@ -80,7 +80,7 @@ function Gui(configuration) {
         }
     });
 
-    this.UI.button('connectToTheOldReader').click(function() {
+    this.UI.button('saveconfig').click(function() {
         self.onConnectToTheOldReader();
     });
 
@@ -245,7 +245,7 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
             $("theoldreader_use_sync").setAttribute("data-checkbox-enabled", false);
             $("theoldreader_username").setAttribute("disabled", true);
             $("theoldreader_password").setAttribute("disabled", true);
-            $("theoldreader_save_password").setAttribute("disabled", true);
+//            $("theoldreader_save_password").setAttribute("disabled", true);
 
         }
         if (oldReaderConf.theoldreader_username)
@@ -259,12 +259,12 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
             if ($("theoldreader_use_sync").getAttribute("data-checkbox-enabled") === "true") {
                 $("theoldreader_username").removeAttribute("disabled");
                 $("theoldreader_password").removeAttribute("disabled");
-                $("theoldreader_save_password").removeAttribute("disabled");
+//                $("theoldreader_save_password").removeAttribute("disabled");
                 configuration.theoldReader_sync.useTheOldReader = true;
             } else {
                 $("theoldreader_username")["disabled"] = true;
                 $("theoldreader_password")["disabled"] = true;
-                $("theoldreader_save_password")["disabled"] = true;
+//                $("theoldreader_save_password")["disabled"] = true;
                 configuration.theoldReader_sync.useTheOldReader = false;
             }
         };

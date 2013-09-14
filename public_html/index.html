@@ -65,8 +65,8 @@
                                         <span class="toggle-bg"></span>
                                     </span>
                                 </label></li>
-                            <li id="refreshButton">Refresh now</li>
-                            <li id="deleteLocalStorage">Delete local-storage</li>
+                            <!--<li id="refreshButton">Refresh now</li>-->
+                            <!--<li id="deleteLocalStorage">Delete local-storage</li>-->
                         </ul>
                     </div>
                 </footer>
@@ -108,16 +108,16 @@
 
                 <div data-role="page" id="extendedConfigurationPage">
                     <section data-role="list"> 
-                        <header><h1>User Interface option</h1></header>
+<!--                        <header><h1>User Interface option</h1></header>
                         <ul data-role="listview">
                             <li>
                                 <p>refresh rate in seconds: <input type="number" placeholder="60">
                                 </p>
                             </li>
-                        </ul>
+                        </ul>-->
                         <header><h1>Feed Synchronization</h1></header>
                         <!--<aside><p>test</p></aside>-->
-                        <ul data-role="listview" class="configurationLeft">
+                        <ul data-role="listview" >
                             <li>    
                                 <p>Synchronize feeds with "theoldreader"</p>
                                 <label>
@@ -135,18 +135,20 @@
                                     <!--<input id="theoldreader_username" type="password"  disabled="" placeholder="password">-->
                                     <input id="theoldreader_password" type="password"  placeholder="password">
                                 </p>
-                            </li><li>
+                            </li>
+<!--                            <li>
                                 <p>Save my password (Unsecure!)</p>
                                 <label>
                                     <input id="theoldreader_save_password" type="checkbox">
                                     <span></span>
                                 </label>
-                            </li>
+                            </li>-->
                         </ul>                        
-                        <div class="configurationRight">
-                            <!--                         </div> -->
+<!--                        <div class="configurationRight">
+                                                     </div> 
                             <a id="connectToTheOldReader" class="button white" data-role="button"><p>Synchronize data<br>with theOldReader</p></a>
-                        </div>
+                        </div>-->
+                        <button class="warning" style="margin:1rem;" data-role="button" id="saveconfig">Save</button> 
                     </section>
                 </div>
 
