@@ -17,25 +17,25 @@
     }
     #subscriptionItemsPane {
         margin-left: 335px;
-/*        width: 318px;*/
+        /*        width: 318px;*/
     }
 
-#extendedConfigurationPage .configurationLeft {
-    float: left;
-    width: 65%;
-}
+    #extendedConfigurationPage .configurationLeft {
+        float: left;
+        width: 65%;
+    }
 
-#extendedConfigurationPage .configurationRight {
-    margin-left: 66%
-}
-    
+    #extendedConfigurationPage .configurationRight {
+        margin-left: 66%
+    }
+
 }
 [data-role="list"] {
-border-top: none;
+    border-top: none;
 }
 
 [data-role="list"] li > a {
-	border-top: none;
+    border-top: none;
 }
 
 .leftpopover[data-gravity="s"]:before,.leftpopover[data-gravity="s"]:after
@@ -94,12 +94,12 @@ body {
 }
 
 [data-role="list"].darkList span.unread{
-	/*margin-left: 1rem;*/
-	background: white; 
-     border-radius: 2rem 2rem 2rem 2rem; 
-     padding: 0rem 0.6rem; 
-     color: #222B2F;
- } 
+    /*margin-left: 1rem;*/
+    background: white; 
+    border-radius: 2rem 2rem 2rem 2rem; 
+    padding: 0rem 0.6rem; 
+    color: #222B2F;
+} 
 
 #subscriptionPane p.title, #subscriptionPane p.unread{
     padding-top: 1.2rem;
@@ -107,7 +107,7 @@ body {
     /*display:inline-block;*/
     float:right;
     margin-right:1em;
-		/*padding-right:0.5rem;*/
+    /*padding-right:0.5rem;*/
 }
 
 [data-role="list"].darkList li, [data-role="list"].darkList a, [data-role="list"].darkList header {
@@ -142,15 +142,15 @@ body {
 
 /*For the configuration menu*/
 [data-role="list"] li p {
-	color: gray;
+    color: gray;
 }
 
 [data-role="content"] h1, [data-role="content"] h2, [data-role="content"] h3{
-	color: black;
+    color: black;
 }
 
 [data-role="content"] {
-	background: white;
+    background: white;
 }
 
 /* The categories subscriptions*/
@@ -225,16 +225,16 @@ li.feedlocation  h2 {
 }
 
 #subscriptionPane p.title{
-	width:55%;
+    width:55%;
     float:left;
 }
 
 #subscriptionPane, #subscriptionItemsSmallDisplayList, #subscriptionItemsPane, #showArticlePage, #extendedConfigurationPage {
     /*bottom: 70px;*/
-/*    position: fixed;
-    overflow-y: auto;
-    top: 74px;
-    bottom: 70px;*/
+    /*    position: fixed;
+        overflow-y: auto;
+        top: 74px;
+        bottom: 70px;*/
 }
 /*#subscriptionItemsPane{
     background-color: #606060;
@@ -248,8 +248,8 @@ li.feedlocation  h2 {
 }
 
 #configurePopover.popover li:active,#configurePopover.popover li:pressed, #configurePopover.popover li:selected{
-	 background: #016A1D;
-	 color: white;
+    background: #016A1D;
+    color: white;
 }
 
 #showArticlePage {
@@ -264,11 +264,11 @@ li.feedlocation  h2 {
     position: fixed;
     top:0;
     bottom:0;
-/*     text-overflow: ellipsis; */
+    /*     text-overflow: ellipsis; */
 }
 
 #addfeeddialog > section {
-	width: 18.7rem;
+    width: 18.7rem;
 }
 
 #articleTitle a,#articleContent a {
@@ -368,15 +368,15 @@ li.feedlocation  h2 {
 
 
 /* a.button.white:HOVER, */
- a.button.white:ACTIVE{
-	color: black;
-/*     border: solid 1px #016A1D; */
-     background: #fff;
+a.button.white:ACTIVE{
+    color: black;
+    /*     border: solid 1px #016A1D; */
+    background: #fff;
     background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
     background: -moz-linear-gradient(top, #ededed,#fff);
-    
-/*     text-shadow: 0 1px 1px rgba(0,0,0,.5); */
-/*     text-shadow: none; */
+
+    /*     text-shadow: 0 1px 1px rgba(0,0,0,.5); */
+    /*     text-shadow: none; */
 }
 
 
@@ -389,13 +389,17 @@ li.feedlocation  h2 {
     clear: both;
 }
 
+[data-role="dialog"] h1{
+    color: white;
+}
+
 /*Toggles*/
 label input[type="checkbox"][data-type="switch"]:checked + span.toggle > span.toggle-handle {
     background: #016A1D;
 }
 
 label:not([for]) input[type="checkbox"]:checked + span {
-/*     background: #016A1D; */
-   background: #016A1D url("../lib/ubuntu-html5-theme/0.1/ambiance/img/CheckMark@18.png") no-repeat 0.5rem 0.5rem;
-   background-size: 53% 53%;
+    /*     background: #016A1D; */
+    background: #016A1D url("../lib/ubuntu-html5-theme/0.1/ambiance/img/CheckMark@18.png") no-repeat 0.5rem 0.5rem;
+    background-size: 53% 53%;
 }
