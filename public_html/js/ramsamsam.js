@@ -61,13 +61,13 @@ function onDeviceReady() {
         saveConfigInLocalStore("configuration", configuration);
     };
 
-    if(!localStorageService.isVersionCompatible()){
+    if (!localStorageService.isVersionCompatible()) {
         gui.showUpgradeWarning();
         localStorageService.clearLocalStorage();
         localStorageService.saveVersion();
     }
 
-    gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
+    gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
 
     googleFeed.retrieveSubscriptions(function(subscriptions) {
 //        gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
@@ -173,6 +173,27 @@ function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");
 }
 
+
+
+function retrieveNormalizeFeedsPersistAndShowInGUI(feedURLs) {
+
+    if (!feedURLs)
+        return;
+    if(feedURLs.length===0)
+        return;
+
+    var feedURL = feedURLs[0];
+    feedURL = feedURL.replace(/feed:\/\//, "http://");
+    if (feedURL.match(/^http:\/\/www.ebay/)) {
+        feedURL += "&rss=1";
+        feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
+    }
+    googleFeed.addSubscription(feedURL, function(subscription) {
+        gui.showSubscriptions("local", subscription);
+        var subFeeds = feedURLs.slice(1);
+        retrieveNormalizeFeedsPersistAndShowInGUI(subFeeds);
+    });
+}
 
 
 function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {

@@ -95,19 +95,22 @@ function Gui(configuration) {
         var feedsList = $("foundfeedsList");
         if (feedsList.childNodes.length === 0) {
             var feedSubscriptionURL = $("rssFeed").value;
-            self.onFeedAdded(feedSubscriptionURL);
-//          if()
+            var oneElementListToAdd = new Array();
+            oneElementListToAdd.push(feedSubscriptionURL);
+            self.onFeedAdded(oneElementListToAdd);
             hide($("addfeeddialog"));
         }
         else {
+            var listToAdd = new Array();
             for (var i = 0; i < feedsList.childNodes.length; i++) {
                 var checkbox = feedsList.childNodes[i].childNodes[1].firstChild;
                 var feedSubscriptionURL = feedsList.childNodes[i].getAttribute("data-role-url");
                 var checked = checkbox.checked;
                 if (checked) {
-                    self.onFeedAdded(feedSubscriptionURL);
+                    listToAdd.push(feedSubscriptionURL);
                 }
             }
+            self.onFeedAdded(listToAdd);
 
             hide($("addfeeddialog"));
 
