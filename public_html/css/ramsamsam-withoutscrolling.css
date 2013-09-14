@@ -396,6 +396,6 @@ label input[type="checkbox"][data-type="switch"]:checked + span.toggle > span.to
 
 label:not([for]) input[type="checkbox"]:checked + span {
 /*     background: #016A1D; */
-   background: #016A1D url("../img/CheckMark@18.png") no-repeat 0.5rem 0.5rem;
+   background: #016A1D url("../lib/ubuntu-html5-theme/0.1/ambiance/img/CheckMark@18.png") no-repeat 0.5rem 0.5rem;
    background-size: 53% 53%;
 }
