@@ -60,8 +60,8 @@ function Gui(configuration) {
 //            self.UI.toolbar("footer").toggle();
 //        }
 //    });
-    
-    
+
+
     UI.toolbar("footer").touch(function(e) {
         var el = e.srcElement || e.target;
         if (el.id && /footer/i.test(el.id)) {
@@ -164,24 +164,17 @@ Gui.prototype.showFoundFeeds = function(foundFeeds) {
     ubuntuList.removeAllItems();
     for (var i = 0; i < feeds.length; i++) {
 
-//		var feedcheckbox = dom("P", null, feeds[i].title);
-        // feeds[i].url;
-
         var p = dom("P");
         p.innerHTML = feeds[i].title;
         var content = dom("P", {"style": "text-overflow: ellipsis;margin-right:4.5rem;"});
         content.innerHTML = feeds[i].title;
-//		var label = 
-        var newListItem = dom("LI", {"data-role-url": feeds[i].url}, content, dom("LABEL", null, dom("INPUT", {type: "checkbox"}), dom("SPAN", null)));
-//		checkboxFragment = document.createDocumentFragment();
-//		checkboxFragment.appendChild(dom("INPUT", {type:"checkbox"}));
-//		checkboxFragment.appendChild(dom("SPAN", null));
+        var checkbox = dom("INPUT", {type: "checkbox"});
+        var newListItem = dom("LI", {"data-role-url": feeds[i].url}, content, dom("LABEL", null, checkbox, dom("SPAN", null)));
+        new FastButton(newListItem, function() {
+            var check = this.childNodes[1].firstChild;
+            check.checked = !check.checked;
+        });
         $("foundfeedsList").appendChild(newListItem);
-
-//		ubuntuList.append("kde", "<p>test</p>", null, function(){
-//			self.onFeedAdded(feeds[i].url);
-////			hide($("addfeeddialog"));
-//		} );
     }
 };
 
