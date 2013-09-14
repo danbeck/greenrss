@@ -1,5 +1,6 @@
-function LocalStorageService(localStoragekey) {
+function LocalStorageService(localStoragekey, compabilityVersion) {
     this.__SUBSCRIPTIONS_LOCAL_STORAGE = localStoragekey;
+    this.__compabilityVersion = compabilityVersion;
 }
 
 
@@ -8,6 +9,22 @@ function LocalStorageService(localStoragekey) {
 //    return subscription["items"];
 //};
 
+
+LocalStorageService.prototype.isVersionCompatible = function() {
+    if (!localStorage)
+        return false;
+    return localStorage["version"] === this.__compabilityVersion;
+};
+
+
+LocalStorageService.prototype.saveVersion = function() {
+    localStorage["version"] = this.__compabilityVersion;
+};
+
+
+LocalStorageService.prototype.clearLocalStorage = function() {
+        localStorage.clear();
+};
 
 LocalStorageService.prototype.keyExist = function() {
     return localStorage[this.__SUBSCRIPTIONS_LOCAL_STORAGE];

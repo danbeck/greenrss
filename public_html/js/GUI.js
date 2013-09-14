@@ -42,7 +42,7 @@ function Gui(configuration) {
         self.openConfigurePage(this, self.onConfigurationChanged);
     });
 
-    new FastButton($("useNightMode"),function(e) {
+    new FastButton($("useNightMode"), function(e) {
         e.stopPropagation();
         configuration.useNightMode = !configuration.useNightMode;
         if (configuration.useNightMode) {
@@ -84,26 +84,26 @@ function Gui(configuration) {
 
 
     this.UI.button('addfeedsuccess').click(function() {
-    	var feedsList = $("foundfeedsList");
-    	if(feedsList.childNodes.length==0){
-    	  var feedSubscriptionURL = $("rssFeed").value;
-          self.onFeedAdded(feedSubscriptionURL);
+        var feedsList = $("foundfeedsList");
+        if (feedsList.childNodes.length == 0) {
+            var feedSubscriptionURL = $("rssFeed").value;
+            self.onFeedAdded(feedSubscriptionURL);
 //          if()
-          hide($("addfeeddialog"));
-    	}
-    	else {
-    		for(var i =0; i< feedsList.childNodes.length; i++){
-    			var checkbox = feedsList.childNodes[i].childNodes[1].firstChild;
-    			var feedSubscriptionURL = feedsList.childNodes[i].getAttribute("data-role-url");
-    			var checked = checkbox.checked;
-    			if (checked){
-    				self.onFeedAdded(feedSubscriptionURL);
-    			}
-    		}
+            hide($("addfeeddialog"));
+        }
+        else {
+            for (var i = 0; i < feedsList.childNodes.length; i++) {
+                var checkbox = feedsList.childNodes[i].childNodes[1].firstChild;
+                var feedSubscriptionURL = feedsList.childNodes[i].getAttribute("data-role-url");
+                var checked = checkbox.checked;
+                if (checked) {
+                    self.onFeedAdded(feedSubscriptionURL);
+                }
+            }
 
             hide($("addfeeddialog"));
-    		
-    	}
+
+        }
     });
 
     this.UI.button('addfeedcancel').click(function() {
@@ -149,9 +149,9 @@ function Gui(configuration) {
 Gui.prototype.showFoundFeeds = function(foundFeeds) {
     var self = this;
 
-    if(!foundFeeds.entries)
-    	return;
-    feeds = foundFeeds.entries.slice(0,5);
+    if (!foundFeeds.entries)
+        return;
+    feeds = foundFeeds.entries.slice(0, 5);
     var ubuntuList = this.UI.list("#foundfeeds");
     ubuntuList.removeAllItems();
     for (var i = 0; i < feeds.length; i++) {
@@ -164,7 +164,7 @@ Gui.prototype.showFoundFeeds = function(foundFeeds) {
         var content = dom("P", {"style": "text-overflow: ellipsis;margin-right:4.5rem;"});
         content.innerHTML = feeds[i].title;
 //		var label = 
-        var newListItem = dom("LI", {"data-role-url": feeds[i].url }, content, dom("LABEL", null, dom("INPUT", {type: "checkbox"}), dom("SPAN", null)));
+        var newListItem = dom("LI", {"data-role-url": feeds[i].url}, content, dom("LABEL", null, dom("INPUT", {type: "checkbox"}), dom("SPAN", null)));
 //		checkboxFragment = document.createDocumentFragment();
 //		checkboxFragment.appendChild(dom("INPUT", {type:"checkbox"}));
 //		checkboxFragment.appendChild(dom("SPAN", null));
@@ -402,9 +402,9 @@ Gui.prototype.showSubscriptions = function(headerName, subscription) {
         var titleSpan = dom("SPAN", {"class": "title"}, subscription.title);
         var numberOfUnreadItemsSpan = dom("SPAN", {"class": "unread"}, "" + numberOfUnreadItems);
         var li = dom("LI", {"data-subscription-id": subscription.id, "data-source": headerName},
-        dom("A", null, aside, dom("P", {class:"title"}, titleSpan), dom("P", {class:"unread"}, numberOfUnreadItemsSpan)));
+        dom("A", null, aside, dom("P", {class: "title"}, titleSpan), dom("P", {class: "unread"}, numberOfUnreadItemsSpan)));
 
-        new FastButton(li,function showFeedEntry() {
+        new FastButton(li, function showFeedEntry() {
             li["className"] = "touchBeforeActive";
             self.__addSelectClassAndCallOnSubscriptionClick(li);
         });
@@ -505,15 +505,18 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
 
     var mobileLi = li.cloneNode(true);
 
-    new FastButton(mobileLi,function() {
+    new FastButton(mobileLi, function() {
         self.onSubscriptionItemClicked(source, wwwurl, subscriptionItem);
     });
     fragment.appendChild(li);
     mobileFragment.appendChild(mobileLi);
 };
 
+Gui.prototype.showUpgradeWarning = function() {
+//      show($("upgradeDialogWarning"));
+};
 Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
- var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
+    var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
     var subscriptionItemElement = document.querySelector(selector);
 
     var wasRead = subscriptionItemElement.firstChild.getAttribute("class") === "read";
@@ -524,7 +527,7 @@ Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
         var unreadItemsElement = document.querySelector("#subscriptionsList li.active a p span.unread");
         unreadItemsElement.innerText = unreadItemsElement.innerText - 1;
     }
-  
+
 
     var articleTitle = $("articleTitle");
     articleTitle.innerHTML = '';

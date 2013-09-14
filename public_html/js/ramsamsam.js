@@ -11,6 +11,8 @@ if (cordovaUsed()) {
 
 var gui;
 
+
+var localStorageService = new LocalStorageService(null, "0.2");
 var theOldReader = new TheOldReader();
 var googleFeed = new GoogleFeed();
 var feedRecordsShownInGUI = {};
@@ -59,6 +61,11 @@ function onDeviceReady() {
         saveConfigInLocalStore("configuration", configuration);
     };
 
+    if(!localStorageService.isVersionCompatible()){
+        gui.showUpgradeWarning();
+        localStorageService.clearLocalStorage();
+        localStorageService.saveVersion();
+    }
 
     gui.onFeedAdded = retrieveNormalizeFeedPersistAndShowInGUI;
 
@@ -105,7 +112,7 @@ function onDeviceReady() {
 
     gui.feedSearch = function(query) {
         googleFeed.searchSubscriptions(query, function(foundFeeds) {
-        	gui.showFoundFeeds(foundFeeds);
+            gui.showFoundFeeds(foundFeeds);
         });
     };
 
@@ -163,7 +170,7 @@ function retrieveDefaultFeeds() {
     retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
     retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
-    retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");  
+    retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");
 }
 
 
