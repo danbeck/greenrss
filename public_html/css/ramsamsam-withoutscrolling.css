@@ -13,13 +13,13 @@
 @media screen and (min-width:640px) {
     #subscriptionPane {
         float: left;
-        width: 335px;
+        width: 280px;
     }
     #subscriptionItemsPane {
-        margin-left: 335px;
+        margin-left: 280px;
         /*        width: 318px;*/
     }
-
+/*
     #extendedConfigurationPage .configurationLeft {
         float: left;
         width: 65%;
@@ -27,7 +27,7 @@
 
     #extendedConfigurationPage .configurationRight {
         margin-left: 66%
-    }
+    }*/
 
 }
 [data-role="list"] {
@@ -225,7 +225,7 @@ li.feedlocation  h2 {
 }
 
 #subscriptionPane p.title{
-    width:55%;
+    width:60%;
     float:left;
 }
 
