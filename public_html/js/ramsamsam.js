@@ -13,6 +13,7 @@ var gui;
 
 
 var localStorageService = new LocalStorageService(null, "0.2");
+var theOldReaderlocalStorageService = new LocalStorageService(null, "0.2");
 var theOldReader = new TheOldReader();
 var googleFeed = new GoogleFeed();
 var feedRecordsShownInGUI = {};
@@ -25,7 +26,7 @@ var DEFAULT_CONFIGURATION = {
     useNightMode: false,
     refreshNow: false,
     deleteLocalStorage: false,
-    refreshRateInSeconds: 600
+    refreshRateInSeconds: 200
 };
 
 var oldReaderSynchronizationActive;
@@ -62,8 +63,11 @@ function onDeviceReady() {
         configuration = newConfiguration;
         saveConfigInLocalStore("configuration", configuration);
         if (configuration.theoldReader_sync.useTheOldReader) {
-            if (!oldReaderSynchronizationActive)
+            if (!oldReaderSynchronizationActive) {
+                getSubscriptionsForTheOldReader();
+                retrieveSubscriptionsForTheOldReader();
                 oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+            }
         } else {
             if (oldReaderSynchronizationActive)
                 clearInterval(oldReaderSynchronizationActive);
@@ -136,22 +140,28 @@ function onDeviceReady() {
     if (configuration.theoldReader_sync.useTheOldReader === true) {
         getSubscriptionsForTheOldReader();
         retrieveSubscriptionsForTheOldReader();
-        setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+        oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
     }
 }
 
 function retrieveSubscriptionsForTheOldReader() {
     var username = configuration.theoldReader_sync.theoldreader_username;
     var password = configuration.theoldReader_sync.theoldreader_password;
+    var self = this;
     theOldReader.retrieveSubscriptions(username, password,
             function(subscriptions) {
                 showSubscriptionList(subscriptions);
 
                 for (var subscriptionid in subscriptions) {
                     theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer) {
+//                        getSubscriptionsForTheOldReader();
+                        self.theOldReaderlocalStorageService.getSubscriptionFromLocalStorage(subscriptionid);
+
+//                showSubscriptionList(subscriptions);
                     });
 
                 }
+
             });
 }
 
