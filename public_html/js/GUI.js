@@ -63,6 +63,9 @@ function Gui(configuration) {
 //    });
 
 
+    UI.button("deleteLocalStorage").click(function() {
+        self.deleteLocalStorage();
+    });
     UI.toolbar("footer").touch(function(e) {
         var el = e.srcElement || e.target;
         if (el.id && /footer/i.test(el.id)) {
@@ -158,6 +161,8 @@ function Gui(configuration) {
     }
 }
 
+Gui.prototype.deleteLocalStorage = function() {
+};
 Gui.prototype.__saveConfig = function() {
     var self = this;
     self.configuration = self.__updateConfigurationFromConfigPage();

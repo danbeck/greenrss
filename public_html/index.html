@@ -86,14 +86,14 @@
                         </menu>
                     </section>
                 </div>
-                <div data-role="dialog" id="connectToOldReaderDialog">
+                <div data-role="dialog" id="connectToOldReaderDialog" class="popupdialog">
                     <section>
                         <h1>Connecting to theOldReader...</h1>
                         <progress class="bigger"></progress>
                     </section>
                 </div>
-                
-                <div data-role="dialog" id="couldNotConnectToTheOldReader">
+
+                <div data-role="dialog" id="couldNotConnectToTheOldReader" class="popupdialog">
                     <section>
                         <h1>Could not connect to theOldReader. False password?</h1>
                         <button data-role="button" id="couldNotConnectPrompt">OK</button>
@@ -105,13 +105,8 @@
 
                 <div data-role="page" id="extendedConfigurationPage">
                     <section data-role="list"> 
-                        <!--                        <header><h1>User Interface option</h1></header>
-                                                <ul data-role="listview">
-                                                    <li>
-                                                        <p>refresh rate in seconds: <input type="number" placeholder="60">
-                                                        </p>
-                                                    </li>
-                                                </ul>-->
+                        <header><h1>Only for development purposes</h1></header>
+                        <button id="deleteLocalStorage" style="margin:1rem;" data-role="button" type="button">Delete localstorage</button>
                         <header><h1>Feed Synchronization</h1></header>
                         <!--<aside><p>test</p></aside>-->
                         <ul data-role="listview" >
@@ -197,8 +192,8 @@
         <script src="https://www.google.com/jsapi"></script>
 
         <!-- Application script -->
-<!--        <script src="js/lz-string-1.3.3.js"></script>
-        <script src="js/ulzss.js"></script>-->
+        <!--        <script src="js/lz-string-1.3.3.js"></script>
+                <script src="js/ulzss.js"></script>-->
         <script src="js/util.js"></script>        
         <script src="js/localstorageservice.js"></script>
         <script src="js/TheOldReader.js"></script>

@@ -80,6 +80,9 @@ function onDeviceReady() {
         }
     };
 
+    gui.deleteLocalStorage = function() {
+        localStorageService.clearLocalStorage();
+    };
     gui.tryConnectToTheOldReader = function(onConnectionDone, onError) {
         theOldReader.__retrieveTokenIfNecessary(
                 configuration.theoldReader_sync.theoldreader_username,
