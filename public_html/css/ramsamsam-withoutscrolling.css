@@ -260,7 +260,7 @@ li.feedlocation  h2 {
     background-color: #eb7f55;
 }
 
-#addfeeddialog {
+#addfeeddialog, .popupdialog {
     position: fixed;
     top:0;
     bottom:0;
