@@ -7,8 +7,8 @@
             "desktop": "ramsamsamreader.desktop"
         }
     },
-    "maintainer": "Daniel Beck",
-    "name": "de.beck.ramsamsamreader",
-    "title": "ramsamsamreader",
-    "version": "0.1"
+    "maintainer": "Daniel Beck <d.danielbeck@googlemail.com>",
+    "name": "com.ubuntu.developer.danielbeck.ramsamsamreader",
+    "title": "RamSamSam Reader",
+    "version": "0.2.0"
 }
