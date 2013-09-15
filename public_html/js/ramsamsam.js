@@ -59,6 +59,14 @@ function onDeviceReady() {
     configuration = loadConfigurationOrCreateDefault();
 
     gui = new Gui(configuration);
+
+
+    if (!localStorageService.isVersionCompatible()) {
+        gui.showUpgradeWarning();
+        localStorageService.clearLocalStorage();
+        localStorageService.saveVersion();
+    }
+
     gui.onConfigurationChanged = function(newConfiguration) {
         configuration = newConfiguration;
         saveConfigInLocalStore("configuration", configuration);
@@ -73,11 +81,6 @@ function onDeviceReady() {
                 clearInterval(oldReaderSynchronizationActive);
         }
 
-        if (!localStorageService.isVersionCompatible()) {
-            gui.showUpgradeWarning();
-            localStorageService.clearLocalStorage();
-            localStorageService.saveVersion();
-        }
     };
 
     gui.deleteLocalStorage = function() {
