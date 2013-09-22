@@ -2,11 +2,11 @@
 
 if (cordovaUsed()) {
 // This is the event that fires when Cordova is fully loaded
-    document.addEventListener("deviceready", onDeviceReady, false);
+  document.addEventListener("deviceready", onDeviceReady, false);
 } else {
 // This is the event that then the browser window is loaded
-    window.onload = onDeviceReady;
-    addGoogleAnalyticsToHTML();
+  window.onload = onDeviceReady;
+  addGoogleAnalyticsToHTML();
 }
 
 var gui;
@@ -20,13 +20,18 @@ var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
 var DEFAULT_CONFIGURATION = {
-    theoldReader_sync: {useTheOldReader: false,
-        theoldreader_username: undefined,
-        theoldreader_password: undefined},
-    useNightMode: false,
-    refreshNow: false,
-    deleteLocalStorage: false,
-    refreshRateInSeconds: 200
+  theoldReader_sync: {useTheOldReader: false,
+    theoldreader_username: undefined,
+    theoldreader_password: undefined},
+  googleapi_sync: true,
+  feedly_sync: {
+    username: undefined,
+    password: undefined
+  },
+  useNightMode: false,
+  refreshNow: false,
+  deleteLocalStorage: false,
+  refreshRateInSeconds: 200
 };
 
 var oldReaderSynchronizationActive;
@@ -34,7 +39,7 @@ var configuration = {};
 
 function addGoogleAnalyticsToHTML() {
 
-    var html = 'var _gaq = _gaq || [];\
+  var html = 'var _gaq = _gaq || [];\
   _gaq.push([\'_setAccount\', \'UA-4099512-3\']);\
   _gaq.push([\'_trackPageview\']);\
 \
@@ -44,10 +49,10 @@ function addGoogleAnalyticsToHTML() {
     var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);\
   })();';
 
-    var ga = dom("SCRIPT", null);
-    ga.innerHTML = html;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
+  var ga = dom("SCRIPT", null);
+  ga.innerHTML = html;
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(ga, s);
 
 }
 
@@ -56,276 +61,340 @@ function addGoogleAnalyticsToHTML() {
  * and connects events to handlers
  */
 function onDeviceReady() {
-    configuration = loadConfigurationOrCreateDefault();
-
-    gui = new Gui(configuration);
+  configuration = loadConfigurationOrCreateDefault();
 
 
-    if (!localStorageService.isVersionCompatible()) {
-        gui.showUpgradeWarning();
-        localStorageService.clearLocalStorage();
-        localStorageService.saveVersion();
+  gui = new Gui(configuration);
+
+
+
+  if (!window.indexedDB) {
+    showAlert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+  }
+
+
+
+  var worker = new Worker('js/feeddownloader.js');
+
+  var command = {command: "sync", conf: configuration};
+  worker.postMessage(command);
+
+
+  worker.addEventListener('message', function(e) {
+    console.log('Worker said: ', e.data);
+  }, false);
+//
+//  var request = window.indexedDB.open("MeineTestdatenbank", 1);
+//
+//  request.onerror = function(event) {
+//    showError(event);
+//  };
+//
+//  request.onsuccess = function(event) {
+//    var db = event.target.result;
+//    var transaction = db.indexedDB.transaction(["customers"], "readwrite");
+//
+//    var transaction = db.transaction(["feeds"], "readwrite");
+//
+//    var objectStore = transaction.objectStore("feeds");
+//    var data = [{url: "www.kde.org", read: false, source: "theoldreader"}, {url: "www.gnome.org", read: false, source: "local"}, {url: "www.gnome.org", read: false, source: "bla"}];
+////   
+//    for (var i in data) {
+//      var dataAddRequest = objectStore.add(data[i]);
+//      dataAddRequest.onsuccess = function(event) {
+//        // event.target.result == customerData[i].ssn;
+//      };
+//    }
+//
+//  };
+//  request.onupgradeneeded = function(event) {
+//    var db = event.target.result;
+//
+//    // Create an objectStore to hold information about our customers. We're
+//    // going to use "ssn" as our key path because it's guaranteed to be
+//    // unique.
+//    var objectStore = db.createObjectStore("feeds", {KeyPath: "url"});
+//
+//    // Create an index to search customers by name. We may have duplicates
+//    // so we can't use a unique index.
+//    objectStore.createIndex("source", "source", {unique: false});
+//
+//    // Create an index to search customers by email. We want to ensure that
+//    // no two customers have the same email, so use a unique index.
+////    objectStore.createIndex("email", "email", {unique: true});
+//
+//    // Store values in the newly created objectStore.
+//    var data = [{url: "www.kde.org", read: false, source: "theoldreader"}, {url: "www.gnome.org", read: false, source: "local"}, {url: "www.gnome.org", read: false, source: "bla"}];
+//    for (var i in  data) {
+//      objectStore.add(data[i]);
+//    }
+//  };
+
+  if (!localStorageService.isVersionCompatible()) {
+    gui.showUpgradeWarning();
+    localStorageService.clearLocalStorage();
+    localStorageService.saveVersion();
+  }
+
+  gui.onConfigurationChanged = function(newConfiguration) {
+    configuration = newConfiguration;
+    saveConfigInLocalStore("configuration", configuration);
+    if (configuration.theoldReader_sync.useTheOldReader) {
+      if (!oldReaderSynchronizationActive) {
+        getSubscriptionsForTheOldReader();
+        retrieveSubscriptionsForTheOldReader();
+        oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+      }
+    } else {
+      if (oldReaderSynchronizationActive)
+        clearInterval(oldReaderSynchronizationActive);
     }
 
-    gui.onConfigurationChanged = function(newConfiguration) {
-        configuration = newConfiguration;
-        saveConfigInLocalStore("configuration", configuration);
-        if (configuration.theoldReader_sync.useTheOldReader) {
-            if (!oldReaderSynchronizationActive) {
-                getSubscriptionsForTheOldReader();
-                retrieveSubscriptionsForTheOldReader();
-                oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-            }
-        } else {
-            if (oldReaderSynchronizationActive)
-                clearInterval(oldReaderSynchronizationActive);
-        }
+  };
 
-    };
+  gui.deleteLocalStorage = function() {
+    localStorageService.clearLocalStorage();
+  };
+  gui.tryConnectToTheOldReader = function(onConnectionDone, onError) {
+    theOldReader.__retrieveTokenIfNecessary(
+            configuration.theoldReader_sync.theoldreader_username,
+            configuration.theoldReader_sync.theoldreader_password, onConnectionDone, onError);
+  };
 
-    gui.deleteLocalStorage = function() {
-        localStorageService.clearLocalStorage();
-    };
-    gui.tryConnectToTheOldReader = function(onConnectionDone, onError) {
-        theOldReader.__retrieveTokenIfNecessary(
-                configuration.theoldReader_sync.theoldreader_username,
-                configuration.theoldReader_sync.theoldreader_password, onConnectionDone, onError);
-    };
+  gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
 
-    gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
+  googleFeed.retrieveSubscriptions(function(subscriptions) {
+    for (var subscriptionid in subscriptions)
+      this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
+  });
 
-    googleFeed.retrieveSubscriptions(function(subscriptions) {
-        for (var subscriptionid in subscriptions)
-            this.gui.showSubscriptions("local", subscriptions[subscriptionid]);
+  gui.onSubscriptionClick = function(clickedFeedDataSource, clickedFeedID) {
+
+    if (clickedFeedDataSource === "local") {
+      googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(subscriptionItemContainer) {
+        gui.showFeedItems("local", subscriptionItemContainer);
+      });
+
+    }
+    if (clickedFeedDataSource === "theOldReader") {
+      theOldReader.getSubscriptionItems(
+              configuration.theoldReader_sync.theoldreader_username,
+              configuration.theoldReader_sync.theoldreader_password,
+              clickedFeedID,
+              function(subscriptionItemObject) {
+                gui.showFeedItems("theOldReader", subscriptionItemObject);
+              }
+      );
+    }
+  };
+
+
+  gui.onSubscriptionItemClicked = function(source, wwwurl, subscriptionItem) {
+    if (source === "local") {
+      googleFeed.setRead(subscriptionItem, function() {
+        gui.showArticle(wwwurl, subscriptionItem);
+      });
+    }
+    if (source === "theOldReader") {
+      theOldReader.setRead(
+              configuration.theoldReader_sync.theoldreader_username,
+              configuration.theoldReader_sync.theoldreader_password, subscriptionItem);
+      gui.showArticle(wwwurl, subscriptionItem);
+    }
+  };
+
+  gui.feedSearch = function(query) {
+    googleFeed.searchSubscriptions(query, function(foundFeeds) {
+      gui.showFoundFeeds(foundFeeds);
     });
-
-    gui.onSubscriptionClick = function(clickedFeedDataSource, clickedFeedID) {
-
-        if (clickedFeedDataSource === "local") {
-            googleFeed.retrieveSubscriptionItems(null, null, clickedFeedID, function(subscriptionItemContainer) {
-                gui.showFeedItems("local", subscriptionItemContainer);
-            });
-
-        }
-        if (clickedFeedDataSource === "theOldReader") {
-            theOldReader.getSubscriptionItems(
-                    configuration.theoldReader_sync.theoldreader_username,
-                    configuration.theoldReader_sync.theoldreader_password,
-                    clickedFeedID,
-                    function(subscriptionItemObject) {
-                        gui.showFeedItems("theOldReader", subscriptionItemObject);
-                    }
-            );
-        }
-    };
-
-
-    gui.onSubscriptionItemClicked = function(source, wwwurl, subscriptionItem) {
-        if (source === "local") {
-            googleFeed.setRead(subscriptionItem, function() {
-                gui.showArticle(wwwurl, subscriptionItem);
-            });
-        }
-        if (source === "theOldReader") {
-            theOldReader.setRead(
-                    configuration.theoldReader_sync.theoldreader_username,
-                    configuration.theoldReader_sync.theoldreader_password, subscriptionItem);
-            gui.showArticle(wwwurl, subscriptionItem);
-        }
-    };
-
-    gui.feedSearch = function(query) {
-        googleFeed.searchSubscriptions(query, function(foundFeeds) {
-            gui.showFoundFeeds(foundFeeds);
-        });
-    };
+  };
 
 //    gui.configSaved = function() {
 //    };
 
-    if (configuration.theoldReader_sync.useTheOldReader === true) {
-        getSubscriptionsForTheOldReader();
-        retrieveSubscriptionsForTheOldReader();
-        oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-    }
+  if (configuration.theoldReader_sync.useTheOldReader === true) {
+    getSubscriptionsForTheOldReader();
+    retrieveSubscriptionsForTheOldReader();
+    oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+  }
 }
 
 function retrieveSubscriptionsForTheOldReader() {
-    var username = configuration.theoldReader_sync.theoldreader_username;
-    var password = configuration.theoldReader_sync.theoldreader_password;
-    var self = this;
-    theOldReader.retrieveSubscriptions(username, password,
-            function(subscriptions) {
-                showSubscriptionList(subscriptions);
+  var username = configuration.theoldReader_sync.theoldreader_username;
+  var password = configuration.theoldReader_sync.theoldreader_password;
+  var self = this;
+  theOldReader.retrieveSubscriptions(username, password,
+          function(subscriptions) {
+            showSubscriptionList(subscriptions);
 
-                for (var subscriptionid in subscriptions) {
-                    theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer) {
+            for (var subscriptionid in subscriptions) {
+              theOldReader.retrieveSubscriptionItems(username, password, subscriptionid, function(subscriptionItemContainer) {
 //                        getSubscriptionsForTheOldReader();
-                        self.theOldReaderlocalStorageService.getSubscriptionFromLocalStorage(subscriptionid);
+                self.theOldReaderlocalStorageService.getSubscriptionFromLocalStorage(subscriptionid);
 
 //                showSubscriptionList(subscriptions);
-                    });
+              });
 
-                }
+            }
 
-            });
+          });
 }
 
 function getSubscriptionsForTheOldReader() {
-    theOldReader.getSubscriptions(
-            configuration.theoldReader_sync.theoldreader_username,
-            configuration.theoldReader_sync.theoldreader_password,
-            function(response) {
-                showSubscriptionList(response);
-            });
+  theOldReader.getSubscriptions(
+          configuration.theoldReader_sync.theoldreader_username,
+          configuration.theoldReader_sync.theoldreader_password,
+          function(response) {
+            showSubscriptionList(response);
+          });
 }
 
 function loadConfigurationOrCreateDefault() {
-    var configuration = loadRecordFromLocalStorage("configuration");
-    if (!configuration) {
-        configuration = DEFAULT_CONFIGURATION;
-    }
-    return configuration;
+  var configuration = loadRecordFromLocalStorage("configuration");
+  if (!configuration) {
+    configuration = DEFAULT_CONFIGURATION;
+  }
+  return configuration;
 }
 
 function showSubscriptionList(subscriptionList) {
 
-    for (var id in subscriptionList) {
-        this.gui.showSubscriptions("theOldReader", subscriptionList[id]);
-    }
+  for (var id in subscriptionList) {
+    this.gui.showSubscriptions("theOldReader", subscriptionList[id]);
+  }
 }
 
 function retrieveDefaultFeeds() {
-    retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
-    retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
-    retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
-    retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");
+  retrieveFeedPersistAndShowSubscriptionInGUI("http://daniel-beck.org/feed/");
+  retrieveFeedPersistAndShowSubscriptionInGUI("http://planet.ubuntu.com/rss20.xml");
+  retrieveFeedPersistAndShowSubscriptionInGUI("http://planetkde.org/rss20.xml");
+  retrieveFeedPersistAndShowSubscriptionInGUI("http://omgubuntu.co.uk/feed");
 }
 
 
 
 function retrieveNormalizeFeedsPersistAndShowInGUI(feedURLs) {
 
-    if (!feedURLs)
-        return;
-    if (feedURLs.length === 0)
-        return;
+  if (!feedURLs)
+    return;
+  if (feedURLs.length === 0)
+    return;
 
-    var feedURL = feedURLs[0];
-    feedURL = feedURL.replace(/feed:\/\//, "http://");
-    if (feedURL.match(/^http:\/\/www.ebay/)) {
-        feedURL += "&rss=1";
-        feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
-    }
-    googleFeed.addSubscription(feedURL, function(subscription) {
-        gui.showSubscriptions("local", subscription);
-        var subFeeds = feedURLs.slice(1);
-        retrieveNormalizeFeedsPersistAndShowInGUI(subFeeds);
-    });
+  var feedURL = feedURLs[0];
+  feedURL = feedURL.replace(/feed:\/\//, "http://");
+  if (feedURL.match(/^http:\/\/www.ebay/)) {
+    feedURL += "&rss=1";
+    feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
+  }
+  googleFeed.addSubscription(feedURL, function(subscription) {
+    gui.showSubscriptions("local", subscription);
+    var subFeeds = feedURLs.slice(1);
+    retrieveNormalizeFeedsPersistAndShowInGUI(subFeeds);
+  });
 }
 
 
 function retrieveNormalizeFeedPersistAndShowInGUI(feedURL) {
-    feedURL = feedURL.replace(/feed:\/\//, "http://");
-    if (feedURL.match(/^http:\/\/www.ebay/)) {
-        feedURL += "&rss=1";
-        feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
-    }
-    googleFeed.addSubscription(feedURL, function(subscription) {
-        gui.showSubscriptions("local", subscription);
-    });
+  feedURL = feedURL.replace(/feed:\/\//, "http://");
+  if (feedURL.match(/^http:\/\/www.ebay/)) {
+    feedURL += "&rss=1";
+    feedURL = feedURL.replace(/\/sch\//, "\/sch/rss/?_sacat=");
+  }
+  googleFeed.addSubscription(feedURL, function(subscription) {
+    gui.showSubscriptions("local", subscription);
+  });
 }
 
 
 function retrieveFeedPersistAndShowSubscriptionInGUI(feedURL) {
-    var feed = new google.feeds.Feed(feedURL);
-    feed.setNumEntries(100);
-    feed.load(function(retrievedFeed) {
-        if (!retrievedFeed.error) {
-            persistFeed(retrievedFeed);
-            addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
-        }
-    });
+  var feed = new google.feeds.Feed(feedURL);
+  feed.setNumEntries(100);
+  feed.load(function(retrievedFeed) {
+    if (!retrievedFeed.error) {
+      persistFeed(retrievedFeed);
+      addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
+    }
+  });
 }
 
 function persistFeedAndAddFeedAndShowFeedEntriesInGUI(retrievedFeed) {
-    persistFeed(retrievedFeed);
-    addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
+  persistFeed(retrievedFeed);
+  addNewSubscriptionInGUI(retrievedFeed.feed.feedUrl);
 }
 
 function persistFeed(retrievedFeed) {
-    var feedInfoForStorage = {"title": retrievedFeed.feed.title,
-        "description": retrievedFeed.feed.description,
-        "author": retrievedFeed.feed.author
-    };
+  var feedInfoForStorage = {"title": retrievedFeed.feed.title,
+    "description": retrievedFeed.feed.description,
+    "author": retrievedFeed.feed.author
+  };
 
-    var feedInfo = {"title": retrievedFeed.feed.title,
-        "description": retrievedFeed.feed.description,
-        "author": retrievedFeed.feed.author,
-        "entries": retrievedFeed.feed.entries
-    };
+  var feedInfo = {"title": retrievedFeed.feed.title,
+    "description": retrievedFeed.feed.description,
+    "author": retrievedFeed.feed.author,
+    "entries": retrievedFeed.feed.entries
+  };
 
-    feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
-    feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
-    saveConfigInLocalStore("feeds", feedRecordsSavedInDB);
+  feedRecordsShownInGUI[retrievedFeed.feed.feedUrl] = feedInfo;
+  feedRecordsSavedInDB[retrievedFeed.feed.feedUrl] = feedInfoForStorage;
+  saveConfigInLocalStore("feeds", feedRecordsSavedInDB);
 }
 
 
 function saveConfigInLocalStore(item, record) {
-    try {
-        localStorage.setItem(item, JSON.stringify(record));
-    } catch (e) {
-        if (e === QUOTA_EXCEEDED_ERR) {
-            showError()("Error: Local Storage limit exceeds.");
-        } else {
-            showError("Error: Saving to local storage.");
-        }
+  try {
+    localStorage.setItem(item, JSON.stringify(record));
+  } catch (e) {
+    if (e === QUOTA_EXCEEDED_ERR) {
+      showError()("Error: Local Storage limit exceeds.");
+    } else {
+      showError("Error: Saving to local storage.");
     }
+  }
 }
 
 function resetLocalStore() {
-    try {
-        localStorage.removeItem("feeds");
-    } catch (e) {
-        if (e === QUOTA_EXCEEDED_ERR) {
-            showError()("Error: Local Storage limit exceeds.");
-        } else {
-            showError("Error: Saving to local storage.");
-        }
+  try {
+    localStorage.removeItem("feeds");
+  } catch (e) {
+    if (e === QUOTA_EXCEEDED_ERR) {
+      showError()("Error: Local Storage limit exceeds.");
+    } else {
+      showError("Error: Saving to local storage.");
     }
+  }
 }
 
 function addNewSubscriptionInGUI(feedUrl) {
-    var feedInfo = feedRecordsShownInGUI[feedUrl];
-    gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
+  var feedInfo = feedRecordsShownInGUI[feedUrl];
+  gui.addGoogleFeedInGui(feedInfo.title, feedUrl, feedRecordsShownInGUI);
 //    showGoogleReaderSubscriptions
 }
 
 function loadFeedsFromLocalStorage() {
-    return loadRecordFromLocalStorage("feeds");
+  return loadRecordFromLocalStorage("feeds");
 }
 //
 function loadRecordFromLocalStorage(item) {
-    if (!localStorage[item])
-        return undefined;
-    return JSON.parse(localStorage[item]);
+  if (!localStorage[item])
+    return undefined;
+  return JSON.parse(localStorage[item]);
 }
 
 function feedsNotInLocalStorage() {
-    return typeof localStorage["feeds"] === "undefined";
+  return typeof localStorage["feeds"] === "undefined";
 }
 
 function showAlert(message) {
-    if (cordovaUsed())
-        navigator.notification.alert(message);
-    else
-        alert(message);
+  if (cordovaUsed())
+    navigator.notification.alert(message);
+  else
+    alert(message);
 }
 
 function showError(message) {
-    showAlert("Error:" + message);
+  showAlert("Error:" + message);
 }
 
 function cordovaUsed() {
-    return navigator.notification;
+  return navigator.notification;
 }
