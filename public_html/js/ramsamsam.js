@@ -20,11 +20,11 @@ var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
 var DEFAULT_CONFIGURATION = {
-  theoldReader_sync: {useTheOldReader: false,
-    theoldreader_username: undefined,
-    theoldreader_password: undefined},
+  theoldReader: {useTheOldReader: false,
+    username: undefined,
+    password: undefined},
   googleapi_sync: true,
-  feedly_sync: {
+  feedly: {
     username: undefined,
     password: undefined
   },
@@ -73,16 +73,26 @@ function onDeviceReady() {
   }
 
 
+  var worker;
+  var command = {
+    command: "sync",
+    conf: configuration
+  };
+  if (cordovaUsed()) {
+    worker = new Worker('js/feeddownloader.js');
 
-  var worker = new Worker('js/feeddownloader.js');
 
-  var command = {command: "sync", conf: configuration};
-  worker.postMessage(command);
+    worker.postMessage(command);
 
+    worker.addEventListener('message', function(e) {
+      console.log('Worker said: ', e.data);
+    }, false);
 
-  worker.addEventListener('message', function(e) {
-    console.log('Worker said: ', e.data);
-  }, false);
+  } else {
+    var theOldReader = new TheOldReaderWebWorker();
+    theOldReader.makeSync(null, command);
+  }
+
 //
 //  var request = window.indexedDB.open("MeineTestdatenbank", 1);
 //

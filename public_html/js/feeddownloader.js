@@ -49,7 +49,7 @@ TheOldReaderWebWorker.prototype.retrieveSubscriptions = function(email, password
       }
       that.localStorageService.saveSubscriptionsInLocalStorage(result);
       onGetSubscriptionList(result);
-    });
+    }, null, {"Authorization": "GoogleLogin auth=" + that.token});
   });
 };
 
@@ -100,7 +100,7 @@ TheOldReaderWebWorker.prototype.getAllItemIds = function(email, password,
         urlParameter += newArray.join("&i=");
         return urlParameter;
       }
-    });
+    }, null, {"Authorization": "GoogleLogin auth=" + that.token});
   });
 };
 
@@ -185,7 +185,7 @@ TheOldReaderWebWorker.prototype.retrieveSubscriptionItems = function(email, pass
           read: itemWasRead};
         return result;
       }
-    });
+    }, null, {"Authorization": "GoogleLogin auth=" + that.token});
   });
 };
 
@@ -230,18 +230,27 @@ TheOldReaderWebWorker.prototype.__saveToken = function(response) {
   this.token = jsonResponse.Auth;
 };
 
-function makeSync(self) {
-  self.postMessage("createing theoldread obj");
+TheOldReaderWebWorker.prototype.makeSync = function(self, conf) {
+  postMessage(self, "createing theoldread obj");
   var theOldReaderWebWorker = new TheOldReaderWebWorker();
-  self.postMessage("retrievesubscritptions");
-  theOldReaderWebWorker.retrieveSubscriptions("d..com", "", function() {
-    self.postMessage("done");
+  postMessage(self, "retrievesubscritptions");
+  theOldReaderWebWorker.retrieveSubscriptions(conf.theOldReader.username, conf.theOldReader.password, function() {
+    postMessage(self, "done");
   });
-}
+};
 
 self.addEventListener('message', function(e) {
+  var theOldReaderWebWorker = new TheOldReaderWebWorker();
   if (e.data.command === "sync") {
-    self.postMessage("starting sync");
-    makeSync(self);
+    postMessage(self, "starting sync");
+    theOldReaderWebWorker.makeSync(self, e.data.conf);
   }
+  ;
 }, false);
+
+function postMessage(self, message) {
+  if (!self)
+    console.log(message);
+  else
+    self.postMessage(message);
+}
