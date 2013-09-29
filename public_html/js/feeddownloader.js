@@ -1,3 +1,7 @@
+if (!window)
+  importScripts('IndexedDBShim.js');
+
+
 function TheOldReaderWebWorker() {
   this.__THEOLDREADER_API_URL = "https://theoldreader.com/reader/api/0/";
   this.__THEOLDREADER_CLIENT_LOGIN_URL = this.__THEOLDREADER_API_URL + "accounts/ClientLogin";
@@ -212,7 +216,6 @@ TheOldReaderWebWorker.prototype.setRead = function(email, password, subscription
     }, function() {
     });
   });
-
 };
 
 
@@ -231,6 +234,10 @@ TheOldReaderWebWorker.prototype.__saveToken = function(response) {
 };
 
 TheOldReaderWebWorker.prototype.makeSync = function(self, conf) {
+  if (!conf.theOldReader) {
+    postMessage(self, "conf.theOldReader was null");
+    return;
+  }
   postMessage(self, "createing theoldread obj");
   var theOldReaderWebWorker = new TheOldReaderWebWorker();
   postMessage(self, "retrievesubscritptions");

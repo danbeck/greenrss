@@ -19,6 +19,7 @@ function Gui(configuration) {
         actionBar = window.plugins.actionbar;
     }
     this.UI = new UbuntuUI();
+    
     //needed because of a bug with "toolbar"
     UI = this.UI;
     this.UI.init();
@@ -28,7 +29,8 @@ function Gui(configuration) {
 
     // Set up the app by pushing the main view
     this.UI.pagestack.push(MAIN_PAGE);
-    // var backButton = document.querySelector("li a[data-role=\"back\"]");
+ 
+  // var backButton = document.querySelector("li a[data-role=\"back\"]");
 
     if (configuration.useNightMode) {
         self.__activateNightMode();
@@ -176,7 +178,6 @@ Gui.prototype.__saveConfig = function() {
         connectToTheOldReader.hide();
         var dialog = self.UI.dialog("couldNotConnectToTheOldReader");
         dialog.show();
-//            self.
         self.onConfigurationChanged(self.configuration);
         self.UI.button("couldNotConnectPrompt").click(function() {
             dialog.hide();
@@ -231,9 +232,9 @@ Gui.prototype.__back = function() {
 };
 
 Gui.prototype.__updateConfigurationFromConfigPage = function() {
-    this.configuration.theoldReader_sync.useTheOldReader = $("theoldreader_use_sync").checked;
-    this.configuration.theoldReader_sync.theoldreader_username = $("theoldreader_username").value;
-    this.configuration.theoldReader_sync.theoldreader_password = $("theoldreader_password").value;
+    this.configuration.theOldReader.useTheOldReader = $("theoldreader_use_sync").checked;
+    this.configuration.theOldReader.username = $("theoldreader_username").value;
+    this.configuration.theOldReader.password = $("theoldreader_password").value;
     return this.configuration;
 };
 
@@ -287,8 +288,6 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         show($("reloadFeedsButton").parentNode);
         show(openConfigButton.parentNode);
 
-//        self.configuration = self.__updateConfigurationFromConfigPage();
-//        return self.onConfigurationChanged(self.configuration);
     });
 
     function restablishPopover(configuration) {
@@ -299,15 +298,15 @@ Gui.prototype.openConfigurePage = function(openConfigButton) {
         }
     }
     function restablishConfigurationPage(configuration) {
-        if (configuration.theoldReader_sync.useTheOldReader === true) {
+        if (configuration.theOldReader.useTheOldReader === true) {
             $("theoldreader_use_sync").checked = true;
         }
         else {
             $("theoldreader_username").setAttribute("disabled", true);
             $("theoldreader_password").setAttribute("disabled", true);
         }
-        $("theoldreader_username").value = configuration.theoldReader_sync.theoldreader_username;
-        $("theoldreader_password").value = configuration.theoldReader_sync.theoldreader_password;
+        $("theoldreader_username").value = configuration.theOldReader.username;
+        $("theoldreader_password").value = configuration.theOldReader.password;
     }
 };
 
@@ -316,10 +315,7 @@ Gui.prototype.__activateNightMode = function() {
 
     var nightModeSytlesheet = dom("LINK", {rel: "stylesheet", href: "css/night-theme.css"});
     insertAfter(firstStyleSheet, nightModeSytlesheet);
-//	
-//	var nightStyleSheet = document.createElement("stylesheet");
-//	nightStyleSheet.setAttribute("src", "css/night-theme.css");
-//	insetAfter(firstStyleSheet);
+
 };
 Gui.prototype.__deactiveNightMode = function() {
 
@@ -493,7 +489,6 @@ Gui.prototype.__showFeedItem = function(fragment, mobileFragment, source, wwwurl
 };
 
 Gui.prototype.showUpgradeWarning = function() {
-//      show($("upgradeDialogWarning"));
 };
 Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var selector = "[data-subscriptionitem-id=\"" + subscriptionItem.id + "\"]";
@@ -515,14 +510,7 @@ Gui.prototype.showArticle = function(wwwurl, subscriptionItem) {
     var titleLink = dom("A", {href: subscriptionItem.url, target: "_blank"}, subscriptionItem.title);
     articleTitle.appendChild(titleLink);
     var contentBlock = $("articleContent");
-//    var base = document.getElementsByName("base")[0];
-//    if (base)
-//        base.remove();
-//    var newbase = dom("BASE", {href: wwwurl, target: "_blank"});
-//    var someTagFromHead = document.querySelector("meta[name=viewport]");
-//    insertAfter(someTagFromHead, newbase);
     var content = subscriptionItem.content.replace(/<a /g, "<a target=\"_blank\"");
-//    content = content.replace(/href="^(?!http)/g, "href=" + wwwurl);
 
 
     contentBlock.innerHTML = content;

@@ -1,5 +1,3 @@
-//google.load("feeds", "1");
-
 if (cordovaUsed()) {
 // This is the event that fires when Cordova is fully loaded
   document.addEventListener("deviceready", onDeviceReady, false);
@@ -20,7 +18,7 @@ var feedRecordsShownInGUI = {};
 var feedRecordsSavedInDB = {};
 
 var DEFAULT_CONFIGURATION = {
-  theoldReader: {useTheOldReader: false,
+  theOldReader: {useTheOldReader: false,
     username: undefined,
     password: undefined},
   googleapi_sync: true,
@@ -63,35 +61,46 @@ function addGoogleAnalyticsToHTML() {
 function onDeviceReady() {
   configuration = loadConfigurationOrCreateDefault();
 
-
   gui = new Gui(configuration);
 
-
-
   if (!window.indexedDB) {
-    showAlert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+    showWarning("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   }
-
 
   var worker;
-  var command = {
-    command: "sync",
-    conf: configuration
-  };
+  var theOldReader;
+
+
   if (cordovaUsed()) {
     worker = new Worker('js/feeddownloader.js');
-
-
-    worker.postMessage(command);
-
-    worker.addEventListener('message', function(e) {
-      console.log('Worker said: ', e.data);
-    }, false);
-
-  } else {
-    var theOldReader = new TheOldReaderWebWorker();
-    theOldReader.makeSync(null, command);
   }
+  else {
+    theOldReader = new TheOldReaderWebWorker();
+  }
+
+  syncDataWithOldReader(worker, theOldReader, configuration);
+
+  var supportIndexedDB = typeof window.indexedDB != 'undefined';
+  var supportNewIndexedDB = typeof window.IDBVersionChangeEvent != 'undefined';
+  var supportsWebSql = typeof window.openDatabase != 'undefined';
+
+
+  if (supportIndexedDB)
+    showInfo("Version of Indexeddb is available");
+  else
+    showError("Version of indexeddb is not available");
+
+
+  if (supportNewIndexedDB)
+    showInfo("New Version of Indexeddb is available");
+  else
+    showError("New Version of indexeddb is not available");
+
+
+  if (supportsWebSql)
+    showInfo("Supports WebSQL");
+  else
+    showError("No WebSQL available");
 
 //
 //  var request = window.indexedDB.open("MeineTestdatenbank", 1);
@@ -149,7 +158,7 @@ function onDeviceReady() {
   gui.onConfigurationChanged = function(newConfiguration) {
     configuration = newConfiguration;
     saveConfigInLocalStore("configuration", configuration);
-    if (configuration.theoldReader_sync.useTheOldReader) {
+    if (configuration.theOldReader.useTheOldReader) {
       if (!oldReaderSynchronizationActive) {
         getSubscriptionsForTheOldReader();
         retrieveSubscriptionsForTheOldReader();
@@ -167,8 +176,8 @@ function onDeviceReady() {
   };
   gui.tryConnectToTheOldReader = function(onConnectionDone, onError) {
     theOldReader.__retrieveTokenIfNecessary(
-            configuration.theoldReader_sync.theoldreader_username,
-            configuration.theoldReader_sync.theoldreader_password, onConnectionDone, onError);
+            configuration.theOldReader.username,
+            configuration.theOldReader.password, onConnectionDone, onError);
   };
 
   gui.onFeedAdded = retrieveNormalizeFeedsPersistAndShowInGUI;
@@ -188,8 +197,8 @@ function onDeviceReady() {
     }
     if (clickedFeedDataSource === "theOldReader") {
       theOldReader.getSubscriptionItems(
-              configuration.theoldReader_sync.theoldreader_username,
-              configuration.theoldReader_sync.theoldreader_password,
+              configuration.theOldReader.username,
+              configuration.theOldReader.password,
               clickedFeedID,
               function(subscriptionItemObject) {
                 gui.showFeedItems("theOldReader", subscriptionItemObject);
@@ -207,8 +216,8 @@ function onDeviceReady() {
     }
     if (source === "theOldReader") {
       theOldReader.setRead(
-              configuration.theoldReader_sync.theoldreader_username,
-              configuration.theoldReader_sync.theoldreader_password, subscriptionItem);
+              configuration.theOldReader.username,
+              configuration.theOldReader.password, subscriptionItem);
       gui.showArticle(wwwurl, subscriptionItem);
     }
   };
@@ -222,16 +231,28 @@ function onDeviceReady() {
 //    gui.configSaved = function() {
 //    };
 
-  if (configuration.theoldReader_sync.useTheOldReader === true) {
+  if (configuration.theOldReader.useTheOldReader === true) {
     getSubscriptionsForTheOldReader();
     retrieveSubscriptionsForTheOldReader();
     oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
   }
 }
 
+function syncDataWithOldReader(webworker, theOldReader, configuration) {
+  if (!webworker)
+    theOldReader.makeSync(null, configuration);
+  else {
+    var command = {command: "sync", conf: configuration};
+    webworker.postMessage(command);
+    webworker.addEventListener('message', function(e) {
+      console.log('Worker said: ', e.data);
+    }, false);
+  }
+
+}
 function retrieveSubscriptionsForTheOldReader() {
-  var username = configuration.theoldReader_sync.theoldreader_username;
-  var password = configuration.theoldReader_sync.theoldreader_password;
+  var username = configuration.theOldReader.username;
+  var password = configuration.theOldReader.password;
   var self = this;
   theOldReader.retrieveSubscriptions(username, password,
           function(subscriptions) {
@@ -252,8 +273,8 @@ function retrieveSubscriptionsForTheOldReader() {
 
 function getSubscriptionsForTheOldReader() {
   theOldReader.getSubscriptions(
-          configuration.theoldReader_sync.theoldreader_username,
-          configuration.theoldReader_sync.theoldreader_password,
+          configuration.theOldReader.username,
+          configuration.theOldReader.password,
           function(response) {
             showSubscriptionList(response);
           });
@@ -394,15 +415,26 @@ function feedsNotInLocalStorage() {
   return typeof localStorage["feeds"] === "undefined";
 }
 
-function showAlert(message) {
-  if (cordovaUsed())
+function showMessage(message) {
+  if (cordovaUsed()) {
     navigator.notification.alert(message);
+//    $("debuggingOutput").innerHTML = "";
+    $("debuggingOutput").appendChild(dom("P", null, message));
+  }
   else
     alert(message);
+  $("debuggingOutput").appendChild(dom("P", null, message));
+}
+function showInfo(message) {
+  showMessage("Info:" + message);
+
+}
+function showWarning(message) {
+  showMessage("Warning:" + message);
 }
 
 function showError(message) {
-  showAlert("Error:" + message);
+  showMessage("Error:" + message);
 }
 
 function cordovaUsed() {
