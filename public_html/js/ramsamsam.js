@@ -71,83 +71,19 @@ function onDeviceReady() {
   var theOldReader;
 
 
-  if (cordovaUsed()) {
-    worker = new Worker('js/feeddownloader.js');
-  }
-  else {
-    theOldReader = new TheOldReaderWebWorker();
-  }
+//  if (cordovaUsed()) {
+  worker = new Worker('js/feeddownloader.js');
+//  }
+//  else {
+//    theOldReader = new TheOldReaderWebWorker();
+//  }
 
-  syncDataWithOldReader(worker, theOldReader, configuration);
-
-  var supportIndexedDB = typeof window.indexedDB != 'undefined';
-  var supportNewIndexedDB = typeof window.IDBVersionChangeEvent != 'undefined';
-  var supportsWebSql = typeof window.openDatabase != 'undefined';
+  worker.addEventListener('message', function(e) {
+    console.log('Worker said: ', e.data);
+  }, false);
 
 
-  if (supportIndexedDB)
-    showInfo("Version of Indexeddb is available");
-  else
-    showError("Version of indexeddb is not available");
-
-
-  if (supportNewIndexedDB)
-    showInfo("New Version of Indexeddb is available");
-  else
-    showError("New Version of indexeddb is not available");
-
-
-  if (supportsWebSql)
-    showInfo("Supports WebSQL");
-  else
-    showError("No WebSQL available");
-
-//
-//  var request = window.indexedDB.open("MeineTestdatenbank", 1);
-//
-//  request.onerror = function(event) {
-//    showError(event);
-//  };
-//
-//  request.onsuccess = function(event) {
-//    var db = event.target.result;
-//    var transaction = db.indexedDB.transaction(["customers"], "readwrite");
-//
-//    var transaction = db.transaction(["feeds"], "readwrite");
-//
-//    var objectStore = transaction.objectStore("feeds");
-//    var data = [{url: "www.kde.org", read: false, source: "theoldreader"}, {url: "www.gnome.org", read: false, source: "local"}, {url: "www.gnome.org", read: false, source: "bla"}];
-////   
-//    for (var i in data) {
-//      var dataAddRequest = objectStore.add(data[i]);
-//      dataAddRequest.onsuccess = function(event) {
-//        // event.target.result == customerData[i].ssn;
-//      };
-//    }
-//
-//  };
-//  request.onupgradeneeded = function(event) {
-//    var db = event.target.result;
-//
-//    // Create an objectStore to hold information about our customers. We're
-//    // going to use "ssn" as our key path because it's guaranteed to be
-//    // unique.
-//    var objectStore = db.createObjectStore("feeds", {KeyPath: "url"});
-//
-//    // Create an index to search customers by name. We may have duplicates
-//    // so we can't use a unique index.
-//    objectStore.createIndex("source", "source", {unique: false});
-//
-//    // Create an index to search customers by email. We want to ensure that
-//    // no two customers have the same email, so use a unique index.
-////    objectStore.createIndex("email", "email", {unique: true});
-//
-//    // Store values in the newly created objectStore.
-//    var data = [{url: "www.kde.org", read: false, source: "theoldreader"}, {url: "www.gnome.org", read: false, source: "local"}, {url: "www.gnome.org", read: false, source: "bla"}];
-//    for (var i in  data) {
-//      objectStore.add(data[i]);
-//    }
-//  };
+  syncDataWithOldReader(worker, configuration);
 
   if (!localStorageService.isVersionCompatible()) {
     gui.showUpgradeWarning();
@@ -238,17 +174,12 @@ function onDeviceReady() {
   }
 }
 
-function syncDataWithOldReader(webworker, theOldReader, configuration) {
-  if (!webworker)
-    theOldReader.makeSync(null, configuration);
-  else {
-    var command = {command: "sync", conf: configuration};
-    webworker.postMessage(command);
-    webworker.addEventListener('message', function(e) {
-      console.log('Worker said: ', e.data);
-    }, false);
-  }
-
+function syncDataWithOldReader(webworker, configuration) {
+  var command = {command: "sync", conf: configuration};
+  webworker.postMessage(command);
+  webworker.addEventListener('message', function(e) {
+    console.log('Worker said: ', e.data);
+  }, false);
 }
 function retrieveSubscriptionsForTheOldReader() {
   var username = configuration.theOldReader.username;
