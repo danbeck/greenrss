@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--<html manifest="cache.manifest">-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>RamSamSam Reader</title>
+        <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.0.min.css" />
+        <!--<link rel="stylesheet" href="css/app.css" />-->
+        <script src="lib/jquery/jquery-1.10.2.min.js"></script>
+        <script src="lib/jquery/jquery-ui-1.10.3.js"></script>
+        <script>$(document).bind('mobileinit', function() {
+                // wird für CORS request benötigt.
+                $.mobile.allowCrossDomainPages = true;
+                $.mobile.page.prototype.options.theme = "a";
+            });
+        </script>
+
+        <script src="lib/jquery/jquery.mobile-1.4.0.min.js"></script>
+        <script src="lib/jquery/jquery.ui.touch-punch.min.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/model/changelisteners.js"></script>
+        <script src="js/model/user.js"></script>
+        <script src="js/model/feedsmodel.js"></script>
+        <script src="js/persistence/feedly.js"></script>
+        <script src="js/persistence/googleapi.js"></script>
+        <script src="js/persistence/theoldreader.js"></script>
+        <script src="js/persistence/tinytinyrss.js"></script>
+        <script src="js/model/applicationmodel.js"></script>
+        <script src="js/view/appview.js"></script>
+        <script src="js/app.js"></script>  
+
+        <meta name="description" content="RSS Reader">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <!-- JQuery mobile import -->
+    </head>
+    <body>
+
+        <div data-role="page" id="mainPage" data-add-back-btn="true" >
+            <header data-position="fixed" data-role="header" data-id="mainHeader">
+                <a href="#configurationPage" data-icon="gear" data-iconpos="notext">Konfiguration</a>
+                <h1>RamSamSam Reader</h1>
+                <a href="#neuesElementHinzufuegenPopupAlle" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer Eintrag</a>
+            </header>
+
+            <div data-role="content">
+                <input type="text" id="eintragEingebenFeld"/>
+                <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
+                </fieldset>
+            </div>
+            <div data-role="popup" id="elementLoeschenPopup"
+                 style="padding: 10px 20px;">
+                <p>Wollen Sie dieses Element wirklich löschen?</p>
+                <h4 id="löscheintrag"></h4>
+                <a href="" data-role="button"
+                   data-inline="true" data-rel="back">Abbrechen</a>
+                <a id="loescheElementButton" data-role="button"
+                   data-inline="true" data-rel="back">Löschen</a>
+            </div>
+
+        </div>
+    </body>
