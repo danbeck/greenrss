@@ -1,7 +1,16 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+function FeedsModel() {
+    console.log("creating feedsmodel obj");
+}
 
+function User() {
+}
+User.prototype.login = function() {
+}
+function Feed() {
+}
 
+function FeedItem() {
+}
+
+function Tag() {
+}
