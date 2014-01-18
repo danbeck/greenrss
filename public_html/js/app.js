@@ -14,7 +14,7 @@ $(document).ready(function() {
             var newData = {
                 response_type: "code",
                 client_id: "sandbox187",
-                redirect_uri: "http://localhost",
+                redirect_uri: "http://localhost:8080",
                 scope: "https://cloud.feedly.com/subscriptions"
             };
 
@@ -26,8 +26,11 @@ $(document).ready(function() {
             });
         }
         jQuery(document).ready(function() {
-            authInFeedly();
-
+            if (/http:\/\/.*?code=.*/.test(window.location.href)) {
+                alert("got the code");
+            } else {
+                authInFeedly();
+            }
         });
     })();
 // $(document).ready(function() {
