@@ -8,13 +8,20 @@ function AppView(presentationModel) {
 
     function registerEventHandler() {
         $("#connectToFeedly").click(function() {
-            that.presentationModel.authenticateWithCloud(function(response) {
-                
-                $.mobile.changePage('#showOAuthLogin', 'pop');
-//                $.mobile.loadPage( response );
-                $("#showOAuthLogin div").html(response);
-                
-            });
+
+            var url = that.presentationModel.ssoLoginURL();
+            $.mobile.changePage(url, {showLoadMsg: true});
+//            that.presentationModel.authenticateWithCloud(function(response) {
+//
+//                $.mobile.changePage('#showOAuthLogin', 'pop');
+//
+////                $.mobile.loadPage( response );
+////                var html = $.parseHTML(response);
+////                var responseDom$ = $('style', html).remove();
+//
+//                $("#showOAuthLogin div").html(response);
+
+//            });
         });
     }
 }

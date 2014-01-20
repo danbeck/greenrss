@@ -6,6 +6,10 @@ function FeedsModel() {
 FeedsModel.prototype.authenticateWithCloud = function(success) {
     this.cloudService.loginUser(success);
 };
+FeedsModel.prototype.ssoLoginURL = function() {
+    return this.cloudService.ssoLoginURL();
+};
+
 function User() {
 }
 User.prototype.login = function() {

@@ -1,0 +1,56 @@
+
+div[data-role=page][data-url][data-external-page=true] div
+{
+    margin              : 0px;
+    padding             : 20px;
+    font-size           : 90%;
+    line-height         : 20px;
+    color               : #EFEFEF;
+    background-color    : #6CC655;  
+    font-family         : sans-serif;   
+    text-shadow         : none;
+}
+
+div[data-role=page][data-url][data-external-page=true] div#logo
+{
+    padding-bottom      : 8px;
+    border-bottom       : 1px solid rgba( 255, 255, 255, 0.3 );
+}
+
+div[data-role=page][data-url][data-external-page=true] div#introduction
+{
+    margin-top          : 17px;
+    margin-bottom       : 12px;
+    font-size           : 140%;
+    line-height         : 24px;
+    color               : #FFF;     
+    text-shadow         : none;
+}
+
+div[data-role=page][data-url][data-external-page=true] .button
+{
+    background-color    : #4D90FE;
+    font-size           : 95%;
+    line-height         : 17px;
+    padding             : 14px;
+    padding-left        : 20px;
+    padding-right       : 20px;
+    font-weight         : bold;
+    border              : 1px solid #3079ED;
+    color               : #FFFFFF;
+    margin              : 0px;
+    display             : block;
+    box-shadow          : 0px 1px 2px rgba(0, 0, 0, 0.2), inset 0px 0px 1px rgba(255, 255, 255, 1);
+    text-decoration     : none;
+    border-radius       : 3px;
+    text-shadow         :  none;
+}
+
+div[data-role=page][data-url][data-external-page=true] .actionLink
+{
+    font-weight         : bold;
+    color               : #FFF;
+    text-decoration     : none;
+    text-shadow         : none;
+}
+

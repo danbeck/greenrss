@@ -6,6 +6,15 @@ function Feedly() {
     //----------------------------------
 }
 
+
+Feedly.prototype.ssoLoginURL = function() {
+    return this.BASE_URL + "/auth/auth?" +
+            "response_type=code&" +
+            "client_id=sandbox187&" +
+            "redirect_uri=http%3A%2F%2Flocalhost%3A8080&"
+            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+};
+
 Feedly.prototype.loginUser = function(success) {
     var that = this;
 
@@ -19,8 +28,10 @@ Feedly.prototype.loginUser = function(success) {
 
     $.get(url, urlParameters).success(function(response) {
         response = response.replace(/src="\//g, 'src="' + that.HOST_URL + '/');
-//        var matches = response.match(/<style>(.*)<\/style>/m)
-//        var style = matches[1];
+//        response = response.replace(/src="\//g, 'src="' + that.HOST_URL + '/');
+//        response = response.replace(/<style>((.|\n)*)<\/style>/mi, '');
+        response = response.replace(/\s*body\s*\n/g, 'div > body');
+
         success(response);
     });
 };
