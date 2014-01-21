@@ -1,16 +1,24 @@
 function AppView(presentationModel) {
+    this.presentationModel = presentationModel;
+}
+
+AppView.prototype.registerModelChangeListeners = function() {
+    console.log("show initial page");
+};
+
+
+AppView.prototype.registerGuiEventListeners = function() {
 
     var that = this;
-    this.presentationModel = presentationModel;
-
-    registerEventHandler();
+    registerConnectToFeedlyEventHandler();
 
 
-    function registerEventHandler() {
+    function registerConnectToFeedlyEventHandler() {
         $("#connectToFeedly").click(function() {
 
             var url = that.presentationModel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
+
 //            that.presentationModel.authenticateWithCloud(function(response) {
 //
 //                $.mobile.changePage('#showOAuthLogin', 'pop');
@@ -23,8 +31,10 @@ function AppView(presentationModel) {
 
 //            });
         });
+
     }
-}
+};
+
 
 AppView.prototype.showInitialPage = function() {
     console.log("show initial page");
