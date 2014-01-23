@@ -8,6 +8,7 @@ var APP_DATA = {
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
 $(document).ready(function() {
 
+    useIndexDBPolyfill();
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(window.location.href)) {
         var code = window.location.href.match(regex)[1];
@@ -32,5 +33,17 @@ $(document).ready(function() {
 
     APP_DATA.feedsModel.retrieveAuthorizationCodeFromURL(window.location.href);
 
+
+    function useIndexDBPolyfill() {
+        // Is there a current implementation of IndexedDB?
+        var requireShim = typeof IDBVersionChangeEvent === 'undefined';
+
+        // Is WebSQL available?
+        var supportsWebSql = typeof openDatabase !== 'undefined';
+
+        if (requireShim && supportsWebSql) {
+            shimIndexedDB.__useShim(); // Use the Polyfills
+        }
+    }
 });
 

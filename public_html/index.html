@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--<html manifest="cache.manifest">-->
 <html>
@@ -7,6 +8,7 @@
         <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.0.min.css" />
         <link rel="stylesheet" href="css/ramsamsam.css" />
         <!--<link rel="stylesheet" href="css/app.css" />-->
+        <script src="js/IndexedDBShim.js"></script>
         <script src="lib/jquery/jquery-2.0.3.min.js"></script>
         <script src="lib/jquery/jquery-ui-1.10.3.js"></script>
         <script>$(document).bind('mobileinit', function() {
@@ -28,7 +30,7 @@
         <script src="js/persistence/tinytinyrss.js"></script>
         <script src="js/view/appview.js"></script>
         <script src="js/presentationmodel/presentation.js"></script>
-        <script src="js/app.js"></script>  
+        <script src="js/app.js"></script>
 
         <meta name="description" content="RSS Reader">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -63,13 +65,9 @@
                 <a href="" id="addButton" data-role="button">Add Feed</a>
             </footer>
         </div>
-       <div data-role="dialog" id="showOAuthLogin">
-           <div data-role="content">
-               <p>gar nichts</p>
-           </div>
+        <div data-role="dialog" id="showOAuthLogin">
+            <div data-role="content">
+                <p>gar nichts</p>
+            </div>
         </div>
-
-        
-        
-        
     </body>
