@@ -1,3 +1,4 @@
+
 var APP_DATA = {
     feedsModel: null,
     presentationModel: null
@@ -9,16 +10,6 @@ var APP_DATA = {
 $(document).ready(function() {
 
     useIndexDBPolyfill();
-    var regex = /http:\/\/.*?code=((\w|\-)*)/;
-    if (regex.test(window.location.href)) {
-        var code = window.location.href.match(regex)[1];
-        alert("got the code:\n" + code);
-    }
-
-    else {
-//        authInFeedly();
-    }
-
 
     //----------------------------------
     APP_DATA.feedsModel = new FeedsModel();
@@ -46,4 +37,3 @@ $(document).ready(function() {
         }
     }
 });
-

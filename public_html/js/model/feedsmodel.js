@@ -1,3 +1,4 @@
+
 /**
  * ApplicationModel = {
  *   categories: [category_1, category_2, category3]
@@ -33,9 +34,17 @@ function FeedsModel() {
     this.cloudService = new Feedly();
     this.loggedInListeners = new ChangeListeners();
     this.feeds = [];
+    this.indexeddbService = new IndexeddbService();
+    this.loadFromDatabase();
 }
 
 
+
+
+FeedsModel.prototype.loadFromDatabase = function() {
+    console.log("load FeedModel from database");
+    this.indexeddbService.loadFeed(this);
+};
 
 FeedsModel.prototype.registerLoggedInListener = function(func) {
     this.loggedInListeners.add(func);
@@ -68,7 +77,7 @@ FeedsModel.prototype.retrieveAuthorizationCodeFromURL = function(url) {
     }
 };
 
-FeedsModel.prototype.save = function() {
+FeedsModel.prototype.saveTestFeed = function(callback) {
 //    return this.cloudService.ssoLoginURL();
 
     var that = this;
@@ -103,6 +112,7 @@ function User() {
 User.prototype.login = function() {
 };
 function Feed(props) {
+    this.id = props.id;
     this.category = props.category;
     this.feedUrl = props.feedUrl;
     this.title = props.title;

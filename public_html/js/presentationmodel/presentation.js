@@ -1,3 +1,4 @@
+
 function PresentationModel(feedsmodel) {
     this.feedsmodel = feedsmodel;
 
@@ -25,3 +26,6 @@ PresentationModel.prototype.ssoLoginURL = function() {
     return this.feedsmodel.ssoLoginURL();
 };
 
+PresentationModel.prototype.saveTestFeed = function(callback) {
+    return this.feedsmodel.saveTestFeed(callback);
+};

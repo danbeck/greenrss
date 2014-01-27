@@ -1,3 +1,4 @@
+
 function AppView(presentationModel) {
     this.presentationModel = presentationModel;
 }
@@ -11,7 +12,7 @@ AppView.prototype.registerGuiEventListeners = function() {
 
     var that = this;
     registerConnectToFeedlyEventHandler();
-
+    registerAddFeed();
 
     function registerConnectToFeedlyEventHandler() {
         $("#connectToFeedly").click(function() {
@@ -31,7 +32,15 @@ AppView.prototype.registerGuiEventListeners = function() {
 
 //            });
         });
+    }
 
+
+    function registerAddFeed() {
+        $("#addButton").click(function() {
+            that.presentationModel.saveTestFeed(function() {
+                alert("saving done");
+            });
+        });
     }
 };
 
@@ -39,3 +48,4 @@ AppView.prototype.registerGuiEventListeners = function() {
 AppView.prototype.showInitialPage = function() {
     console.log("show initial page");
 };
+
