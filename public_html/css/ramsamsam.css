@@ -54,3 +54,16 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
     text-shadow         : none;
 }
 
+#listViewHandy .feedTitle {
+    /*font-weight: normal;*/
+    font-weight: bold;
+    color:black;
+    white-space: normal;
+}
+
+#listViewHandy .feedDescription {
+    font-weight: normal;
+    color: black;
+    /*color: grey;*/
+    white-space: normal;
+}
