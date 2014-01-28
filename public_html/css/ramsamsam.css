@@ -57,13 +57,13 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
 #listViewHandy .feedTitle {
     /*font-weight: normal;*/
     font-weight: bold;
-    color:black;
+    color:white;
     white-space: normal;
 }
 
 #listViewHandy .feedDescription {
     font-weight: normal;
-    color: black;
+    color: white;
     /*color: grey;*/
     white-space: normal;
 }
