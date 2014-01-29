@@ -1,13 +1,14 @@
 
-var APP_DATA = {
-    feedsModel: null,
-    presentationModel: null
-//    appview: angezeigteListe: null
-};
 
 /**
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
 $(document).ready(function() {
+
+    var APP_DATA = {
+    feedsModel: null,
+    presentationModel: null
+//    appview: angezeigteListe: null
+};
 
     useIndexDBPolyfill();
 
