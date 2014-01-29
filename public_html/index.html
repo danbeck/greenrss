@@ -106,11 +106,37 @@
                 <h2>Wählen Sie einen Dienst aus</h2>
 
                 <ul data-role="listview">
-                    <li><a href="#feedly">Feedly cloud<br>Der bekannteste Anbieter</a></li>
-                    <li><a href="#theoldreader">The Old Reader<br>*Der* alternative Anbieter</a></li>
+                    <li><a href="#feedlyLoginDialog" data-rel="dialog">Feedly cloud<br>Der bekannteste Anbieter</a></li>
+                    <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative Anbieter</a></li>
                     <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal gespeichert</a></li>
                 </ul>
             </div>
+            
         </div>
+        
+        
+        <div data-role="dialog" id="feedlyLoginDialog" >
+            <div data-role="content">
+                <h1>Feedly Cloud</h1>
+                <p>Feedly ist der bekannteste Feed Anbieter. Die Anmeldung geschieht über das 
+                    Google-Login Verfahren.</p>
+                <a data-role="button" href="#">Anmelden</a>
+            </div>
+        </div>
+        
+        <div data-role="dialog" id="theOldReaderLoginDialog" >
+            <div data-role="content">
+                <h1>TheOldReader</h1>
+                <p>TheOldReader ist einer alternativer RSS Anbieter. Legen Sie auf der 
+                    Einstellungsseite von TheOldReader einpassword fest, um sich anzumelden.
+                </p>
+                <input type="email" placeholder="E-Mail">
+                <input type="password" placeholder="Passwort">
+                <label for="hidePassword" >Passwort versteckt eingeben</label>
+                <input type="checkbox" id="hidePassword">
+                <a href="#" data-role="button">Anmelden</a>
+            </div>
+        </div>
+        
     </body>
 </html>

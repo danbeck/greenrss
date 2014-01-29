@@ -67,3 +67,15 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
     /*color: grey;*/
     white-space: normal;
 }
+
+
+.ui-dialog-background {
+    opacity: 0.2;
+    display: block !important;
+    -webkit-transition: opacity 0.5s ease-in;
+}
+
+.ui-dialog-background.pop.in {
+    opacity: 1;
+    -webkit-transition: opacity 0.5s ease-in;
+}

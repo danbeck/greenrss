@@ -1,6 +1,14 @@
 
 function AppView(presentationModel) {
     this.presentationModel = presentationModel;
+
+    $('div[data-role="dialog"]').on('pagebeforeshow', function(e, ui) {
+        ui.prevPage.addClass("ui-dialog-background ");
+    });
+
+    $('div[data-role="dialog"]').on('pagehide', function(e, ui) {
+        $(".ui-dialog-background ").removeClass("ui-dialog-background ");
+    });
 }
 
 
@@ -43,11 +51,11 @@ AppView.prototype.registerGuiEventListeners = function() {
 AppView.prototype.showInitialPage = function() {
     var url = undefined;
 
-    if (this.presentationModel.firstStepsPageMustBeShown()){
+    if (this.presentationModel.firstStepsPageMustBeShown()) {
         url = "#firstStepPage";
     }
-    
-    
+
+
     if (url)
         $.mobile.changePage(url);
 
