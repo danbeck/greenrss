@@ -91,58 +91,26 @@
                 <a href="" id="addButton" data-role="button">Add Feed</a>
             </footer>
         </div>
-        
-        
-        
-        <div data-role="page" id="mainPage" data-add-back-btn="true" >
+
+
+
+        <div data-role="page" id="firstStepPage" data-add-back-btn="true" >
 
             <div data-role="content">
                 <h1>RamSamSam reader</h1>
                 <p>RamSamSam reader ist ein einfach, schnell, intuitiv zu bedienen und OpenSource. 
                     Es bietet eine volle Offline-Untertzützung, und Synchroniserung mit verschiedene
                     Providers.</p>
-                <input type="text" id="eintragEingebenFeld"/>
-                <a id="connectToFeedly" data-role="button">Connect to Feedly</a>
-                <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
-                </fieldset>
-            </div>
-            <div data-role="popup" id="elementLoeschenPopup"
-                 style="padding: 10px 20px;">
-                <p>Wollen Sie dieses Element wirklich löschen?</p>
-                <h4 id="löscheintrag"></h4>
-                <a href="" data-role="button"
-                   data-inline="true" data-rel="back">Abbrechen</a>
-                <a id="loescheElementButton" data-role="button"
-                   data-inline="true" data-rel="back">Löschen</a>
-            </div>
-            <ul data-role="listview" id="listViewHandy">
-                <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
-                        - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
+                <a data-role="button" href="http://www.daniel-beck.org">ramsamsam reader</a>
+                <hr/>
+                <h2>Wählen Sie einen Dienst aus</h2>
 
-                <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
-                        - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
-
-                <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
-                        - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
-
-                <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
-                        - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
-            </ul>
-
-        </div>
-        
-        
-        <div data-role="dialog" id="showOAuthLogin">
-            <div data-role="content">
-                <p>gar nichts</p>
+                <ul data-role="listview">
+                    <li><a href="#feedly">Feedly cloud<br>Der bekannteste Anbieter</a></li>
+                    <li><a href="#theoldreader">The Old Reader<br>*Der* alternative Anbieter</a></li>
+                    <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal gespeichert</a></li>
+                </ul>
             </div>
         </div>
     </body>
+</html>

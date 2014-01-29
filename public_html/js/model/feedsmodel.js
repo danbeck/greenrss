@@ -39,7 +39,9 @@ function FeedsModel() {
 }
 
 
-
+FeedsModel.prototype.syncServiceConfigured = function() {
+    return false;
+};
 
 FeedsModel.prototype.loadFromDatabase = function() {
     console.log("load FeedModel from database");

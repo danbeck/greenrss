@@ -4,26 +4,21 @@
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
 $(document).ready(function() {
 
-    var APP_DATA = {
-    feedsModel: null,
-    presentationModel: null
-//    appview: angezeigteListe: null
-};
 
     useIndexDBPolyfill();
 
     //----------------------------------
-    APP_DATA.feedsModel = new FeedsModel();
-    APP_DATA.presentationModel = new PresentationModel(APP_DATA.feedsModel);
+    var feedsModel = new FeedsModel();
+    var presentationModel = new PresentationModel(feedsModel);
 
-    var appView = new AppView(APP_DATA.presentationModel);
+    var appView = new AppView(presentationModel);
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage();
 
-    APP_DATA.presentationModel.loadFromStorage();
+    presentationModel.loadFromStorage();
 
-    APP_DATA.feedsModel.retrieveAuthorizationCodeFromURL(window.location.href);
+    feedsModel.retrieveAuthorizationCodeFromURL(window.location.href);
 
 
     function useIndexDBPolyfill() {

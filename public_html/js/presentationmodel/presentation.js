@@ -29,3 +29,7 @@ PresentationModel.prototype.ssoLoginURL = function() {
 PresentationModel.prototype.saveTestFeed = function(callback) {
     return this.feedsmodel.saveTestFeed(callback);
 };
+
+PresentationModel.prototype.firstStepsPageMustBeShown = function() {
+    return !this.feedsmodel.syncServiceConfigured();
+};
