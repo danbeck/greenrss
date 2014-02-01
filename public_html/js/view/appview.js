@@ -24,25 +24,32 @@ AppView.prototype.registerModelChangeListeners = function() {
 
 
 AppView.prototype.registerGuiEventListeners = function() {
-
     var that = this;
-    registerConnectToFeedlyEventHandler();
-    registerAddFeed();
 
-    function registerConnectToFeedlyEventHandler() {
-        $("#connectToFeedly").click(function() {
+//    registerConnectToFeedlyEventHandler();
+    registerAddFeedHandler();
+    registerFeedlyButtonClickHandler();
 
-            var url = that.presentationModel.ssoLoginURL();
-            $.mobile.changePage(url, {showLoadMsg: true});
-        });
-    }
+//    function registerConnectToFeedlyEventHandler() {
+//        $("#connectToFeedly").click(function() {
+//
+//            var url = that.presentationModel.ssoLoginURL();
+//            $.mobile.changePage(url, {showLoadMsg: true});
+//        });
+//    }
 
-
-    function registerAddFeed() {
+    function registerAddFeedHandler() {
         $("#addButton").click(function() {
             that.presentationModel.saveTestFeed(function() {
                 alert("saving done");
             });
+        });
+    }
+
+    function registerFeedlyButtonClickHandler() {
+        $("a[data-ui=feedlyLoginButton]").click(function() {
+            var url = that.presentationModel.ssoLoginURL();
+            $.mobile.changePage(url, {showLoadMsg: true});
         });
     }
 };
