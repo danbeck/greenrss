@@ -4,11 +4,9 @@ function PresentationModel(feedsmodel) {
 
     this.loggedInListeners = new ChangeListeners();
 
-    this.feedsmodel.registerLoggedInListener(loggedInHandler);
-
-    function loggedInHandler() {
+    this.feedsmodel.registerLoggedInListener(function() {
         this.loggedInListeners.notifyChangeListeners();
-    }
+    });
 }
 
 
@@ -32,4 +30,14 @@ PresentationModel.prototype.saveTestFeed = function(callback) {
 
 PresentationModel.prototype.firstStepsPageMustBeShown = function() {
     return !this.feedsmodel.syncServiceConfigured();
+};
+
+
+PresentationModel.prototype.extractSSOAuthorizationFromURL = function(url) {
+    return this.feedsmodel.extractSSOAuthorizationFromURL(url);
+};
+
+
+PresentationModel.prototype.synchronizeFeeds= function() {
+    return this.feedsmodel.synchronizeFeeds();
 };

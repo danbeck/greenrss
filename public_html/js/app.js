@@ -11,15 +11,12 @@ $(document).ready(function() {
     var feedsModel = new FeedsModel();
     var presentationModel = new PresentationModel(feedsModel);
 
-    var appView = new AppView(presentationModel);
+    var appView = new AppView(presentationModel, window.location.href);
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage();
 
     presentationModel.loadFromStorage();
-
-    feedsModel.retrieveAuthorizationCodeFromURL(window.location.href);
-
 
     function useIndexDBPolyfill() {
         // Is there a current implementation of IndexedDB?

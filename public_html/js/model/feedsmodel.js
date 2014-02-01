@@ -68,16 +68,28 @@ FeedsModel.prototype.authenticateWithCloud = function(success) {
     this.cloudService.loginUser(success);
 };
 
-FeedsModel.prototype.retrieveAuthorizationCodeFromURL = function(url) {
-    var that = this;
+
+FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url) {
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(url)) {
-        var code = url.match(regex)[1];
-        this.cloudService.retrieveAccessToken(code, function() {
-            that.loggedInListeners.notifyChangeListeners();
-        });
+        this.code = url.match(regex)[1];
+        this.cloudService.setSSOAuthorization(this.code);
+        return this.code;
     }
 };
+
+
+FeedsModel.prototype.synchronizeFeeds = function() {
+    this.cloudService.synchronizeFeeds(this, saveFeeds, function(error) {
+        console.log(error);
+    });
+
+    function saveFeeds() {
+        console.log("save feeds in indexeddb");
+    }
+};
+
+
 
 FeedsModel.prototype.saveTestFeed = function(callback) {
 //    return this.cloudService.ssoLoginURL();

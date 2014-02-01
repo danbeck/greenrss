@@ -1,14 +1,18 @@
 
-function AppView(presentationModel) {
+function AppView(presentationModel, hrefUrl) {
     this.presentationModel = presentationModel;
+    this.hrefUrl = hrefUrl;
+    makeDialogBackgroundTransaparent();
 
-    $('div[data-role="dialog"]').on('pagebeforeshow', function(e, ui) {
-        ui.prevPage.addClass("ui-dialog-background ");
-    });
+    function makeDialogBackgroundTransaparent() {
+        $('div[data-role="dialog"]').on('pagebeforeshow', function(e, ui) {
+            ui.prevPage.addClass("ui-dialog-background ");
+        });
 
-    $('div[data-role="dialog"]').on('pagehide', function(e, ui) {
-        $(".ui-dialog-background ").removeClass("ui-dialog-background ");
-    });
+        $('div[data-role="dialog"]').on('pagehide', function() {
+            $(".ui-dialog-background ").removeClass("ui-dialog-background ");
+        });
+    }
 }
 
 
@@ -19,24 +23,17 @@ AppView.prototype.registerListeners = function() {
 };
 
 AppView.prototype.registerModelChangeListeners = function() {
-    console.log("show initial page");
+    this.presentationModel.registerLoggedInListener(function() {
+        console.log("loggedIn");
+    });
 };
 
 
 AppView.prototype.registerGuiEventListeners = function() {
     var that = this;
 
-//    registerConnectToFeedlyEventHandler();
     registerAddFeedHandler();
     registerFeedlyButtonClickHandler();
-
-//    function registerConnectToFeedlyEventHandler() {
-//        $("#connectToFeedly").click(function() {
-//
-//            var url = that.presentationModel.ssoLoginURL();
-//            $.mobile.changePage(url, {showLoadMsg: true});
-//        });
-//    }
 
     function registerAddFeedHandler() {
         $("#addButton").click(function() {
@@ -56,12 +53,17 @@ AppView.prototype.registerGuiEventListeners = function() {
 
 
 AppView.prototype.showInitialPage = function() {
+    var code = this.presentationModel.extractSSOAuthorizationFromURL(this.hrefUrl);
+    this.presentationModel.synchronizeFeeds();
+    
+    if(code)
+        return;
+
     var url = undefined;
 
     if (this.presentationModel.firstStepsPageMustBeShown()) {
         url = "#firstStepPage";
     }
-
 
     if (url)
         $.mobile.changePage(url);
