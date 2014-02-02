@@ -129,6 +129,7 @@ function Feed(props) {
     this.id = props.id;
     this.category = props.category;
     this.feedUrl = props.feedUrl;
+    this.htmlLink = props.htmlLink;
     this.title = props.title;
     this.description = props.description;
     this.author = props.author;
