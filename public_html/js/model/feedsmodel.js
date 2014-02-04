@@ -1,4 +1,3 @@
-
 /**
  * ApplicationModel = {
  *   categories: [category_1, category_2, category3]
@@ -29,47 +28,56 @@
  */
 
 
-function FeedsModel() {
+function FeedsModel(indexeddbService) {
     console.log("creating feedsmodel obj");
-    this.cloudService = new Feedly();
     this.loggedInListeners = new ChangeListeners();
+    this.cloudService = new Feedly(this);
     this.feeds = [];
-    this.indexeddbService = new IndexeddbService();
+    this.indexeddbService = indexeddbService;;
     this.loadFromDatabase();
 }
 
+FeedsModel.prototype.setAccessToken = function (accessToken) {
+    this.accessToken = accessToken;
+    this.saveSSOAuthorizationCode();
+};
 
-FeedsModel.prototype.syncServiceConfigured = function() {
+FeedsModel.prototype.saveSSOAuthorizationCode = function () {
+    this.indexeddbService.saveSSOAuthorizationCode(this.accessToken);
+};
+
+
+FeedsModel.prototype.syncServiceConfigured = function () {
     return false;
 };
 
-FeedsModel.prototype.loadFromDatabase = function() {
+FeedsModel.prototype.loadFromDatabase = function () {
     console.log("load FeedModel from database");
     this.indexeddbService.loadFeed(this);
 };
 
-FeedsModel.prototype.registerLoggedInListener = function(func) {
+FeedsModel.prototype.registerLoggedInListener = function (func) {
     this.loggedInListeners.add(func);
 };
 
-FeedsModel.prototype.useFeedlySynchronization = function() {
+FeedsModel.prototype.useFeedlySynchronization = function () {
     this.cloudService = new Feedly();
 };
-FeedsModel.prototype.useTheOlderReaderSynchronization = function() {
+FeedsModel.prototype.useTheOlderReaderSynchronization = function () {
     this.cloudService = new TheOldReader();
 };
-FeedsModel.prototype.useTinyTinySynchronization = function() {
+FeedsModel.prototype.useTinyTinySynchronization = function () {
     this.cloudService = new TinyTiny();
 };
-FeedsModel.prototype.useNoSynchronization = function() {
+FeedsModel.prototype.useNoSynchronization = function () {
     this.cloudService = new GoogleFeedService();
 };
-FeedsModel.prototype.authenticateWithCloud = function(success) {
+FeedsModel.prototype.authenticateWithCloud = function (success) {
     this.cloudService.loginUser(success);
 };
 
 
-FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url) {
+FeedsModel.prototype.extractSSOAuthorizationFromURL = function (url) {
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(url)) {
         this.code = url.match(regex)[1];
@@ -79,8 +87,8 @@ FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url) {
 };
 
 
-FeedsModel.prototype.synchronizeFeeds = function() {
-    this.cloudService.synchronizeFeeds(this, saveFeeds, function(error) {
+FeedsModel.prototype.synchronizeFeeds = function () {
+    this.cloudService.synchronizeFeeds(saveFeeds, function (error) {
         console.log(error);
     });
 
@@ -90,40 +98,13 @@ FeedsModel.prototype.synchronizeFeeds = function() {
 };
 
 
-
-FeedsModel.prototype.saveTestFeed = function(callback) {
-//    return this.cloudService.ssoLoginURL();
-
-    var that = this;
-
-    var request = indexedDB.open("Feed Database", 1);
-    var feed1 = new Feed({
-        title: "this is the first feed",
-        feedUrl: "www.kde.org"});
-    var feed2 = new Feed({
-        title: "this is the second feed",
-        feedUrl: "www.gnome.org"});
-    this.feeds.push(feed1);
-    this.feeds.push(feed2);
-
-    request.onsuccess = function(event) {
-        var objectStore = event.result.objectStore("feeds");
-        for (var i = 0; i < that.feeds.length; i++) {
-            var feed = feeds[i];
-            objectStore.add(feed).onsuccess = function(event) {
-//                document.getElementById("display").textContent += user.name + " with id " + event.result;
-            };
-        }
-    };
-};
-
-FeedsModel.prototype.ssoLoginURL = function() {
+FeedsModel.prototype.ssoLoginURL = function () {
     return this.cloudService.ssoLoginURL();
 };
 
 function User() {
 }
-User.prototype.login = function() {
+User.prototype.login = function () {
 };
 function Feed(props) {
     this.id = props.id;

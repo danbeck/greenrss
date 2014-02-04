@@ -18,7 +18,7 @@ function TheOldReader() {
 
 TheOldReader.prototype.retrieveLoginToken = function(email, password, gotToken, onError) {
     var self = this;
-    var data = "output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email="
+    var data = "output=json&client=RamSamSamReader&accountType=HOSTED&indexedDBService=reader&Email="
             + email + "&Passwd=" + password;
     postUrlEncodedHttpRequest(this.__THEOLDREADER_CLIENT_LOGIN_URL, data, function(response) {
         self.__saveToken(response);

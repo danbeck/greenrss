@@ -5,11 +5,15 @@ function IndexeddbService() {
     this.FEEDENTRYSTORE_NAME = "feedEntry";
 }
 
-IndexeddbService.prototype._openDatabase = function(success, error) {
+IndexeddbService.prototype._openDatabase = function (success, error) {
     var that = this;
 
+    indexedDB.onerror = function (e) {
+        console.log(e)
+    };
+
     var openDBRequest = indexedDB.open("feedsmodel", 1);
-    openDBRequest.onupgradeNeeded = function() {
+    openDBRequest.onupgradeneeded = function () {
         that.database = openDBRequest.result;
 
         that.database.createObjectStore(that.METADATASTORE_NAME, {keyPath: "key"});
@@ -20,14 +24,21 @@ IndexeddbService.prototype._openDatabase = function(success, error) {
         success();
     };
 
-    openDBRequest.onerror = function(e) {
+    openDBRequest.onerror = function (e) {
         console.log("Error");
         console.dir(e);
         error(e);
     };
+
+    openDBRequest.onsuccess = function (e) {
+        var db = e.target.result;
+        console.log("Success");
+        console.dir(e);
+        success();
+    };
 };
 
-IndexeddbService.prototype.saveSSOAuthorizationCode = function(authorizationCode, success, error) {
+IndexeddbService.prototype.saveSSOAuthorizationCode = function (authorizationCode, success, error) {
     var that = this;
 
     if (!this.database)
@@ -44,9 +55,9 @@ IndexeddbService.prototype.saveSSOAuthorizationCode = function(authorizationCode
     }
 
 };
-IndexeddbService.prototype.loadFeed = function(feedsmodel) {
+IndexeddbService.prototype.loadFeed = function (feedsmodel) {
     $.indexedDB("feedsmodel", {
-        1: function(versionTransaction) {
+        1: function (versionTransaction) {
             versionTransaction.createObjectStore("feeds", {keyPath: "id"});
         }});
 

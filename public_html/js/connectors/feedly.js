@@ -1,5 +1,6 @@
-function Feedly() {
+function Feedly(feedsModel) {
 //    this.BASE_URL = "http://cloud.feedly.com/v3/";
+    this.feedsModel = feedsModel;
     this.HOST_URL = "http://sandbox.feedly.com";
     this.redirect_uri = "http://localhost:8080";
     this.BASE_URL = this.HOST_URL + "/v3";
@@ -13,38 +14,38 @@ function Feedly() {
 }
 
 
-Feedly.prototype.ssoLoginURL = function() {
+Feedly.prototype.ssoLoginURL = function () {
     return this.BASE_URL + "/auth/auth?" +
-            "response_type=code&" +
-            "client_id=sandbox187&" +
-            "redirect_uri=http%3A%2F%2Flocalhost%3A8080&"
-            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+        "response_type=code&" +
+        "client_id=sandbox187&" +
+        "redirect_uri=http%3A%2F%2Flocalhost%3A8080&"
+        + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
 };
 
-Feedly.prototype.setSSOAuthorization = function(code) {
+Feedly.prototype.setSSOAuthorization = function (code) {
     this.ssoAuthorizationCode = code;
 };
 
 
-Feedly.prototype.synchronizeFeeds = function(feedModel, success, error) {
+Feedly.prototype.synchronizeFeeds = function (success, error) {
     var that = this;
 
     if (!this.accessToken && !this.ssoAuthorizationCode) {
         error("No accessToken and no ssoAuthorization Code");
     }
     else if (!this.accessToken && this.ssoAuthorizationCode)
-        retrieveAccessToken(function() {
+        retrieveAccessToken(function () {
             console.log("got access token " + that.ssoAuthorizationCode);
             console.log("got refreh token " + that.refreshToken);
             console.log("expires in " + that.expiresIn);
-            getFeedsFromCloud(function() {
+            getFeedsFromCloud(function () {
                 success();
             });
 //            that.loggedInListeners.notifyChangeListeners();
         });
 
     else if (this.accessToken) {
-        getFeedsFromCloud(function() {
+        getFeedsFromCloud(function () {
             success();
         });
 
@@ -53,6 +54,7 @@ Feedly.prototype.synchronizeFeeds = function(feedModel, success, error) {
     function getFeedsFromCloud(successFunc) {
         console.log("get Feeds from cloud");
     }
+
     function retrieveAccessToken(successFunc) {
 
         var url = that.BASE_URL + "/auth/token";
@@ -64,11 +66,13 @@ Feedly.prototype.synchronizeFeeds = function(feedModel, success, error) {
             grant_type: "authorization_code"
         };
 
-        $.post(url, data).success(function(response) {
+        $.post(url, data).success(function (response) {
             that.userId = response.id;
             that.refreshToken = response.refresh_token;
             that.accessToken = response.access_token;
             that.expiresIn = response.expires_in;
+
+            that.feedsModel.setAccessToken(that.accessToken);
             successFunc();
         });
     }

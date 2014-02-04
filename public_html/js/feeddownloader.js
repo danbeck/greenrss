@@ -44,7 +44,7 @@ onmessage = function (e) {
 //
 //TheOldReaderWebWorker.prototype.retrieveLoginToken = function(email, password, gotToken, onError) {
 //  var that = this;
-//  var data = "output=json&client=RamSamSamReader&accountType=HOSTED&service=reader&Email="
+//  var data = "output=json&client=RamSamSamReader&accountType=HOSTED&indexedDBService=reader&Email="
 //          + email + "&Passwd=" + password;
 //  postUrlEncodedHttpRequest(this.__THEOLDREADER_CLIENT_LOGIN_URL, data, function(response) {
 //    that.__saveToken(response);

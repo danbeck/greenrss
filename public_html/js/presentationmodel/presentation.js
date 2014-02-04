@@ -41,3 +41,8 @@ PresentationModel.prototype.extractSSOAuthorizationFromURL = function(url) {
 PresentationModel.prototype.synchronizeFeeds= function() {
     return this.feedsmodel.synchronizeFeeds();
 };
+
+
+//PresentationModel.prototype.saveSSOAuthorizationCode= function() {
+//    return this.feedsmodel.saveSSOAuthorizationCode();
+//};
