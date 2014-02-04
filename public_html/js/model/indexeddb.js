@@ -13,9 +13,8 @@ IndexeddbService.prototype._openDatabase = function (success, error) {
     };
 
     var openDBRequest = indexedDB.open("feedsmodel", 1);
-    openDBRequest.onupgradeneeded = function () {
+    openDBRequest.onupgradeneeded = function (e) {
         that.database = openDBRequest.result;
-
         that.database.createObjectStore(that.METADATASTORE_NAME, {keyPath: "key"});
         that.feedStore = that.database.createObjectStore(that.FEEDSTORE_NAME, {keyPath: "id"});
         that.categoryStore = that.database.createObjectStore(that.CATEGORYSTORE_NAME, {keyPath: "id"});
@@ -31,7 +30,7 @@ IndexeddbService.prototype._openDatabase = function (success, error) {
     };
 
     openDBRequest.onsuccess = function (e) {
-        var db = e.target.result;
+        that.database = e.target.result;
         console.log("Success");
         console.dir(e);
         success();
@@ -53,8 +52,8 @@ IndexeddbService.prototype.saveSSOAuthorizationCode = function (authorizationCod
         request.onSuccess(success);
         request.onError(error);
     }
-
 };
+
 IndexeddbService.prototype.loadFeed = function (feedsmodel) {
     $.indexedDB("feedsmodel", {
         1: function (versionTransaction) {
