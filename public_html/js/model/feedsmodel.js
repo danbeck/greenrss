@@ -53,7 +53,7 @@ FeedsModel.prototype.syncServiceConfigured = function () {
 
 FeedsModel.prototype.loadFromDatabase = function () {
     console.log("load FeedModel from database");
-    this.indexeddbService.loadFeed(this);
+  //  this.indexeddbService.loadFeed(this);
 };
 
 FeedsModel.prototype.registerLoggedInListener = function (func) {
