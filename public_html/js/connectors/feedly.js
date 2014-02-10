@@ -35,8 +35,8 @@ Feedly.prototype.synchronizeFeeds = function (success, error) {
     }
     else if (!this.accessToken && this.ssoAuthorizationCode)
         retrieveAccessToken(function () {
-            console.log("got access token " + that.ssoAuthorizationCode);
-            console.log("got refreh token " + that.refreshToken);
+            console.log("got access token " + that.accessToken);
+            console.log("got refresh token " + that.refreshToken);
             console.log("expires in " + that.expiresIn);
             getFeedsFromCloud(function () {
                 success();
@@ -52,11 +52,35 @@ Feedly.prototype.synchronizeFeeds = function (success, error) {
     }
 
     function getFeedsFromCloud(successFunc) {
-        console.log("get Feeds from cloud");
+        var url = that.BASE_URL + "/subscriptions";
+        var data = {
+            Authorization: "OAuth " + that.accessToken
+//            client_id: that.client_id,
+//            client_secret: that.client_secret,
+//            redirect_uri: that.redirect_uri,
+//            grant_type: "authorization_code"
+        };
+
+        $.ajax({type: "POST", url: url,
+            // data:data,
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", "OAuth " + that.accessToken);
+            },
+            header: data})
+            .success(function (response) {
+//            that.userId = response.id;
+//            that.refreshToken = response.refresh_token;
+//            that.accessToken = response.access_token;
+//            that.expiresIn = response.expires_in;
+//
+//            that.feedsModel.setAccessToken(that.accessToken);
+                successFunc();
+            }).error(function (e) {
+                console.log("got error");
+            });
     }
 
     function retrieveAccessToken(successFunc) {
-
         var url = that.BASE_URL + "/auth/token";
         var data = {
             code: that.ssoAuthorizationCode,
