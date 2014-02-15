@@ -55,25 +55,14 @@ Feedly.prototype.synchronizeFeeds = function (success, error) {
         var url = that.BASE_URL + "/subscriptions";
         var data = {
             Authorization: "OAuth " + that.accessToken
-//            client_id: that.client_id,
-//            client_secret: that.client_secret,
-//            redirect_uri: that.redirect_uri,
-//            grant_type: "authorization_code"
         };
 
-        $.ajax({type: "POST", url: url,
-            // data:data,
-            beforeSend: function (request) {
-                request.setRequestHeader("Authorization", "OAuth " + that.accessToken);
-            },
-            header: data})
+        $.ajax({type: "GET",
+            url: url,
+            headers: {"Authorization": that.accessToken}
+        })
             .success(function (response) {
-//            that.userId = response.id;
-//            that.refreshToken = response.refresh_token;
-//            that.accessToken = response.access_token;
-//            that.expiresIn = response.expires_in;
-//
-//            that.feedsModel.setAccessToken(that.accessToken);
+                console.dir(response);
                 successFunc();
             }).error(function (e) {
                 console.log("got error");
