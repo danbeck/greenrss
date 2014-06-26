@@ -20,6 +20,16 @@ if (!Function.prototype.bind) {
   };
 }
 
+
+// Is there a current implementation of IndexedDB?
+var requireShim = typeof window.IDBVersionChangeEvent === 'undefined';
+
+// Is WebSQL available?
+var supportsWebSql = typeof window.openDatabase !== 'undefined';
+if (requireShim && supportsWebSql) {
+  window.shimIndexedDB.__useShim(); // Use the Polyfills
+}
+
 function getHttpRequest(url, success, failure, headerAttributes) {
   var request = new XMLHttpRequest();
   request.open("GET", url, true);
