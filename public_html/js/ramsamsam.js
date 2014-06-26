@@ -8,6 +8,8 @@ if (cordovaUsed()) {
 }
 
 var gui;
+
+
 var localStorageService = new LocalStorageService(null, "0.2");
 var theOldReaderlocalStorageService = new LocalStorageService(null, "0.2");
 var theOldReader = new TheOldReader();
@@ -60,6 +62,34 @@ function onDeviceReady() {
   configuration = loadConfigurationOrCreateDefault();
 
   gui = new Gui(configuration);
+
+  if (!window.indexedDB) {
+    showWarning("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+  }
+
+  var worker;
+  var theOldReader;
+
+
+//  if (cordovaUsed()) {
+  worker = new Worker('js/feeddownloader.js');
+//  }
+//  else {
+//    theOldReader = new TheOldReaderWebWorker();
+//  }
+
+  worker.addEventListener('message', function(e) {
+    console.log('Worker said: ', e.data);
+  }, false);
+
+
+  syncDataWithOldReader(worker, configuration);
+
+  if (!localStorageService.isVersionCompatible()) {
+    gui.showUpgradeWarning();
+    localStorageService.clearLocalStorage();
+    localStorageService.saveVersion();
+  }
 
   gui.onConfigurationChanged = function(newConfiguration) {
     configuration = newConfiguration;
@@ -137,13 +167,20 @@ function onDeviceReady() {
 //    gui.configSaved = function() {
 //    };
 
-//  if (configuration.theOldReader.useTheOldReader === true) {
-//    getSubscriptionsForTheOldReader();
-//    retrieveSubscriptionsForTheOldReader();
-//    oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
-//  }
+  if (configuration.theOldReader.useTheOldReader === true) {
+    getSubscriptionsForTheOldReader();
+    retrieveSubscriptionsForTheOldReader();
+    oldReaderSynchronizationActive = setInterval(retrieveSubscriptionsForTheOldReader, 60000);
+  }
 }
 
+function syncDataWithOldReader(webworker, configuration) {
+  var command = {command: "sync", conf: configuration};
+  webworker.postMessage(command);
+  webworker.addEventListener('message', function(e) {
+    console.log('Worker said: ', e.data);
+  }, false);
+}
 function retrieveSubscriptionsForTheOldReader() {
   var username = configuration.theOldReader.username;
   var password = configuration.theOldReader.password;

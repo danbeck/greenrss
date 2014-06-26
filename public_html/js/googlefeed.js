@@ -114,7 +114,7 @@ GoogleFeed.prototype.__asSubscriptionValue = function(googleFeed) {
     var subscriptionid = encodeURI(googleFeed.feedUrl);
 
     var subscriptionObject = {
-        syncid: subscriptionid,
+        id: subscriptionid,
         url: googleFeed.feedUrl,
         wwwurl: googleFeed.link,
         title: googleFeed.title,

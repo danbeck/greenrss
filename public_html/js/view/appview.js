@@ -1,5 +1,5 @@
-function AppView(feedsmodel, hrefUrl) {
-    this.feedsmodel = feedsmodel;
+function AppView(presentationModel, hrefUrl) {
+    this.presentationModel = presentationModel;
     this.hrefUrl = hrefUrl;
     makeDialogBackgroundTransparent();
 
@@ -16,15 +16,15 @@ function AppView(feedsmodel, hrefUrl) {
 
 
 AppView.prototype.registerListeners = function () {
-//    this.registerModelChangeListeners();
+    this.registerModelChangeListeners();
     this.registerGuiEventListeners();
 };
 
-//AppView.prototype.registerModelChangeListeners = function () {
-//    this.presentationModel.registerLoggedInListener(function () {
-//        console.log("loggedIn");
-//    });
-//};
+AppView.prototype.registerModelChangeListeners = function () {
+    this.presentationModel.registerLoggedInListener(function () {
+        console.log("loggedIn");
+    });
+};
 
 
 AppView.prototype.registerGuiEventListeners = function () {
@@ -38,7 +38,7 @@ AppView.prototype.registerGuiEventListeners = function () {
 
     function registerAddFeedHandler() {
         $("#addButton").click(function () {
-            that.feedsmodel.saveTestFeed(function () {
+            that.presentationModel.saveTestFeed(function () {
                 alert("saving done");
             });
         });
@@ -46,7 +46,7 @@ AppView.prototype.registerGuiEventListeners = function () {
 
     function registerFeedlyButtonClickHandler() {
         $("a[data-ui=feedlyLoginButton]").click(function () {
-            var url = that.feedsmodel.ssoLoginURL();
+            var url = that.presentationModel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
         });
     }
@@ -54,15 +54,15 @@ AppView.prototype.registerGuiEventListeners = function () {
 
 
 AppView.prototype.showInitialPage = function () {
-    var code = this.feedsmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
-    this.feedsmodel.synchronizeFeeds();
+    var code = this.presentationModel.extractSSOAuthorizationFromURL(this.hrefUrl);
+    this.presentationModel.synchronizeFeeds();
 
     if (code)
         return;
 
     var url = undefined;
 
-    if (!this.feedsmodel.syncServiceConfigured()) {
+    if (this.presentationModel.firstStepsPageMustBeShown()) {
         url = "#firstStepPage";
     }
 
