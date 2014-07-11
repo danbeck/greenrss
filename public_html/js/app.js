@@ -13,6 +13,7 @@ $(document).ready(function () {
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage();
+    appView.start();
 
 //    presentationModel.loadFromStorage();
 

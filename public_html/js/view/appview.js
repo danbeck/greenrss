@@ -4,46 +4,46 @@ function AppView(feedsmodel, hrefUrl) {
     makeDialogBackgroundTransparent();
 
     function makeDialogBackgroundTransparent() {
-        $('div[data-role="dialog"]').on('pagebeforeshow', function (e, ui) {
+        $('div[data-role="dialog"]').on('pagebeforeshow', function(e, ui) {
             ui.prevPage.addClass("ui-dialog-background ");
         });
 
-        $('div[data-role="dialog"]').on('pagehide', function () {
+        $('div[data-role="dialog"]').on('pagehide', function() {
             $(".ui-dialog-background ").removeClass("ui-dialog-background ");
         });
     }
 }
 
 
-AppView.prototype.registerListeners = function () {
+AppView.prototype.registerListeners = function() {
     this.registerModelChangeListeners();
     this.registerGuiEventListeners();
 };
 
-AppView.prototype.registerModelChangeListeners = function () {
-        console.log("registermodelchangelisteners");
+AppView.prototype.registerModelChangeListeners = function() {
+    console.log("registermodelchangelisteners");
 };
 
 
-AppView.prototype.registerGuiEventListeners = function () {
+AppView.prototype.registerGuiEventListeners = function() {
     var that = this;
 
     registerAddFeedHandler();
     registerFeedlyButtonClickHandler();
-  //  $("#textIndexedDB").click(function () {
-   //     that.presentationModel.saveSSOAuthorizationCode();
-   // });
+    //  $("#textIndexedDB").click(function () {
+    //     that.presentationModel.saveSSOAuthorizationCode();
+    // });
 
     function registerAddFeedHandler() {
-        $("#addButton").click(function () {
-            that.feedsmodel.saveTestFeed(function () {
+        $("#addButton").click(function() {
+            that.feedsmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
                 alert("saving done");
             });
         });
     }
 
     function registerFeedlyButtonClickHandler() {
-        $("a[data-ui=feedlyLoginButton]").click(function () {
+        $("a[data-ui=feedlyLoginButton]").click(function() {
             var url = that.feedsmodel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
         });
@@ -51,21 +51,20 @@ AppView.prototype.registerGuiEventListeners = function () {
 };
 
 
-AppView.prototype.showInitialPage = function () {
+AppView.prototype.showInitialPage = function() {
     var code = this.feedsmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
-    this.feedsmodel.synchronizeFeeds();
 
     if (code)
         return;
 
-    var url = undefined;
-
     if (!this.feedsmodel.syncServiceConfigured()) {
-        url = "#firstStepPage";
+        $.mobile.changePage("#firstStepPage");
     }
-
-    if (url)
-        $.mobile.changePage(url);
-
 };
 
+
+
+AppView.prototype.start = function() {
+    console.log("start GUI");
+    this.model.synchronizeFeeds();
+};
