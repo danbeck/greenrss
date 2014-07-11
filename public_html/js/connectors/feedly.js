@@ -2,10 +2,10 @@ function Feedly(feedsModel) {
 //    this.BASE_URL = "http://cloud.feedly.com/v3/";
     this.feedsModel = feedsModel;
     this.HOST_URL = "http://sandbox.feedly.com";
-    this.redirect_uri = "http://localhost:8080";
+    this.redirect_uri = "http://localhost";
     this.BASE_URL = this.HOST_URL + "/v3";
-    this.client_id = "sandbox187";
-    this.client_secret = "YACE8Q0VK79N7AKH5FWXFLUD";
+    this.client_id = "sandbox";
+    this.client_secret = "ES3R6KCEG46BW9MYD332";
     this.userId = undefined;
     this.ssoAuthorizationCode = undefined;
     this.accessToken = undefined;
@@ -17,8 +17,8 @@ function Feedly(feedsModel) {
 Feedly.prototype.ssoLoginURL = function () {
     return this.BASE_URL + "/auth/auth?" +
         "response_type=code&" +
-        "client_id=sandbox187&" +
-        "redirect_uri=http%3A%2F%2Flocalhost%3A8080&"
+        "client_id=" + this.client_id + "&" +
+        "redirect_uri=" + this.redirect_uri +"&"
         + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
 };
 

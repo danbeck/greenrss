@@ -8,19 +8,18 @@ $(document).ready(function () {
     //----------------------------------
     var indexedDBService = new IndexeddbService();
     var feedsModel = new FeedsModel(indexedDBService);
-    var presentationModel = new PresentationModel(feedsModel);
-
-    var appView = new AppView(presentationModel, window.location.href);
+    
+    var appView = new AppView(feedsModel, window.location.href);
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage();
 
-    presentationModel.loadFromStorage();
+//    presentationModel.loadFromStorage();
 
     $("#testDatabase").click(function () {
         console.log("here we go!");
         indexedDBService.saveSSOAuthorizationCode("mycode", function () {
-                console.log("saved it")
+                console.log("saved it");
             },
             function () {
                 console.log("could not save it");
