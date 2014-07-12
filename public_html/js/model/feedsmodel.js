@@ -78,13 +78,24 @@ FeedsModel.prototype.authenticateWithCloud = function(success) {
 };
 
 
-FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url) {
+FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(url)) {
         this.code = url.match(regex)[1];
-        this.cloudService.setSSOAuthorization(this.code);
+        
+        var indexOfNewParameter = this.code.indexOf("&");
+        if (indexOfNewParameter !== -1) {
+            this.code = this.code.substring(0,indexOfNewParameter);
+        }
+        
         return this.code;
+//        this.cloudService.setSSOAuthorization(success);
+//        return this.code;
     }
+};
+
+FeedsModel.prototype.retrieveAccesToken = function(code, success) {
+        this.cloudService.retrieveAccessToken(code, success);
 };
 
 

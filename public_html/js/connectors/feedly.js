@@ -1,5 +1,4 @@
 function Feedly(feedsModel) {
-//    this.BASE_URL = "http://cloud.feedly.com/v3/";
     this.feedsModel = feedsModel;
     this.HOST_URL = "http://sandbox.feedly.com";
     this.redirect_uri = "http://localhost";
@@ -22,28 +21,105 @@ Feedly.prototype.ssoLoginURL = function() {
             + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
 };
 
-Feedly.prototype.setSSOAuthorization = function(code) {
+Feedly.prototype.setSSOAuthorization = function(code, success) {
+    var that = this;
+
     this.ssoAuthorizationCode = code;
+    retrieveAccessToken(success);
+
+    function retrieveAccessToken(successFunc) {
+        var url = that.BASE_URL + "/auth/token";
+        var data = {
+            code: that.ssoAuthorizationCode,
+            client_id: that.client_id,
+            client_secret: that.client_secret,
+            redirect_uri: that.redirect_uri,
+            grant_type: "authorization_code"
+        };
+
+        console.dir("POST:" + url);
+        console.dir(data);
+
+        $.post(url, data).success(function(response) {
+            console.dir(response);
+            that.userId = response.id;
+            that.refreshToken = response.refresh_token;
+            that.accessToken = response.access_token;
+            that.expiresIn = response.expires_in;
+
+            that.feedsModel.setAccessToken(that.accessToken);
+            successFunc();
+        });
+    }
 };
 
 
 Feedly.prototype.subscribeFeed = function(url, success) {
     var that = this;
     executePostRequest();
-    
+
     function executePostRequest() {
-        var feedlySubscriptionUrl = that.BASE_URL + "/subscriptions";
+//        var feedlySubscriptionUrl = that.BASE_URL + "/subscriptions";
+//        var data = {
+//        };
+//
+//        $.post(feedlySubscriptionUrl, data).success(function(response) {
+//            success();
+//        });
+
+
+        var feedlyPostUrl = that.BASE_URL + "/subscriptions";
         var data = {
-            id: "feed/§" + url
+            id: "feed/" + url
+//            Authorization: "OAuth " + that.accessToken
         };
 
-        $.post(feedlySubscriptionUrl, data).success(function(response) {
-            success();
+        console.dir(data);
+        $.ajax({type: "PUT",
+            url: feedlyPostUrl,
+            headers: {
+//                testa:"danieol", 
+                Authorization: "OAuth " +
+                        that.accessToken},
+            contentType: "application/json",
+            data: data,
+            dataType: "json"
+        }).success(function(response) {
+            console.dir(response);
+            successFunc();
+        }).error(function(e) {
+            console.log("got error");
         });
     }
 };
 
 
+Feedly.prototype.retrieveAccessToken = function(success, error) {
+    var that = this;
+    
+    var url = that.BASE_URL + "/auth/token";
+    var data = {
+        code: that.ssoAuthorizationCode,
+        client_id: that.client_id,
+        client_secret: that.client_secret,
+        redirect_uri: that.redirect_uri,
+        grant_type: "authorization_code"
+    };
+
+    console.dir("POST:" + url);
+    console.dir(data);
+
+    $.post(url, data).success(function(response) {
+        console.dir(response);
+        that.userId = response.id;
+        that.refreshToken = response.refresh_token;
+        that.accessToken = response.access_token;
+        that.expiresIn = response.expires_in;
+
+        that.feedsModel.setAccessToken(that.accessToken);
+        success();
+    });
+};
 
 
 
@@ -77,7 +153,8 @@ Feedly.prototype.synchronizeFeeds = function(success, error) {
             Authorization: "OAuth " + that.accessToken
         };
 
-        $.ajax({type: "GET",
+        console.dir(data);
+        $.ajax({type: "PUT",
             url: url,
             headers: {"Authorization": that.accessToken}
         }).success(function(response) {
@@ -98,7 +175,11 @@ Feedly.prototype.synchronizeFeeds = function(success, error) {
             grant_type: "authorization_code"
         };
 
+        console.dir("POST:" + url);
+        console.dir(data);
+
         $.post(url, data).success(function(response) {
+            console.dir(response);
             that.userId = response.id;
             that.refreshToken = response.refresh_token;
             that.accessToken = response.access_token;
