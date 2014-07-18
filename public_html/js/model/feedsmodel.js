@@ -94,7 +94,7 @@ FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
     }
 };
 
-FeedsModel.prototype.retrieveAccesToken = function(code, success) {
+FeedsModel.prototype.retrieveAccessToken = function(code, success) {
         this.cloudService.retrieveAccessToken(code, success);
 };
 

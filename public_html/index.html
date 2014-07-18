@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <!--<html manifest="cache.manifest">-->
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
     <title>RamSamSam Reader</title>
-    <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.0.min.css"/>
+    <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.3.min.css"/>
+    <link rel="stylesheet" href="lib/jquery/jquery.mobile.icons-1.4.3.min.css"/>
     <link rel="stylesheet" href="css/themes/ramsamsamtheme.css"/>
-    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css"/>
     <link rel="stylesheet" href="css/ramsamsam.css"/>
+    <link rel="resource" type="application/l10n" href="locales/locales.ini" />
     <!--<link rel="stylesheet" href="css/app.css" />-->
     <script src="js/IndexedDBShim.js"></script>
-    <script src="lib/jquery/jquery-2.0.3.min.js"></script>
+    <script src="lib/jquery/jquery-2.1.1.min.js"></script>
     <script src="lib/jquery/jquery-ui-1.10.3.js"></script>
-    <script>$(document).bind('mobileinit', function () {
+    <script>$(document).bind('mobileinit', function() {
         // wird für CORS request benötigt.
         $.mobile.allowCrossDomainPages = true;
         $.mobile.page.prototype.options.theme = "a";
-    });
+      });
     </script>
 
-    <script src="lib/jquery/jquery.mobile-1.4.0.min.js"></script>
-    <script src="lib/jquery/jquery.ui.touch-punch.min.js"></script>
+    <script src="lib/jquery/jquery.mobile-1.4.3.min.js"></script>
+    <!--<script src="lib/jquery/jquery.ui.touch-punch.min.js"></script>-->
     <script src="lib/jquery/jquery.indexeddb.js"></script>
+    <script src="lib/l10n.js"></script>
     <!--<script src="js/util.js"></script>-->
     <script src="js/model/changelisteners.js"></script>
     <script src="js/model/user.js"></script>
@@ -38,112 +40,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- JQuery mobile import -->
-</head>
-<body>
+  </head>
+  <body>
 
-<div data-role="page" id="mainPage" data-add-back-btn="true">
-    <header data-position="fixed" data-role="header" data-id="mainHeader">
+    <div data-role="page" id="mainPage" data-add-back-btn="true">
+      <header data-position="fixed" data-role="header" data-id="mainHeader">
         <a href="#configurationPage" data-icon="gear" data-iconpos="notext">Konfiguration</a>
 
         <h1>RamSamSam Reader</h1>
         <a href="#neuesElementHinzufuegenPopupAlle" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer
-            Eintrag</a>
-    </header>
+          Eintrag</a>
+      </header>
 
-    <div data-role="content">
+      <div data-role="content">
         <input type="text" id="eintragEingebenFeld"/>
         <a id="textIndexedDB" data-role="button">Test IndexedDB</a>
         <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
         </fieldset>
-    </div>
-    <div data-role="popup" id="elementLoeschenPopup"
-         style="padding: 10px 20px;">
+      </div>
+      <div data-role="popup" id="elementLoeschenPopup"
+           style="padding: 10px 20px;">
         <p>Wollen Sie dieses Element wirklich löschen?</p>
         <h4 id="löscheintrag"></h4>
         <a href="" data-role="button"
            data-inline="true" data-rel="back">Abbrechen</a>
         <a id="loescheElementButton" data-role="button"
            data-inline="true" data-rel="back">Löschen</a>
-    </div>
-    <ul data-role="listview" id="listViewHandy">
+      </div>
+      <ul data-role="listview" id="listViewHandy">
         <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
             - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
+              "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
+              umweltschonend. Denn er ist es nicht.</span></a></li>
 
         <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
             - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
+              "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
+              umweltschonend. Denn er ist es nicht.</span></a></li>
 
         <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
             - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
+              "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
+              umweltschonend. Denn er ist es nicht.</span></a></li>
 
         <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
             - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen
-                            "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
-                            umweltschonend. Denn er ist es nicht.</span></a></li>
-    </ul>
+              "Acura" beschreibt. Folgendes darüber lässt sich *nicht* berichten: es ist 
+              umweltschonend. Denn er ist es nicht.</span></a></li>
+      </ul>
 
-    <footer data-role="footer">
+      <footer data-role="footer">
         <a href="" id="addButton" data-role="button">Add Feed</a>
-    </footer>
-</div>
+      </footer>
+    </div>
 
 
-<div data-role="page" id="firstStepPage" data-theme="a" data-add-back-btn="true">
+    <div data-role="page" id="firstStepPage" data-theme="a" data-add-back-btn="true">
 
-    <div data-role="content">
+      <div data-role="content">
 
         <h1>RamSamSam reader</h1>
 
         <p>Vielen dank, dass Sie sich für RamSamSam Reader entschieden haben. Zuerst müssen
-            Sie noch einen RSS-Dienst auswählen, um Ihre Feeds zu synchronisieren.</p>
+          Sie noch einen RSS-Dienst auswählen, um Ihre Feeds zu synchronisieren.</p>
 
         <div data-role="content">
-            <!--<h2>Wählen Sie einen Dienst aus</h2>-->
+          <!--<h2>Wählen Sie einen Dienst aus</h2>-->
 
-            <ul data-role="listview">
-                <li><a href="#feedlyLoginDialog" data-rel="dialog">Feedly cloud<br>Der bekannteste Anbieter</a></li>
-                <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative
-                    Anbieter</a></li>
-                <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal speichern</a></li>
-            </ul>
+          <ul data-role="listview">
+            <li><a href="#feedlyLoginDialog" data-rel="dialog">Feedly cloud<br>Der bekannteste Anbieter</a></li>
+            <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative
+                Anbieter</a></li>
+            <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal speichern</a></li>
+          </ul>
         </div>
 
         <a data-role="button" id="testDatabase">Test Database</a>
 
+      </div>
+
     </div>
 
-</div>
 
-
-<div data-role="dialog" id="feedlyLoginDialog">
-    <div data-role="content">
+    <div data-role="dialog" id="feedlyLoginDialog">
+      <div data-role="content">
         <h1>Feedly Cloud</h1>
 
         <p>Feedly ist der bekannteste Feed Anbieter. Die Anmeldung geschieht über das
-            Google-Login Verfahren.</p>
+          Google-Login Verfahren.</p>
         <a data-role="button" href="#" data-ui="feedlyLoginButton">Anmelden</a>
+      </div>
     </div>
-</div>
 
-<div data-role="dialog" id="theOldReaderLoginDialog">
-    <div data-role="content">
+    <div data-role="dialog" id="theOldReaderLoginDialog">
+      <div data-role="content">
         <h1>TheOldReader</h1>
 
         <p>TheOldReader ist einer alternativer RSS Anbieter. Legen Sie auf der
-            Einstellungsseite von TheOldReader einpassword fest, um sich anzumelden.
+          Einstellungsseite von TheOldReader einpassword fest, um sich anzumelden.
         </p>
         <input type="email" placeholder="E-Mail">
         <input type="password" placeholder="Passwort">
         <label for="hidePassword">Passwort versteckt eingeben</label>
         <input type="checkbox" id="hidePassword">
         <a href="#" data-role="button">Anmelden</a>
+      </div>
     </div>
-</div>
 
-</body>
+  </body>
 </html>

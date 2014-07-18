@@ -54,8 +54,8 @@ AppView.prototype.registerGuiEventListeners = function() {
 AppView.prototype.showInitialPage = function() {
     var code = this.feedsmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
 
-//    if (code)
-//        return;
+    if (code === undefined)
+        return;
 
     this.feedsmodel.retrieveAccessToken(code, function() {
         if (!this.feedsmodel.syncServiceConfigured()) {
@@ -69,5 +69,5 @@ AppView.prototype.showInitialPage = function() {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    this.model.synchronizeFeeds();
+    this.feedsmodel.synchronizeFeeds();
 };
