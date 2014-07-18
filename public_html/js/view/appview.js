@@ -71,5 +71,10 @@ AppView.prototype.showInitialPage = function() {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-//    this.feedsmodel.synchronizeFeeds();
+    this.feedsmodel.retrieveFeeds(function() {
+        console.log("feed were retrieved successfully");
+    }, function() {
+        console.log("error while retrieving feeds");
+    }
+    );
 };

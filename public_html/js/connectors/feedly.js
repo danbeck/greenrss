@@ -124,74 +124,54 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
 };
 
 
+Feedly.prototype.retrieveStream = function(streamid, success, error) {
+    var that = this;
+    var url = that.BASE_URL + "/streams/contents?streamId=" + streamid;
 
-Feedly.prototype.synchronizeFeeds = function(success, error) {
+    $.ajax({type: "GET",
+        url: url,
+        headers: {
+            Authorization: "OAuth " +
+                    that.accessToken}
+    }).success(function(stream) {
+        console.dir(stream);
+        success();
+    }).error(function(e) {
+        console.log("got error");
+        error();
+    });
+};
+
+Feedly.prototype.retrieveSubscriptions = function(success, error) {
     var that = this;
 
-    if (!this.accessToken && !this.ssoAuthorizationCode) {
-        error("No accessToken and no ssoAuthorization Code");
-    }
-    else if (!this.accessToken && this.ssoAuthorizationCode)
-        retrieveAccessToken(function() {
-            console.log("got access token " + that.accessToken);
-            console.log("got refresh token " + that.refreshToken);
-            console.log("expires in " + that.expiresIn);
-            getFeedsFromCloud(function() {
-                success();
-            });
-//            that.loggedInListeners.notifyChangeListeners();
-        });
-
-    else if (this.accessToken) {
-        getFeedsFromCloud(function() {
-            success();
-        });
-
-    }
-
-    function getFeedsFromCloud(successFunc) {
+    getFeedsFromCloud(success, error);
+    function getFeedsFromCloud(successFunc, error) {
         var url = that.BASE_URL + "/subscriptions";
         var data = {
             Authorization: "OAuth " + that.accessToken
         };
 
         console.dir(data);
-        $.ajax({type: "PUT",
+        $.ajax({type: "GET",
             url: url,
-            headers: {"Authorization": that.accessToken}
-        }).success(function(response) {
-            console.dir(response);
+            headers: {
+                Authorization: "OAuth " +
+                        that.accessToken}
+        }).success(function(subscriptions) {
+            console.dir(subscriptions);
+            subscriptions.forEach(function(entry) {
+                that.retrieveStream(entry.id, function() {
+                    console.log("retrieved Feed");
+                }, function() {
+                    console.log("error");
+                });
+            });
+//            that.retrieveStream();
             successFunc();
         }).error(function(e) {
             console.log("got error");
-        });
-    }
-
-    function retrieveAccessToken(successFunc) {
-        var url = that.BASE_URL + "/auth/token";
-        var data = {
-            code: that.ssoAuthorizationCode,
-            client_id: that.client_id,
-            client_secret: that.client_secret,
-            redirect_uri: that.redirect_uri,
-            grant_type: "authorization_code"
-        };
-
-        console.dir("POST:" + url);
-        console.dir(data);
-
-        $.post(url, data).success(function(response) {
-            console.dir(response);
-            that.userId = response.id;
-            that.accessToken = response.access_token;
-            that.refreshToken = response.refresh_token;
-            that.expiresIn = response.expires_in;
-
-            localStorage.setItem("feedly.accesstoken", that.accessToken);
-            localStorage.setItem("feedly.refreshtoken", that.refreshToken);
-            localStorage.setItem("feedly.expiresin", that.expiresIn);
-//            that.feedsModel.setAccessToken(that.accessToken);
-            successFunc();
+            error();
         });
     }
 };

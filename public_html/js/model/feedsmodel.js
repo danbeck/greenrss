@@ -49,7 +49,7 @@ FeedsModel.prototype.saveSSOAuthorizationCode = function() {
 
 
 FeedsModel.prototype.syncServiceConfigured = function() {
-    return this.cloudService.syncServiceConfigured();  
+    return this.cloudService.syncServiceConfigured();
 };
 
 FeedsModel.prototype.loadFromDatabase = function() {
@@ -82,12 +82,12 @@ FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(url)) {
         this.code = url.match(regex)[1];
-        
+
         var indexOfNewParameter = this.code.indexOf("&");
         if (indexOfNewParameter !== -1) {
-            this.code = this.code.substring(0,indexOfNewParameter);
+            this.code = this.code.substring(0, indexOfNewParameter);
         }
-        
+
         return this.code;
 //        this.cloudService.setSSOAuthorization(success);
 //        return this.code;
@@ -95,17 +95,16 @@ FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
 };
 
 FeedsModel.prototype.retrieveAccessToken = function(code, success) {
-        this.cloudService.retrieveAccessToken(code, success);
+    this.cloudService.retrieveAccessToken(code, success);
 };
 
 
-FeedsModel.prototype.synchronizeFeeds = function() {
-    this.cloudService.synchronizeFeeds(saveFeeds, function(error) {
-        console.log("error while synchronizing feeds" + error);
-    });
+FeedsModel.prototype.retrieveFeeds = function(success, error) {
+    this.cloudService.retrieveSubscriptions(saveFeeds, error);
 
     function saveFeeds() {
         console.log("save feeds in indexeddb");
+        success();
     }
 };
 
