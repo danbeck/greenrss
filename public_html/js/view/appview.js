@@ -54,15 +54,17 @@ AppView.prototype.registerGuiEventListeners = function() {
 AppView.prototype.showInitialPage = function() {
     var code = this.feedsmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
 
-    if (code === undefined)
-        return;
-
-    this.feedsmodel.retrieveAccessToken(code, function() {
+    if (code === undefined) {
         if (!this.feedsmodel.syncServiceConfigured()) {
             $.mobile.changePage("#firstStepPage");
-        }
-    });
-
+        } else
+            // show the standard page
+            return;
+    }
+    else
+        this.feedsmodel.retrieveAccessToken(code, function() {
+            console.log("access token retrieved");
+        });
 };
 
 

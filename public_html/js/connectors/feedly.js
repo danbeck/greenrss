@@ -94,12 +94,12 @@ Feedly.prototype.subscribeFeed = function(url, success) {
 };
 
 
-Feedly.prototype.retrieveAccessToken = function(success, error) {
+Feedly.prototype.retrieveAccessToken = function(code, success) {
     var that = this;
     
     var url = that.BASE_URL + "/auth/token";
     var data = {
-        code: that.ssoAuthorizationCode,
+        code: code,
         client_id: that.client_id,
         client_secret: that.client_secret,
         redirect_uri: that.redirect_uri,
