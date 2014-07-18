@@ -93,10 +93,14 @@ Feedly.prototype.subscribeFeed = function(url, success) {
     }
 };
 
-
+Feedly.prototype.syncServiceConfigured = function() {
+    var accessToken = localStorage.getItem("feedly.accesstoken");
+    if (!accessToken)
+        return false;
+};
 Feedly.prototype.retrieveAccessToken = function(code, success) {
     var that = this;
-    
+
     var url = that.BASE_URL + "/auth/token";
     var data = {
         code: code,
@@ -112,11 +116,13 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
     $.post(url, data).success(function(response) {
         console.dir(response);
         that.userId = response.id;
-        that.refreshToken = response.refresh_token;
         that.accessToken = response.access_token;
+        that.refreshToken = response.refresh_token;
         that.expiresIn = response.expires_in;
 
-        that.feedsModel.setAccessToken(that.accessToken);
+        localStorage.setItem("feedly.accesstoken", that.accessToken);
+        localStorage.setItem("feedly.refreshtoken", that.refreshToken);
+        localStorage.setItem("feedly.expiresin", that.expiresIn);
         success();
     });
 };
@@ -181,11 +187,14 @@ Feedly.prototype.synchronizeFeeds = function(success, error) {
         $.post(url, data).success(function(response) {
             console.dir(response);
             that.userId = response.id;
-            that.refreshToken = response.refresh_token;
             that.accessToken = response.access_token;
+            that.refreshToken = response.refresh_token;
             that.expiresIn = response.expires_in;
 
-            that.feedsModel.setAccessToken(that.accessToken);
+            localStorage.setItem("feedly.accesstoken", that.accessToken);
+            localStorage.setItem("feedly.refreshtoken", that.refreshToken);
+            localStorage.setItem("feedly.expiresin", that.expiresIn);
+//            that.feedsModel.setAccessToken(that.accessToken);
             successFunc();
         });
     }

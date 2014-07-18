@@ -49,7 +49,7 @@ FeedsModel.prototype.saveSSOAuthorizationCode = function() {
 
 
 FeedsModel.prototype.syncServiceConfigured = function() {
-    return false;
+    return this.cloudService.syncServiceConfigured();  
 };
 
 FeedsModel.prototype.loadFromDatabase = function() {
