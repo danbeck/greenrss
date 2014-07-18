@@ -59,15 +59,6 @@ Feedly.prototype.subscribeFeed = function(url, success) {
     executePostRequest();
 
     function executePostRequest() {
-//        var feedlySubscriptionUrl = that.BASE_URL + "/subscriptions";
-//        var data = {
-//        };
-//
-//        $.post(feedlySubscriptionUrl, data).success(function(response) {
-//            success();
-//        });
-
-
         var feedlyPostUrl = that.BASE_URL + "/subscriptions";
         var data = {
             id: "feed/" + url
@@ -75,14 +66,14 @@ Feedly.prototype.subscribeFeed = function(url, success) {
         };
 
         console.dir(data);
-        $.ajax({type: "PUT",
+        $.ajax({type: "POST",
             url: feedlyPostUrl,
             headers: {
 //                testa:"danieol", 
                 Authorization: "OAuth " +
                         that.accessToken},
             contentType: "application/json",
-            data: data,
+            data: JSON.stringify(data),
             dataType: "json"
         }).success(function(response) {
             console.dir(response);
@@ -94,10 +85,15 @@ Feedly.prototype.subscribeFeed = function(url, success) {
 };
 
 Feedly.prototype.syncServiceConfigured = function() {
-    var accessToken = localStorage.getItem("feedly.accesstoken");
-    if (!accessToken)
+    this.accessToken = localStorage.getItem("feedly.accesstoken");
+    if (!this.accessToken)
         return false;
+
+    this.refreshToken = localStorage.getItem("feedly.refreshtoken");
+    this.expiresIn = localStorage.getItem("feedly.expiresin");
+    return true;
 };
+
 Feedly.prototype.retrieveAccessToken = function(code, success) {
     var that = this;
 

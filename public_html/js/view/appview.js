@@ -35,7 +35,7 @@ AppView.prototype.registerGuiEventListeners = function() {
     // });
 
     function registerAddFeedHandler() {
-        $("#addButton").click(function() {
+        $("#addFeedButton").click(function() {
             that.feedsmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
                 alert("saving done");
             });
@@ -71,5 +71,5 @@ AppView.prototype.showInitialPage = function() {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    this.feedsmodel.synchronizeFeeds();
+//    this.feedsmodel.synchronizeFeeds();
 };
