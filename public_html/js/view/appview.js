@@ -30,24 +30,34 @@ AppView.prototype.registerGuiEventListeners = function() {
 
     registerAddFeedHandler();
     registerFeedlyButtonClickHandler();
+    registerRefreshFeedsHandler();
     //  $("#textIndexedDB").click(function () {
     //     that.presentationModel.saveSSOAuthorizationCode();
     // });
 
     function registerAddFeedHandler() {
         $("#addFeedButton").click(function() {
-            that.feedsmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
+            that.applicationmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
                 alert("saving done");
             });
         });
     }
 
+    function registerRefreshFeedsHandler() {
+        $("#refreshButton").click(function() {
+            that.applicationmodel.retrieveFeeds();
+        });
+    }
+
     function registerFeedlyButtonClickHandler() {
         $("a[data-ui=feedlyLoginButton]").click(function() {
-            var url = that.feedsmodel.ssoLoginURL();
+            that.applicationmodel.setCloudService("feedly");
+            var url = that.applicationmodel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
         });
     }
+
+
 };
 
 
@@ -64,6 +74,7 @@ AppView.prototype.showInitialPage = function() {
     else
         this.applicationmodel.retrieveAccessToken(code, function() {
             console.log("access token retrieved");
+            localStorage.setItem("cloudService", "feedly");
         });
 };
 

@@ -31,11 +31,31 @@
 function ApplicationModel(indexeddbService) {
     console.log("creating feedsmodel obj");
     this.loggedInListeners = new ChangeListeners();
-    this.cloudService = new Feedly(this);
-    this.feeds = [];
     this.indexeddbService = indexeddbService;
+    this.feedsModel = new FeedsModel(this.indexeddbService);
+    this.cloudService = null;
+    var cloudServiceConf = localStorage.getItem("cloudService");
+    if (cloudServiceConf === "feedly")
+        this.cloudService = new Feedly(this.feedsModel);
+    if (cloudServiceConf === "theoldreader")
+        this.cloudService = new TheOldReader(this.feedsModel);
+    if (cloudServiceConf === "local")
+        this.cloudService = new GoogleFeedService(this.feedsModel);
+
     this.loadFromDatabase();
+//    this.
 }
+ApplicationModel.prototype.setCloudService = function(cloudServiceKey) {
+    if (cloudServiceKey === "feedly")
+        this.cloudService = new Feedly(this.feedsModel);
+    if (cloudServiceKey === "theoldreader")
+        this.cloudService = new TheOldReader(this.feedsModel);
+    if (cloudServiceKey === "local")
+        this.cloudService = new GoogleFeedService(this.feedsModel);
+    localStorage.setItem("cloudService", cloudServiceKey);
+
+};
+
 
 ApplicationModel.prototype.setAccessToken = function(accessToken) {
     this.accessToken = accessToken;
@@ -46,8 +66,9 @@ ApplicationModel.prototype.saveSSOAuthorizationCode = function() {
     this.indexeddbService.saveSSOAuthorizationCode(this.accessToken);
 };
 
-
 ApplicationModel.prototype.syncServiceConfigured = function() {
+    if (!this.cloudService)
+        return false;
     return this.cloudService.syncServiceConfigured();
 };
 
@@ -97,6 +118,9 @@ ApplicationModel.prototype.retrieveAccessToken = function(code, success) {
 
 
 ApplicationModel.prototype.retrieveFeeds = function(success, error) {
+    if (!this.cloudService)
+        return;
+
     this.cloudService.retrieveSubscriptions(saveFeeds, error);
 
     function saveFeeds() {

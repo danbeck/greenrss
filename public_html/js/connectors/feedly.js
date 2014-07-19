@@ -21,37 +21,37 @@ Feedly.prototype.ssoLoginURL = function() {
             + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
 };
 
-Feedly.prototype.setSSOAuthorization = function(code, success) {
-    var that = this;
-
-    this.ssoAuthorizationCode = code;
-    retrieveAccessToken(success);
-
-    function retrieveAccessToken(successFunc) {
-        var url = that.BASE_URL + "/auth/token";
-        var data = {
-            code: that.ssoAuthorizationCode,
-            client_id: that.client_id,
-            client_secret: that.client_secret,
-            redirect_uri: that.redirect_uri,
-            grant_type: "authorization_code"
-        };
-
-        console.dir("POST:" + url);
-        console.dir(data);
-
-        $.post(url, data).success(function(response) {
-            console.dir(response);
-            that.userId = response.id;
-            that.refreshToken = response.refresh_token;
-            that.accessToken = response.access_token;
-            that.expiresIn = response.expires_in;
-
-            that.feedsModel.setAccessToken(that.accessToken);
-            successFunc();
-        });
-    }
-};
+//Feedly.prototype.setSSOAuthorization = function(code, success) {
+//    var that = this;
+//
+//    this.ssoAuthorizationCode = code;
+//    retrieveAccessToken(success);
+//
+//    function retrieveAccessToken(successFunc) {
+//        var url = that.BASE_URL + "/auth/token";
+//        var data = {
+//            code: that.ssoAuthorizationCode,
+//            client_id: that.client_id,
+//            client_secret: that.client_secret,
+//            redirect_uri: that.redirect_uri,
+//            grant_type: "authorization_code"
+//        };
+//
+//        console.dir("POST:" + url);
+//        console.dir(data);
+//
+//        $.post(url, data).success(function(response) {
+//            console.dir(response);
+//            that.userId = response.id;
+//            that.refreshToken = response.refresh_token;
+//            that.accessToken = response.access_token;
+//            that.expiresIn = response.expires_in;
+//
+//            that.feedsModel.setAccessToken(that.accessToken);
+//            successFunc();
+//        });
+//    }
+//};
 
 
 Feedly.prototype.subscribeFeed = function(url, success) {
@@ -123,10 +123,17 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
     });
 };
 
+Feedly.prototype.ssoLoginURL = function() {
+    return this.BASE_URL + "/auth/auth?" +
+            "response_type=code&" +
+            "client_id=" + this.client_id + "&" +
+            "redirect_uri=" + this.redirect_uri + "&"
+            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+};
 
-Feedly.prototype.retrieveStream = function(streamid, success, error) {
+Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
     var that = this;
-    var url = that.BASE_URL + "/streams/contents?streamId=" + streamid;
+    var url = that.BASE_URL + "/streams/contents?streamId=" + subscriptionModel.id;
 
     $.ajax({type: "GET",
         url: url,
@@ -134,6 +141,17 @@ Feedly.prototype.retrieveStream = function(streamid, success, error) {
             Authorization: "OAuth " +
                     that.accessToken}
     }).success(function(stream) {
+        stream.items.forEach(function(el) {
+            var content = null;
+            if (el.content)
+                content = el.content.content;
+            else
+                content = el.summary.content;
+            subscriptionModel.addItem(el.id, el.title, el.updated, el.unread, el.author,
+                    el.origin.htmlUrl, content, content);
+
+        });
+//        this.feedsModel.
         console.dir(stream);
         success(stream);
     }).error(function(e) {
@@ -160,23 +178,17 @@ Feedly.prototype.retrieveSubscriptions = function(success, error) {
                         that.accessToken}
         }).success(function(subscriptions) {
             console.dir(subscriptions);
-            var subscriptionsModelArray = [];
-            subscriptions.forEach(function(entry) {
-                var subscriptionModel = {
-                    id: entry.id,
-                    title: entry.title,
-                    updated: entry.updated,
-                    items: []
-                };
-                subscriptionsModelArray.push(subscriptionModel);
-                that.retrieveStream(entry.id, function() {
+
+            subscriptions.forEach(function(subscription) {
+                var subscriptionModel = that.feedsModel.getOrCreateSubscription(subscription.id, subscription.title);
+                that.retrieveStream(subscriptionModel, function() {
                     console.log("retrieved Feed");
                 }, function() {
                     console.log("error");
                 });
             });
 //            that.retrieveStream();
-            successFunc();
+            successFunc(that.feedsModel);
         }).error(function(e) {
             console.log("got error");
             error();

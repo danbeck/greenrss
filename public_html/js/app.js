@@ -7,9 +7,9 @@ $(document).ready(function () {
 
     //----------------------------------
     var indexedDBService = new IndexeddbService();
-    var feedsModel = new FeedsModel(indexedDBService);
+    var applicationModel = new ApplicationModel(indexedDBService);
     
-    var appView = new AppView(feedsModel, window.location.href);
+    var appView = new AppView(applicationModel, window.location.href);
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage();
