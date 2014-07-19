@@ -135,7 +135,7 @@ Feedly.prototype.retrieveStream = function(streamid, success, error) {
                     that.accessToken}
     }).success(function(stream) {
         console.dir(stream);
-        success();
+        success(stream);
     }).error(function(e) {
         console.log("got error");
         error();
@@ -160,7 +160,15 @@ Feedly.prototype.retrieveSubscriptions = function(success, error) {
                         that.accessToken}
         }).success(function(subscriptions) {
             console.dir(subscriptions);
+            var subscriptionsModelArray = [];
             subscriptions.forEach(function(entry) {
+                var subscriptionModel = {
+                    id: entry.id,
+                    title: entry.title,
+                    updated: entry.updated,
+                    items: []
+                };
+                subscriptionsModelArray.push(subscriptionModel);
                 that.retrieveStream(entry.id, function() {
                     console.log("retrieved Feed");
                 }, function() {

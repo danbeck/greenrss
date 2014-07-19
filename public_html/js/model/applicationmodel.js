@@ -28,57 +28,56 @@
  */
 
 
-function FeedsModel(indexeddbService) {
+function ApplicationModel(indexeddbService) {
     console.log("creating feedsmodel obj");
     this.loggedInListeners = new ChangeListeners();
     this.cloudService = new Feedly(this);
     this.feeds = [];
     this.indexeddbService = indexeddbService;
-    ;
     this.loadFromDatabase();
 }
 
-FeedsModel.prototype.setAccessToken = function(accessToken) {
+ApplicationModel.prototype.setAccessToken = function(accessToken) {
     this.accessToken = accessToken;
     this.saveSSOAuthorizationCode();
 };
 
-FeedsModel.prototype.saveSSOAuthorizationCode = function() {
+ApplicationModel.prototype.saveSSOAuthorizationCode = function() {
     this.indexeddbService.saveSSOAuthorizationCode(this.accessToken);
 };
 
 
-FeedsModel.prototype.syncServiceConfigured = function() {
+ApplicationModel.prototype.syncServiceConfigured = function() {
     return this.cloudService.syncServiceConfigured();
 };
 
-FeedsModel.prototype.loadFromDatabase = function() {
+ApplicationModel.prototype.loadFromDatabase = function() {
     console.log("load FeedModel from database");
     //  this.indexeddbService.loadFeed(this);
 };
 
-FeedsModel.prototype.registerLoggedInListener = function(func) {
+ApplicationModel.prototype.registerLoggedInListener = function(func) {
     this.loggedInListeners.add(func);
 };
 
-FeedsModel.prototype.useFeedlySynchronization = function() {
+ApplicationModel.prototype.useFeedlySynchronization = function() {
     this.cloudService = new Feedly();
 };
-FeedsModel.prototype.useTheOlderReaderSynchronization = function() {
+ApplicationModel.prototype.useTheOlderReaderSynchronization = function() {
     this.cloudService = new TheOldReader();
 };
-FeedsModel.prototype.useTinyTinySynchronization = function() {
+ApplicationModel.prototype.useTinyTinySynchronization = function() {
     this.cloudService = new TinyTiny();
 };
-FeedsModel.prototype.useNoSynchronization = function() {
+ApplicationModel.prototype.useNoSynchronization = function() {
     this.cloudService = new GoogleFeedService();
 };
-FeedsModel.prototype.authenticateWithCloud = function(success) {
+ApplicationModel.prototype.authenticateWithCloud = function(success) {
     this.cloudService.loginUser(success);
 };
 
 
-FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
+ApplicationModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
     var regex = /http:\/\/.*?code=((\w|\-)*)/;
     if (regex.test(url)) {
         this.code = url.match(regex)[1];
@@ -89,17 +88,15 @@ FeedsModel.prototype.extractSSOAuthorizationFromURL = function(url, success) {
         }
 
         return this.code;
-//        this.cloudService.setSSOAuthorization(success);
-//        return this.code;
     }
 };
 
-FeedsModel.prototype.retrieveAccessToken = function(code, success) {
+ApplicationModel.prototype.retrieveAccessToken = function(code, success) {
     this.cloudService.retrieveAccessToken(code, success);
 };
 
 
-FeedsModel.prototype.retrieveFeeds = function(success, error) {
+ApplicationModel.prototype.retrieveFeeds = function(success, error) {
     this.cloudService.retrieveSubscriptions(saveFeeds, error);
 
     function saveFeeds() {
@@ -109,32 +106,11 @@ FeedsModel.prototype.retrieveFeeds = function(success, error) {
 };
 
 
-FeedsModel.prototype.subscribeFeed = function(url, success) {
+ApplicationModel.prototype.subscribeFeed = function(url, success) {
     return this.cloudService.subscribeFeed(url, success);
 };
 
 
-FeedsModel.prototype.ssoLoginURL = function() {
+ApplicationModel.prototype.ssoLoginURL = function() {
     return this.cloudService.ssoLoginURL();
 };
-
-function User() {
-}
-User.prototype.login = function() {
-};
-function Feed(props) {
-    this.id = props.id;
-    this.category = props.category;
-    this.feedUrl = props.feedUrl;
-    this.htmlLink = props.htmlLink;
-    this.title = props.title;
-    this.description = props.description;
-    this.author = props.author;
-    this.entry = props.entries;
-}
-
-function FeedItem() {
-}
-
-function Tag() {
-}

@@ -1,5 +1,5 @@
-function AppView(feedsmodel, hrefUrl) {
-    this.feedsmodel = feedsmodel;
+function AppView(applicationmodel, hrefUrl) {
+    this.applicationmodel = applicationmodel;
     this.hrefUrl = hrefUrl;
     makeDialogBackgroundTransparent();
 
@@ -52,17 +52,17 @@ AppView.prototype.registerGuiEventListeners = function() {
 
 
 AppView.prototype.showInitialPage = function() {
-    var code = this.feedsmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
+    var code = this.applicationmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
 
     if (code === undefined) {
-        if (!this.feedsmodel.syncServiceConfigured()) {
+        if (!this.applicationmodel.syncServiceConfigured()) {
             $.mobile.changePage("#firstStepPage");
         } else
             // show the standard page
             return;
     }
     else
-        this.feedsmodel.retrieveAccessToken(code, function() {
+        this.applicationmodel.retrieveAccessToken(code, function() {
             console.log("access token retrieved");
         });
 };
@@ -71,7 +71,7 @@ AppView.prototype.showInitialPage = function() {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    this.feedsmodel.retrieveFeeds(function() {
+    this.applicationmodel.retrieveFeeds(function() {
         console.log("feed were retrieved successfully");
     }, function() {
         console.log("error while retrieving feeds");
