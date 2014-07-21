@@ -1,8 +1,13 @@
 function FeedsModel(indexeddbService) {
-    this.indexeddbService = indexeddbService;
     this.subscriptions = {};
     this.categories = {};
+    if (indexeddbService !== null)
+        this.indexeddbService = indexeddbService;
+
 }
+FeedsModel.prototype.loadFromDatabase = function(success, error) {
+    this.indexeddbService.loadFeedModel(this, success, error);
+};
 FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate, categories) {
     if (this.subscriptions[id]) {
         return this.subscriptions[id];
@@ -16,6 +21,11 @@ FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate, 
 
 FeedsModel.prototype.addSubscription = function(subscription) {
     this.subscriptions.push(subscription);
+    this.indexeddbService.saveFeedSubscription(subscription, function() {
+        console.log("ok");
+    }, function() {
+        console.log("ERROR");
+    });
     if (subscription.categories) {
         subscription.categories.forEach(function(category) {
             if (!this.categories[category.id]) {

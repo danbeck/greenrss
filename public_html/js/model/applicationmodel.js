@@ -29,10 +29,21 @@
 
 
 function ApplicationModel(indexeddbService) {
+    var that = this;
+    
     console.log("creating feedsmodel obj");
     this.loggedInListeners = new ChangeListeners();
     this.indexeddbService = indexeddbService;
-    this.feedsModel = new FeedsModel(this.indexeddbService);
+    this.indexeddbService.init(function() {
+        that.feedsModel = new FeedsModel(that.indexeddbService);
+        that.feedsModel.loadFromDatabase(function() {
+            console.log("loaded data from db");
+        }, function() {
+            console.log("error");
+        });
+    }, function() {
+        console.log("error");
+    });
     this.cloudService = null;
     var cloudServiceConf = localStorage.getItem("cloudService");
     if (cloudServiceConf === "feedly")
@@ -42,7 +53,6 @@ function ApplicationModel(indexeddbService) {
     if (cloudServiceConf === "local")
         this.cloudService = new GoogleFeedService(this.feedsModel);
 
-    this.loadFromDatabase();
 //    this.
 }
 ApplicationModel.prototype.setCloudService = function(cloudServiceKey) {
