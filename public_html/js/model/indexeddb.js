@@ -8,56 +8,62 @@ function IndexeddbService() {
 
 
 IndexeddbService.prototype.init = function(success, error) {
-    var that = this;
 
-    // Open a connection to the datastore.
-    var request = indexedDB.open('feedsmodel', 1);
-
-    // Handle datastore upgrades.
-    request.onupgradeneeded = function(e) {
-        var db = e.target.result;
-        e.target.transaction.onerror = error;
-
-        db.createObjectStore("subscriptions", {keyPath: "id"});
-        db.createObjectStore("categories", {keyPath: "id"});
-        db.createObjectStore("entries", {keyPath: "id"});
-    };
-
-    // Handle successful datastore access.
-    request.onsuccess = function(e) {
-        // Get a reference to the DB.
-        that.database = e.target.result;
-        success();
-    };
-
-    request.onerror = function(e) {
-        console.log("error");
-        console.dir(e);
-        error(e);
-    };
+    var dbOpenPromise = $.indexedDB("feedsmodel", {
+        "version": 1,
+        "schema": {
+            "1": function(v) {
+                v.createObjectStore("subscriptions", {keyPath: "id"});
+                v.createObjectStore("categories", {keyPath: "id"});
+                v.createObjectStore("items", {keyPath: "id"});
+            }
+//           , "2": function(versionTransaction) {
+//                versionTransaction.createObjectStore("objectStore2");
+//            }
+        }
+    });
+    dbOpenPromise.done(success);
+    dbOpenPromise.fail(error);
 };
 
-
 IndexeddbService.prototype.loadFeedModel = function(feedsmodel, success, error) {
-    var transaction = this.database.transaction(["subscriptions", "categories", "entries"], "readonly");
-    var objectStore = transaction.objectStore("subscriptions");
-    objectStore.openCursor().onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-            var id = cursor.key;
-            var title = cursor.value.title;
-            var updatedDate = cursor.value.updatedDate;
-            var categories = cursor.value.categories;
-            var items = cursor.value.items;
+    var that = this;
+    var transactionPromise = $.indexedDB("feedsmodel").transaction(["subscriptions", "categories", "items"]).then(function(transaction) {
 
-            var subscription = new Subscription(id, title, updatedDate, categories, items);
-            feedsmodel.addSubscription(subscription);
-            cursor.continue();
-        }
-        else {
-            console.log("finished reading indexeddb");
-        }
-    };
+        var iterationPromise = $.indexedDB("feedsmodel").objectStore("subscriptions").each(function(entry) {
+            var id = entry.key;
+            var title = entry.value.title;
+            var updatedDate = entry.value.updatedDate;
+            var categories = entry.value.categories;
+            var items = entry.value.items;
+            var subscription = feedsmodel.createSubscription(id, title, updatedDate);
+            subscription.tmpItemIds = [];
+            for (var cat in categories) {
+                subscription.addCategory(cat.id, cat.title);
+            }
+            for (var item in items) {
+                subscription.tmpItemIds.push(item);
+            }
+        });
+
+        iterationPromise.done(function() {
+            feedsmodel.getSubscriptions().forEach(function(subscription) {
+                subscription.tmpItemIds.forEach(function(itemId) {
+                    var promise = $.indexedDB("feedsmodel").objectStore("items").get(itemId);
+                    promise.done(function(item) {
+                        subscription.addItem(item.id, item.title, item.updatedDate, item.unread, item.author, item.href, item.summary, item.content);
+                    });
+                });
+                delete subscription.tmpItemIds;
+            });
+        });
+
+        console.log("in progress");
+    }, function() {
+        success();
+    }, function(transaction) {
+        console.log("fail");
+    });
 };
 
 
@@ -77,19 +83,33 @@ IndexeddbService.prototype.saveFeedEntry = function(feedentry, success, error) {
 };
 
 IndexeddbService.prototype.saveFeedSubscription = function(subscription, success, error) {
-    var transaction = this.database.transaction(["subscriptions", "entries"], "readwrite");
-    var objectStore = transaction.objectStore("subscriptions");
-//    var objectStore = transaction.objectStore("entries");
+    var feedsmodel = subscription["feedsmodel"];
+    delete subscription["feedsmodel"];
 
-    var request = objectStore.add(subscription);
-    request.onsuccess = function(event) {
-//        subscription.ite
+    $.indexedDB("feedsmodel").objectStore("subscriptions", true).put(subscription).then(subscriptionWritten);
 
-        success();
-    };
-    request.onerror = function(e) {
-        error(e);
-    };
+    subscription["feedsmodel"] = feedsmodel;
+
+    var categories = subscription.getCategories();
+    categories.forEach(function(category) {
+        $.indexedDB("feedsmodel").objectStore("categories", true).put(category).then(categoryWritten);
+    });
+
+    var items = subscription.getItems();
+    items.forEach(function(item) {
+        $.indexedDB("feedsmodel").objectStore("items", true).put(item).then(itemWritten);
+    });
+
+    function categoryWritten() {
+        console.log("category written");
+    }
+    function subscriptionWritten() {
+        console.log("subscription written");
+    }
+    function itemWritten() {
+        console.log("subscription written");
+    }
+
 };
 
 

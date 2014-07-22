@@ -179,14 +179,14 @@ Feedly.prototype.retrieveSubscriptions = function(success, error) {
         }).success(function(subscriptions) {
             console.dir(subscriptions);
 
-            subscriptions.forEach(function(subscription) {
-                var subscriptionModel = that.feedsModel.getOrCreateSubscription(subscription.id, subscription.title);
-                that.retrieveStream(subscriptionModel, function() {
-                    console.log("retrieved Feed");
-                }, function() {
-                    console.log("error");
-                });
-            });
+//            subscriptions.forEach(function(subscription) {
+//                var subscriptionModel = that.feedsModel.getOrCreateSubscription(subscription.id, subscription.title);
+//                that.retrieveStream(subscriptionModel, function() {
+//                    console.log("retrieved Feed");
+//                }, function() {
+//                    console.log("error");
+//                });
+//            });
 //            that.retrieveStream();
             successFunc(that.feedsModel);
         }).error(function(e) {
