@@ -2,8 +2,8 @@ function FeedsModel(indexeddbService) {
     this.subscriptions = {};
     this.categories = {};
     this.items = {};
-    if (indexeddbService !== null)
-        this.indexeddbService = indexeddbService;
+//    if (indexeddbService !== null)
+    this.indexeddbService = indexeddbService;
 
 }
 FeedsModel.prototype.loadFromDatabase = function(success, error) {
@@ -37,11 +37,17 @@ FeedsModel.prototype.loadFromDatabase = function(success, error) {
 //};
 
 
-FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate, categories) {
+FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate) {
     if (this.subscriptions[id])
         return this.subscriptions[id];
     else
-        this.createSubscription(id, title, updatedDate, categories);
+        this.createSubscription(id, title, updatedDate);
+};
+
+FeedsModel.prototype.getSubscription = function(id) {
+    if (this.subscriptions[id])
+        return this.subscriptions[id];
+    return null;
 };
 
 FeedsModel.prototype.createSubscription = function(id, title, updatedDate) {
@@ -50,6 +56,15 @@ FeedsModel.prototype.createSubscription = function(id, title, updatedDate) {
 
     return newSubscription;
 };
+
+FeedsModel.prototype.createAndPersistSubscription = function(id, title, updatedDate, success) {
+    var newSubscription = new Subscription(this, id, title, updatedDate);
+    this.subscriptions[id] = newSubscription;
+
+    newSubscription.persistSubscription();
+    return newSubscription;
+};
+
 
 
 FeedsModel.prototype.getSubscriptions = function() {
@@ -74,6 +89,17 @@ Subscription.prototype.addItem = function(id, title, updatedDate, unread, author
     var newItem = new Item(id, title, updatedDate, unread, author, href, summary, content);
     this.feedsmodel.items[id] = newItem;
     return newItem;
+};
+
+Subscription.prototype.persistSubscription = function() {
+    this.feedsmodel.indexeddbService.saveFeedSubscription(this,
+            function() {
+                console.log("feed saved");
+            },
+            function() {
+                console.log("feed saved");
+            }
+    );
 };
 
 Subscription.prototype.addCategory = function(id, title) {

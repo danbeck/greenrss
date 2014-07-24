@@ -29,30 +29,33 @@
 
 
 function ApplicationModel(indexeddbService) {
+    console.log("Creating ApplicationModel");
     var that = this;
-    
-    console.log("creating feedsmodel obj");
-    this.loggedInListeners = new ChangeListeners();
-    this.indexeddbService = indexeddbService;
-    this.indexeddbService.init(function() {
-        that.feedsModel = new FeedsModel(that.indexeddbService);
+    this.feedsModel = new FeedsModel(indexeddbService);
+
+    this.cloudService = cloudService(this.feedsModel);
+//    this.loggedInListeners = new ChangeListeners();
+
+    indexeddbService.init(function() {
         that.feedsModel.loadFromDatabase(function() {
-            console.log("loaded data from db");
+            that.cloudService.retrieveSubscriptions();
         }, function() {
             console.log("error");
         });
     }, function() {
         console.log("error");
     });
-    this.cloudService = null;
-    var cloudServiceConf = localStorage.getItem("cloudService");
-    if (cloudServiceConf === "feedly")
-        this.cloudService = new Feedly(this.feedsModel);
-    if (cloudServiceConf === "theoldreader")
-        this.cloudService = new TheOldReader(this.feedsModel);
-    if (cloudServiceConf === "local")
-        this.cloudService = new GoogleFeedService(this.feedsModel);
 
+    function cloudService(feedsModel) {
+        var cloudServiceConf = localStorage.getItem("cloudService");
+        if (cloudServiceConf === "feedly")
+            return new Feedly(feedsModel);
+        if (cloudServiceConf === "theoldreader")
+            return new TheOldReader(feedsModel);
+        if (cloudServiceConf === "local")
+            return new GoogleFeedService(feedsModel);
+        return null;
+    }
 //    this.
 }
 ApplicationModel.prototype.setCloudService = function(cloudServiceKey) {
@@ -66,15 +69,6 @@ ApplicationModel.prototype.setCloudService = function(cloudServiceKey) {
 
 };
 
-
-ApplicationModel.prototype.setAccessToken = function(accessToken) {
-    this.accessToken = accessToken;
-    this.saveSSOAuthorizationCode();
-};
-
-ApplicationModel.prototype.saveSSOAuthorizationCode = function() {
-    this.indexeddbService.saveSSOAuthorizationCode(this.accessToken);
-};
 
 ApplicationModel.prototype.syncServiceConfigured = function() {
     if (!this.cloudService)

@@ -160,7 +160,7 @@ Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
     });
 };
 
-Feedly.prototype.retrieveSubscriptions = function(success, error) {
+Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
     var that = this;
 
     getFeedsFromCloud(success, error);
@@ -179,14 +179,16 @@ Feedly.prototype.retrieveSubscriptions = function(success, error) {
         }).success(function(subscriptions) {
             console.dir(subscriptions);
 
-//            subscriptions.forEach(function(subscription) {
-//                var subscriptionModel = that.feedsModel.getOrCreateSubscription(subscription.id, subscription.title);
-//                that.retrieveStream(subscriptionModel, function() {
-//                    console.log("retrieved Feed");
-//                }, function() {
-//                    console.log("error");
-//                });
-//            });
+            subscriptions.forEach(function(subscription) {
+                var subscriptionModel = that.feedsModel.getSubscription(subscription.id);
+                if (!subscriptionModel)
+                    subscriptionModel = that.feedsModel.createSubscription(subscription.id, subscription.title);
+                that.retrieveStream(subscriptionModel, function() {
+                    subscriptionModel.persistSubscription();
+                }, function() {
+                    console.log("error");
+                });
+            });
 //            that.retrieveStream();
             successFunc(that.feedsModel);
         }).error(function(e) {

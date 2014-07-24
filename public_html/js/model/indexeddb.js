@@ -28,9 +28,15 @@ IndexeddbService.prototype.init = function(success, error) {
 
 IndexeddbService.prototype.loadFeedModel = function(feedsmodel, success, error) {
     var that = this;
-    var transactionPromise = $.indexedDB("feedsmodel").transaction(["subscriptions", "categories", "items"]).then(function(transaction) {
+    var transactionPromise = $.indexedDB("feedsmodel").transaction(["subscriptions", "categories", "items"]).then(function() {
+        console.log("done loading feedmodel from indexeddb");
+        success();
+    }, function() {
+        console.log("aborted");
+    }, function(t) {
+        console.log("Loading feedsmodel from indexeddb...");
 
-        var iterationPromise = $.indexedDB("feedsmodel").objectStore("subscriptions").each(function(entry) {
+        var iterationPromise = t.objectStore("subscriptions").each(function(entry) {
             var id = entry.key;
             var title = entry.value.title;
             var updatedDate = entry.value.updatedDate;
@@ -49,7 +55,7 @@ IndexeddbService.prototype.loadFeedModel = function(feedsmodel, success, error) 
         iterationPromise.done(function() {
             feedsmodel.getSubscriptions().forEach(function(subscription) {
                 subscription.tmpItemIds.forEach(function(itemId) {
-                    var promise = $.indexedDB("feedsmodel").objectStore("items").get(itemId);
+                    var promise = t.objectStore("items").get(itemId);
                     promise.done(function(item) {
                         subscription.addItem(item.id, item.title, item.updatedDate, item.unread, item.author, item.href, item.summary, item.content);
                     });
@@ -58,11 +64,7 @@ IndexeddbService.prototype.loadFeedModel = function(feedsmodel, success, error) 
             });
         });
 
-        console.log("in progress");
-    }, function() {
-        success();
-    }, function(transaction) {
-        console.log("fail");
+
     });
 };
 
@@ -83,32 +85,65 @@ IndexeddbService.prototype.saveFeedEntry = function(feedentry, success, error) {
 };
 
 IndexeddbService.prototype.saveFeedSubscription = function(subscription, success, error) {
-    var feedsmodel = subscription["feedsmodel"];
-    delete subscription["feedsmodel"];
 
-    $.indexedDB("feedsmodel").objectStore("subscriptions", true).put(subscription).then(subscriptionWritten);
+    $.indexedDB("feedsmodel").transaction(["subscriptions", "categories", "items"]).then(function(t) {
+        console.log("Saved subscription to indexeddb: " + subscription);
+        success();
+    }, function(t) {
+        console.log("Aborted saving subscription to indexeddb");
+    }, function(t) {
+        console.log("Saving subscription to indexeddb: " + subscription);
+        var subscriptionToSave = {
+            id: subscription.id,
+            title: subscription.title,
+            updateDate: subscription.updateDate,
+            items: subscription.items,
+            categories: subscription.categories
+        };
+        t.objectStore("subscriptions", true).put(subscriptionToSave);
 
-    subscription["feedsmodel"] = feedsmodel;
+        subscription.getCategories().forEach(function(category) {
+            t.objectStore("categories", true).put(category);
+        });
+        subscription.getItems().forEach(function(item) {
+            t.objectStore("items", true).put(item);
+        });
 
-    var categories = subscription.getCategories();
-    categories.forEach(function(category) {
-        $.indexedDB("feedsmodel").objectStore("categories", true).put(category).then(categoryWritten);
+
+//        var feedsmodel = subscription["feedsmodel"];
+//        delete subscription["feedsmodel"];
+
+
+
     });
 
-    var items = subscription.getItems();
-    items.forEach(function(item) {
-        $.indexedDB("feedsmodel").objectStore("items", true).put(item).then(itemWritten);
-    });
 
-    function categoryWritten() {
-        console.log("category written");
-    }
-    function subscriptionWritten() {
-        console.log("subscription written");
-    }
-    function itemWritten() {
-        console.log("subscription written");
-    }
+//    var feedsmodel = subscription["feedsmodel"];
+//    delete subscription["feedsmodel"];
+//
+//
+//
+//    subscription["feedsmodel"] = feedsmodel;
+//
+//    var categories = subscription.getCategories();
+//    categories.forEach(function(category) {
+//        $.indexedDB("feedsmodel").objectStore("categories", true).put(category).then(categoryWritten);
+//    });
+//
+//    var items = subscription.getItems();
+//    items.forEach(function(item) {
+//        $.indexedDB("feedsmodel").objectStore("items", true).put(item).then(itemWritten);
+//    });
+//
+//    function categoryWritten() {
+//        console.log("category written");
+//    }
+//    function subscriptionWritten() {
+//        console.log("subscription written");
+//    }
+//    function itemWritten() {
+//        console.log("subscription written");
+//    }
 
 };
 
