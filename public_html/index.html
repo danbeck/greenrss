@@ -45,30 +45,37 @@
   </head>
   <body>
 
-    <div data-role="page" id="mainPage" data-add-back-btn="true">
+    <div data-role="page" class="ui-responsive-panel" id="mainPage" data-add-back-btn="true">
       <header data-position="fixed" data-role="header" data-id="mainHeader">
-        <a href="#configurationPage" data-icon="gear" data-iconpos="notext">Konfiguration</a>
-
+        <a id="openLeftPanel" data-role="button" data-icon="bars" data-iconpos="notext">Konfiguration</a>
         <h1>RamSamSam Reader</h1>
         <a href="#neuesElementHinzufuegenPopupAlle" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer
           Eintrag</a>
       </header>
 
-      <div data-role="content">
-        <input type="text" id="eintragEingebenFeld"/>
-        <a id="textIndexedDB" data-role="button">Test IndexedDB</a>
-        <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
-        </fieldset>
+      <div data-role="panel" id="leftPanel" data-display="push">
+        <ul data-role="listview" id="categories">
+          <li><a  href="acura.html"><span class="feedTitle">Ubuntu</span></a></li>
+          <li><a><span class="feedTitle">Spiel Online</span></a></li>
+          <li><a><span class="feedTitle">KDE Desktop Environment</span></a></li>
+          <li><a ><span class="feedTitle">Planet Gnome</span></a></li>
+        </ul>
       </div>
-      <div data-role="popup" id="elementLoeschenPopup"
-           style="padding: 10px 20px;">
-        <p>Wollen Sie dieses Element wirklich löschen?</p>
-        <h4 id="löscheintrag"></h4>
-        <a href="" data-role="button"
-           data-inline="true" data-rel="back">Abbrechen</a>
-        <a id="loescheElementButton" data-role="button"
-           data-inline="true" data-rel="back">Löschen</a>
-      </div>
+      <!--      <div data-role="content">
+              <input type="text" id="eintragEingebenFeld"/>
+              <a id="textIndexedDB" data-role="button">Test IndexedDB</a>
+              <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
+              </fieldset>
+            </div>-->
+      <!--      <div data-role="popup" id="elementLoeschenPopup"
+                 style="padding: 10px 20px;">
+              <p>Wollen Sie dieses Element wirklich löschen?</p>
+              <h4 id="löscheintrag"></h4>
+              <a href="" data-role="button"
+                 data-inline="true" data-rel="back">Abbrechen</a>
+              <a id="loescheElementButton" data-role="button"
+                 data-inline="true" data-rel="back">Löschen</a>
+            </div>-->
       <ul data-role="listview" id="listViewHandy">
         <li><a style="height:5.8em; margin-bottom: 8px;" href="acura.html"><span class="feedTitle">Acura, der neue Sprittverbraucher. Vom Hause Audi.</span>
             - <span class="feedDescription">Hier kommt nun ein längerer Text, der den neuen

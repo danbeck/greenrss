@@ -34,6 +34,7 @@ AppView.prototype.registerGuiEventListeners = function() {
     registerAddFeedHandler();
     registerFeedlyButtonClickHandler();
     registerRefreshFeedsHandler();
+    registerOpenLeftPanelHandler();
     //  $("#textIndexedDB").click(function () {
     //     that.presentationModel.saveSSOAuthorizationCode();
     // });
@@ -57,6 +58,13 @@ AppView.prototype.registerGuiEventListeners = function() {
             that.feedsmodel.setCloudService("feedly");
             var url = that.applicationmodel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
+        });
+    }
+
+    function registerOpenLeftPanelHandler() {
+        $("#openLeftPanel").click(function() {
+            console.log("toggling panel");
+            $("#leftPanel").panel("toggle");
         });
     }
 
