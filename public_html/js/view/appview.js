@@ -98,7 +98,7 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    this.feedsmodel.synchronizeFeeds(function() {
+    this.feedsmodel.initAndloadFromDatabase(function() {
         console.log("feed were retrieved successfully");
     }, function() {
         console.log("error while retrieving feeds");

@@ -6,16 +6,6 @@ function FeedsModel(indexeddbService, cloudService) {
 //    if (indexeddbService !== null)
     this.indexeddbService = indexeddbService;
 
-    indexeddbService.init(function() {
-        that.feedsModel.loadFromDatabase(function() {
-            that.cloudService.retrieveSubscriptions();
-        }, function() {
-            console.log("error");
-        });
-    }, function() {
-        console.log("error");
-    });
-
 }
 
 FeedsModel.prototype.initAndloadFromDatabase = function(success, error) {
@@ -23,13 +13,12 @@ FeedsModel.prototype.initAndloadFromDatabase = function(success, error) {
 
     this.indexeddbService.init(function() {
         that.loadFromDatabase(function() {
-            that.cloudService.retrieveSubscriptions();
-        }, function() {
-            console.log("OK");
-        });
-    }, function() {
-        console.log("error");
-    });
+            that.cloudService.retrieveSubscriptions(that, logNothing, logNothing);
+        }, logNothing);
+    }, logNothing);
+    function logNothing() {
+//        cons
+    }
 };
 
 
