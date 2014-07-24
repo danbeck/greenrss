@@ -1,6 +1,5 @@
-function AppView(applicationmodel, hrefUrl) {
-    this.applicationmodel = applicationmodel;
-    this.hrefUrl = hrefUrl;
+function AppView(feedsmodel) {
+    this.feedsmodel = feedsmodel;
     makeDialogBackgroundTransparent();
 
     function makeDialogBackgroundTransparent() {
@@ -37,7 +36,7 @@ AppView.prototype.registerGuiEventListeners = function() {
 
     function registerAddFeedHandler() {
         $("#addFeedButton").click(function() {
-            that.applicationmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
+            that.feedsmodel.subscribeFeed("http://daniel-beck.org/feed/", function() {
                 alert("saving done");
             });
         });
@@ -45,13 +44,13 @@ AppView.prototype.registerGuiEventListeners = function() {
 
     function registerRefreshFeedsHandler() {
         $("#refreshButton").click(function() {
-            that.applicationmodel.retrieveFeeds();
+//            that.applicationmodel.retrieveFeeds();
         });
     }
 
     function registerFeedlyButtonClickHandler() {
         $("a[data-ui=feedlyLoginButton]").click(function() {
-            that.applicationmodel.setCloudService("feedly");
+            that.feedsmodel.setCloudService("feedly");
             var url = that.applicationmodel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
         });
@@ -61,11 +60,11 @@ AppView.prototype.registerGuiEventListeners = function() {
 };
 
 
-AppView.prototype.showInitialPage = function() {
-    var code = this.applicationmodel.extractSSOAuthorizationFromURL(this.hrefUrl);
+AppView.prototype.showInitialPage = function(hrefUrl) {
+    var code = extractSSOAuthorizationFromURL(hrefUrl);
 
     if (code === undefined) {
-        if (!this.applicationmodel.syncServiceConfigured()) {
+        if (!this.feedsmodel.syncServiceConfigured()) {
             $.mobile.changePage("#firstStepPage");
         } else
             // show the standard page
@@ -76,13 +75,30 @@ AppView.prototype.showInitialPage = function() {
             console.log("access token retrieved");
             localStorage.setItem("cloudService", "feedly");
         });
+
+
+    function extractSSOAuthorizationFromURL(url) {
+        var regex = /http:\/\/.*?code=((\w|\-)*)/;
+        if (regex.test(url)) {
+            this.code = url.match(regex)[1];
+
+            var indexOfNewParameter = this.code.indexOf("&");
+            if (indexOfNewParameter !== -1) {
+                this.code = this.code.substring(0, indexOfNewParameter);
+            }
+
+            return this.code;
+        }
+    }
+    ;
+
 };
 
 
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    this.applicationmodel.retrieveFeeds(function() {
+    this.feedsmodel.synchronizeFeeds(function() {
         console.log("feed were retrieved successfully");
     }, function() {
         console.log("error while retrieving feeds");

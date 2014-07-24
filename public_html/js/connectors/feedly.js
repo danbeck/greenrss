@@ -173,16 +173,14 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
         console.dir(data);
         $.ajax({type: "GET",
             url: url,
-            headers: {
-                Authorization: "OAuth " +
-                        that.accessToken}
+            headers: {Authorization: "OAuth " + that.accessToken}
         }).success(function(subscriptions) {
             console.dir(subscriptions);
 
             subscriptions.forEach(function(subscription) {
-                var subscriptionModel = that.feedsModel.getSubscription(subscription.id);
+                var subscriptionModel = feedsmodel.getSubscription(subscription.id);
                 if (!subscriptionModel)
-                    subscriptionModel = that.feedsModel.createSubscription(subscription.id, subscription.title);
+                    subscriptionModel = feedsmodel.createSubscription(subscription.id, subscription.title);
                 that.retrieveStream(subscriptionModel, function() {
                     subscriptionModel.persistSubscription();
                 }, function() {
@@ -190,7 +188,7 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
                 });
             });
 //            that.retrieveStream();
-            successFunc(that.feedsModel);
+            successFunc(feedsmodel);
         }).error(function(e) {
             console.log("got error");
             error();

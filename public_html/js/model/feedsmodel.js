@@ -1,14 +1,78 @@
-function FeedsModel(indexeddbService) {
+function FeedsModel(indexeddbService, cloudService) {
     this.subscriptions = {};
     this.categories = {};
     this.items = {};
+    this.cloudService = cloudService;
 //    if (indexeddbService !== null)
     this.indexeddbService = indexeddbService;
 
+    indexeddbService.init(function() {
+        that.feedsModel.loadFromDatabase(function() {
+            that.cloudService.retrieveSubscriptions();
+        }, function() {
+            console.log("error");
+        });
+    }, function() {
+        console.log("error");
+    });
+
 }
+
+FeedsModel.prototype.initAndloadFromDatabase = function(success, error) {
+    var that = this;
+
+    this.indexeddbService.init(function() {
+        that.loadFromDatabase(function() {
+            that.cloudService.retrieveSubscriptions();
+        }, function() {
+            console.log("OK");
+        });
+    }, function() {
+        console.log("error");
+    });
+};
+
+
 FeedsModel.prototype.loadFromDatabase = function(success, error) {
     this.indexeddbService.loadFeedModel(this, success, error);
 };
+
+
+
+FeedsModel.prototype.syncServiceConfigured = function() {
+    if (!this.cloudService)
+        return false;
+    return this.cloudService.syncServiceConfigured();
+};
+
+FeedsModel.prototype.setCloudService = function(cloudServiceKey) {
+    if (cloudServiceKey === "feedly")
+        this.cloudService = new Feedly(this.feedsModel);
+    if (cloudServiceKey === "theoldreader")
+        this.cloudService = new TheOldReader(this.feedsModel);
+    if (cloudServiceKey === "local")
+        this.cloudService = new GoogleFeedService(this.feedsModel);
+    localStorage.setItem("cloudService", cloudServiceKey);
+
+};
+
+
+
+FeedsModel.prototype.synchronizeFeeds = function(success, error) {
+    this.cloudService.retrieveSubscriptions(this, saveFeeds, error);
+
+    function saveFeeds() {
+        console.log("TODO: save feeds in indexeddb");
+        success();
+    }
+};
+
+
+
+FeedsModel.prototype.subscribeFeed = function(url, success) {
+    return this.cloudService.subscribeFeed(url, success);
+};
+
 //FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate, categories) {
 //    if (this.subscriptions[id]) {
 //        return this.subscriptions[id];

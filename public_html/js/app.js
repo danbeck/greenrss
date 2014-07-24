@@ -7,13 +7,27 @@ $(document).ready(function() {
 
     //----------------------------------
     var indexedDBService = new IndexeddbService();
-    var applicationModel = new ApplicationModel(indexedDBService);
-
-    var appView = new AppView(applicationModel, window.location.href);
+//    var applicationModel = new ApplicationModel(indexedDBService);
+    var cloudService = cloudService();
+    var feedsModel = new FeedsModel(indexedDBService, cloudService);
+    var appView = new AppView(feedsModel);
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
-    appView.showInitialPage();
+    appView.showInitialPage(window.location.href);
     appView.start();
+
+
+    function cloudService() {
+        var cloudServiceConf = localStorage.getItem("cloudService");
+        if (cloudServiceConf === "feedly")
+            return new Feedly(feedsModel);
+        if (cloudServiceConf === "theoldreader")
+            return new TheOldReader(feedsModel);
+        if (cloudServiceConf === "local")
+            return new GoogleFeedService(feedsModel);
+        return null;
+    }
+
 
 //    function useIndexDBPolyfill() {
 //        // Is there a current implementation of IndexedDB?
