@@ -1,14 +1,13 @@
-function ChangeListeners(that){
+function ChangeListeners() {
     this.changeListeners = [];
-    this.that = that;
 }
 
-ChangeListeners.prototype.add = function(changeListener){
+ChangeListeners.prototype.add = function(changeListener) {
     this.changeListeners.push(changeListener);
 };
 
 
-ChangeListeners.prototype.notifyChangeListeners = function() {
+ChangeListeners.prototype.notify = function() {
     this.changeListeners.forEach(function(listener) {
         listener.apply(null);
     });

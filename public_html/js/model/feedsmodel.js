@@ -3,6 +3,7 @@ function FeedsModel(indexeddbService, cloudService) {
     this.categories = {};
     this.items = {};
     this.cloudService = cloudService;
+    this.subscriptionAddedListener = new ChangeListeners();
 //    if (indexeddbService !== null)
     this.indexeddbService = indexeddbService;
 
@@ -19,6 +20,10 @@ FeedsModel.prototype.initAndloadFromDatabase = function(success, error) {
     function logNothing() {
 //        cons
     }
+};
+
+FeedsModel.prototype.registerSubscriptionAddedListener = function(handler) {
+    this.subscriptionAddedListener.add(handler);
 };
 
 
@@ -62,34 +67,6 @@ FeedsModel.prototype.subscribeFeed = function(url, success) {
     return this.cloudService.subscribeFeed(url, success);
 };
 
-//FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate, categories) {
-//    if (this.subscriptions[id]) {
-//        return this.subscriptions[id];
-//    }
-//    else {
-//        var newSubscription = new Subscription(id, title, updatedDate, categories, []);
-//        this.subscriptions[id] = newSubscription;
-//        return newSubscription;
-//    }
-//};
-//
-//FeedsModel.prototype.addSubscription = function(subscription) {
-//    this.subscriptions.push(subscription);
-//    this.indexeddbService.saveFeedSubscription(subscription, function() {
-//        console.log("ok");
-//    }, function() {
-//        console.log("ERROR");
-//    });
-//    if (subscription.categories) {
-//        subscription.categories.forEach(function(category) {
-//            if (!this.categories[category.id]) {
-//                this.categories[category.id] = category;
-//            }
-//        });
-//    }
-//};
-
-
 FeedsModel.prototype.getOrCreateSubscription = function(id, title, updatedDate) {
     if (this.subscriptions[id])
         return this.subscriptions[id];
@@ -106,13 +83,12 @@ FeedsModel.prototype.getSubscription = function(id) {
 FeedsModel.prototype.createSubscription = function(id, title, updatedDate) {
     var newSubscription = new Subscription(this, id, title, updatedDate);
     this.subscriptions[id] = newSubscription;
-
+    this.subscriptionAddedListener.notify(newSubscription);
     return newSubscription;
 };
 
 FeedsModel.prototype.createAndPersistSubscription = function(id, title, updatedDate, success) {
-    var newSubscription = new Subscription(this, id, title, updatedDate);
-    this.subscriptions[id] = newSubscription;
+    var newSubscription = this.createSubscription(id, title, updatedDate);
 
     newSubscription.persistSubscription();
     return newSubscription;

@@ -21,6 +21,10 @@ AppView.prototype.registerListeners = function() {
 
 AppView.prototype.registerModelChangeListeners = function() {
     console.log("registermodelchangelisteners");
+    this.feedsmodel.registerSubscriptionAddedListener(subscriptionAdded);
+
+    function subscriptionAdded() {
+    }
 };
 
 
@@ -90,11 +94,7 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
             return this.code;
         }
     }
-    ;
-
 };
-
-
 
 AppView.prototype.start = function() {
     console.log("start GUI");
