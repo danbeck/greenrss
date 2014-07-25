@@ -7,8 +7,8 @@ ChangeListeners.prototype.add = function(changeListener) {
 };
 
 
-ChangeListeners.prototype.notify = function() {
+ChangeListeners.prototype.notify = function(object) {
     this.changeListeners.forEach(function(listener) {
-        listener.apply(null);
+        listener(object);
     });
 };

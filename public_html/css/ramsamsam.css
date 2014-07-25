@@ -54,7 +54,7 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
     text-shadow         : none;
 }
 
-#listViewHandy .feedTitle {
+.feedTitle {
     /*font-weight: normal;*/
     font-weight: bold;
     color:white;

@@ -23,7 +23,17 @@ AppView.prototype.registerModelChangeListeners = function() {
     console.log("registermodelchangelisteners");
     this.feedsmodel.registerSubscriptionAddedListener(subscriptionAdded);
 
-    function subscriptionAdded() {
+    function subscriptionAdded(subscription) {
+        var newSubscription$ = $("<li><a><span class='feedTitle'>" + subscription.title + "</span></a></li>");
+        $("#subscriptionList").append(newSubscription$).listview('refresh');
+        newSubscription$.click(function() {
+            $("#listViewHandy").html("");
+            subscription.getItems().forEach(function(item) {
+                var newItem$ = $("<li><a href='#'><span class='feedTitle'>" + item.title + "</span>" +
+                        " - <span class='feedDescription'>" + item.summary + "</span></a></li>");
+                $("#listViewHandy").append(newItem$).listview('refresh');
+            });
+        });
     }
 };
 
