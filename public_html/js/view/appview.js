@@ -27,11 +27,20 @@ AppView.prototype.registerModelChangeListeners = function() {
         var newSubscription$ = $("<li><a><span class='feedTitle'>" + subscription.title + "</span></a></li>");
         $("#subscriptionList").append(newSubscription$).listview('refresh');
         newSubscription$.click(function() {
+
+            $("#leftPanel").panel("toggle");
             $("#listViewHandy").html("");
             subscription.getItems().forEach(function(item) {
                 var newItem$ = $("<li><a href='#'><span class='feedTitle'>" + item.title + "</span>" +
                         " - <span class='feedDescription'>" + item.summary + "</span></a></li>");
                 $("#listViewHandy").append(newItem$).listview('refresh');
+                newItem$.click(function() {
+//
+                    $.mobile.changePage("#entryView");
+                    $("#entryContent").html("").append(item.content);
+//
+                });
+
             });
         });
     }
@@ -116,6 +125,7 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
+    $("#leftPanel").panel("toggle");
     this.feedsmodel.initAndloadFromDatabase(function() {
         console.log("feed were retrieved successfully");
     }, function() {
