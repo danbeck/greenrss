@@ -1,71 +1,71 @@
 
 div[data-role=page][data-url][data-external-page=true] div
 {
-    margin              : 0px;
-    padding             : 20px;
-    font-size           : 90%;
-    line-height         : 20px;
-    color               : #EFEFEF;
-    background-color    : #6CC655;  
-    font-family         : sans-serif;   
-    text-shadow         : none;
+  margin              : 0px;
+  padding             : 20px;
+  font-size           : 90%;
+  line-height         : 20px;
+  color               : #EFEFEF;
+  background-color    : #6CC655;  
+  font-family         : sans-serif;   
+  text-shadow         : none;
 }
 
 div[data-role=page][data-url][data-external-page=true] div#logo
 {
-    padding-bottom      : 8px;
-    border-bottom       : 1px solid rgba( 255, 255, 255, 0.3 );
+  padding-bottom      : 8px;
+  border-bottom       : 1px solid rgba( 255, 255, 255, 0.3 );
 }
 
 div[data-role=page][data-url][data-external-page=true] div#introduction
 {
-    margin-top          : 17px;
-    margin-bottom       : 12px;
-    font-size           : 140%;
-    line-height         : 24px;
-    color               : #FFF;     
-    text-shadow         : none;
+  margin-top          : 17px;
+  margin-bottom       : 12px;
+  font-size           : 140%;
+  line-height         : 24px;
+  color               : #FFF;     
+  text-shadow         : none;
 }
 
 div[data-role=page][data-url][data-external-page=true] .button
 {
-    background-color    : #4D90FE;
-    font-size           : 95%;
-    line-height         : 17px;
-    padding             : 14px;
-    padding-left        : 20px;
-    padding-right       : 20px;
-    font-weight         : bold;
-    border              : 1px solid #3079ED;
-    color               : #FFFFFF;
-    margin              : 0px;
-    display             : block;
-    box-shadow          : 0px 1px 2px rgba(0, 0, 0, 0.2), inset 0px 0px 1px rgba(255, 255, 255, 1);
-    text-decoration     : none;
-    border-radius       : 3px;
-    text-shadow         :  none;
+  background-color    : #4D90FE;
+  font-size           : 95%;
+  line-height         : 17px;
+  padding             : 14px;
+  padding-left        : 20px;
+  padding-right       : 20px;
+  font-weight         : bold;
+  border              : 1px solid #3079ED;
+  color               : #FFFFFF;
+  margin              : 0px;
+  display             : block;
+  box-shadow          : 0px 1px 2px rgba(0, 0, 0, 0.2), inset 0px 0px 1px rgba(255, 255, 255, 1);
+  text-decoration     : none;
+  border-radius       : 3px;
+  text-shadow         :  none;
 }
 
 div[data-role=page][data-url][data-external-page=true] .actionLink
 {
-    font-weight         : bold;
-    color               : #FFF;
-    text-decoration     : none;
-    text-shadow         : none;
+  font-weight         : bold;
+  color               : #FFF;
+  text-decoration     : none;
+  text-shadow         : none;
 }
 
 .feedTitle {
-    /*font-weight: normal;*/
-    font-weight: bold;
-    color:white;
-    white-space: normal;
+  /*font-weight: normal;*/
+  font-weight: bold;
+  color:white;
+  white-space: normal;
 }
 
 #listViewHandy .feedDescription {
-    font-weight: normal;
-    color: white;
-    /*color: grey;*/
-    white-space: normal;
+  font-weight: normal;
+  color: white;
+  /*color: grey;*/
+  white-space: normal;
 }
 
 
@@ -75,26 +75,34 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
 }
 
 .ui-dialog-background {
-    opacity: 0.2;
-    display: block !important;
-    -webkit-transition: opacity 0.5s ease-in;
+  opacity: 0.2;
+  display: block !important;
+  -webkit-transition: opacity 0.5s ease-in;
 }
 
 .ui-dialog-background.pop.in {
-    opacity: 1;
-    -webkit-transition: opacity 0.5s ease-in;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s ease-in;
 }
 
 #firstStepPage div[data-role="content"] > div:first-child {
-    /*background:#d0facd;*/
-    /*color:white;*/
+  /*background:#d0facd;*/
+  /*color:white;*/
 }
 
 #firstStepPage h1 {
-    text-align: center;
+  text-align: center;
 }
 
 /*#firstStepPage div[style] {
     width:50%;
     height: 40px;
 }*/
+
+
+#entryContent {
+  padding: 1.25em;
+  background-color: #273136;
+  font-size: 1.2em;
+  line-height: 1.5;
+}
