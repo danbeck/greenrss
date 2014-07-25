@@ -162,13 +162,13 @@ function Category(id, title) {
     this.id = id;
     this.title = title;
 }
-function Item(id, title, updatedDate, unread, author, summary, content, href) {
+function Item(id, title, updatedDate, unread, author, href, summary, content) {
     this.id = id;
     this.title = title;
     this.updatedDate = updatedDate;
     this.unread = unread;
     this.author = author;
+    this.href = href;
     this.summary = summary;
     this.content = content;
-    this.href = href;
 }
