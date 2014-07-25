@@ -69,6 +69,11 @@ div[data-role=page][data-url][data-external-page=true] .actionLink
 }
 
 
+#listViewHandy li a {
+  height: 5.8em;
+  margin-bottom: 1px;
+}
+
 .ui-dialog-background {
     opacity: 0.2;
     display: block !important;
