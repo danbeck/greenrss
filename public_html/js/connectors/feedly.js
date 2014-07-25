@@ -146,17 +146,11 @@ Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
             var content = "";
             var summary = "";
             if (el.summary) {
-                summary = el.summary.content;
-                var div = document.createElement("div");
-                div.innerHTML = el.summary.content;
-                var text = div.textContent || div.innerText || "";
-                summary = text;
-                if (text.length > 250)
-                    summary = summary.substring(0, 250) + "...";
+                summary = util.extractAndCropText(el.summary.content);
             }
-            else if (el.content)
-                summary = el.content.content.substring(0, 120) + "...";
-
+            else if (el.content) {
+                summary = util.extractAndCropText(el.content.content);
+            }
             if (el.content)
                 content = el.content.content;
             else if (el.summary)
