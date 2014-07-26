@@ -199,7 +199,9 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
 //            that.retrieveStream();
             successFunc(feedsmodel);
         }).error(function(e) {
-            console.log("got error");
+            console.error("Got error while retrieving subscriptions", e);
+            console.dir(e.getResponseHeader());
+//            e.
             error();
         });
     }

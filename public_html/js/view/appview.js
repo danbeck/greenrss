@@ -75,7 +75,7 @@ AppView.prototype.registerGuiEventListeners = function() {
     function registerFeedlyButtonClickHandler() {
         $("a[data-ui=feedlyLoginButton]").click(function() {
             that.feedsmodel.setCloudService("feedly");
-            var url = that.applicationmodel.ssoLoginURL();
+            var url = that.feedsmodel.ssoLoginURL();
             $.mobile.changePage(url, {showLoadMsg: true});
         });
     }
@@ -102,7 +102,7 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
             return;
     }
     else
-        this.applicationmodel.retrieveAccessToken(code, function() {
+        this.feedsmodel.retrieveAccessToken(code, function() {
             console.log("access token retrieved");
             localStorage.setItem("cloudService", "feedly");
         });

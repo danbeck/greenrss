@@ -1,8 +1,9 @@
 /**
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
-$(document).ready(function() {
+$(document).on("pageinit", function() {
 
-
+    var host = window.location.hostname;
+    console.log("host:" + host);
 //    useIndexDBPolyfill();
 
     //----------------------------------

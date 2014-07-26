@@ -9,6 +9,14 @@ function FeedsModel(indexeddbService, cloudService) {
 
 }
 
+FeedsModel.prototype.retrieveAccessToken = function(code, success) {
+    this.cloudService.retrieveAccessToken(code, success);
+};
+
+FeedsModel.prototype.ssoLoginURL = function() {
+    return this.cloudService.ssoLoginURL();
+};
+
 FeedsModel.prototype.initAndloadFromDatabase = function(success, error) {
     var that = this;
 
