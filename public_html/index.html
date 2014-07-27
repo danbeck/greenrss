@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="lib/jquery/jquery.mobile.icons-1.4.3.min.css"/>
     <link rel="stylesheet" href="css/themes/ramsamsamtheme.css"/>
     <link rel="stylesheet" href="css/ramsamsam.css"/>
-    <link rel="resource" type="application/l10n" href="locales/locales.ini" / >
-    <!--<link rel="stylesheet" href="css/app.css" />-->
-    <!--<script src="js/IndexedDBShim.js"></script>-->
+    <link rel="resource" type="application/l10n" href="locales/locales.ini" />
+  
     <script src="lib/jquery/jquery-2.1.1.min.js"></script>
     <script src="lib/jquery/jquery.indexeddb.js"></script>
-    <script src="lib/jquery/jquery-ui-1.10.3.min.js"></script>
+    <!--<script src="lib/jquery/jquery-ui-1.10.3.min.js"></script>-->
     <script>$(document).bind('mobileinit', function() {
         // wird für CORS request benötigt.
         $.mobile.allowCrossDomainPages = true;
@@ -22,27 +21,22 @@
     </script>
 
     <script src="lib/jquery/jquery.mobile-1.4.3.min.js"></script>
-    <!--<script src="lib/jquery/jquery.ui.touch-punch.min.js"></script>-->
     <script src="lib/jquery/jquery.indexeddb.js"></script>
     <script src="lib/l10n.js"></script>
-    <!--<script src="js/util.js"></script>-->
-    <script src="js/model/util.js"></script>>
+    <script src="js/model/util.js"></script>
     <script src="js/model/changelisteners.js"></script>
     <script src="js/model/user.js"></script>
     <script src="js/model/indexeddb.js"></script>
     <script src="js/model/feedsmodel.js"></script>
-    <!--<script src="js/model/applicationmodel.js"></script>-->
     <script src="js/connectors/feedly.js"></script>
     <script src="js/connectors/googleapi.js"></script>
     <script src="js/connectors/theoldreader.js"></script>
-    <script src="js/connectors/tinytinyrss.js"></script>
     <script src="js/view/appview.js"></script>
     <script src="js/app.js"></script>
 
-    <meta name="description" content="RSS Reader">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <!-- JQuery mobile import -->
+    <meta name="description" content="RSS Reader"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
   </head>
   <body>
 
@@ -58,49 +52,19 @@
         <ul data-role="listview" id="subscriptionList">
         </ul>
       </div>
-      <!--      <div data-role="content">
-              <input type="text" id="eintragEingebenFeld"/>
-              <a id="textIndexedDB" data-role="button">Test IndexedDB</a>
-              <fieldset data-role="controlgroup" id="controlGroupAlleEintraege">
-              </fieldset>
-            </div>-->
-      <!--      <div data-role="popup" id="elementLoeschenPopup"
-                 style="padding: 10px 20px;">
-              <p>Wollen Sie dieses Element wirklich löschen?</p>
-              <h4 id="löscheintrag"></h4>
-              <a href="" data-role="button"
-                 data-inline="true" data-rel="back">Abbrechen</a>
-              <a id="loescheElementButton" data-role="button"
-                 data-inline="true" data-rel="back">Löschen</a>
-            </div>-->
-      <!--      <div role="main">
-            </div>-->
       <div role="main" class="ui-content jqm-content jqm-fullwidth">
         <ul data-role="listview" id="listViewHandy">
         </ul>
       </div>
-
-
-      <!--      <footer data-role="footer" >
-              <a href="" id="addFeedButton" data-role="button">Add Feed</a>
-              <a href="" id="refreshButton" data-role="button">Refresh Feeds</a>
-            </footer>-->
     </div>
 
 
     <div data-role="page" class="ui-responsive-panel" id="entryView" data-add-back-btn="true">
       <header data-position="fixed" data-role="header" data-id="mainHeader">
-        <a id="openLeftPanel" data-role="button" data-icon="back" data-iconpos="left"  data-rel="back" >Back</a>
+        <a data-role="button" data-icon="back" data-iconpos="left"  data-rel="back" >Back</a>
         <h1>RamSamSam Reader</h1>
-        <a href="#neuesElementHinzufuegenPopupAlle" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer
-          Eintrag</a>
       </header>
       <div id="entryContent">
-
-        <!--      <footer data-role="footer" >
-                <a href="" id="addFeedButton" data-role="button">Add Feed</a>
-                <a href="" id="refreshButton" data-role="button">Refresh Feeds</a>
-              </footer>-->
       </div>
     </div>
 
@@ -115,8 +79,6 @@
           Sie noch einen RSS-Dienst auswählen, um Ihre Feeds zu synchronisieren.</p>
 
         <div data-role="content">
-          <!--<h2>Wählen Sie einen Dienst aus</h2>-->
-
           <ul data-role="listview">
             <li><a href="#feedlyLoginDialog" data-rel="dialog">Feedly cloud<br>Der bekannteste Anbieter</a></li>
             <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative

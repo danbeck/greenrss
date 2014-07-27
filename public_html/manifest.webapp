@@ -1,14 +1,14 @@
 {
     "name": "RamSamSam Reader",
     "description": "RamSamSam Reader is a RSS Reader which can synchronize its feeds with Feedly and The Old Reader.",
-    "launch_path": "/ramsamsam/index.html",
+    "launch_path": "/index.html",
     "icons": {
-        "256": "/ramsamsam/firefox/icon-256.png",
-        "128": "/ramsamsam/firefox/icon-128.png",
-        "64": "/ramsamsam/firefox/icon-64.png",
-        "60": "/ramsamsam/firefox/icon-60.png",
-        "32": "/ramsamsam/firefox/icon-32.png",
-        "16": "/ramsamsam/firefox/icon-16.png"
+        "256": "/firefox/icon-256.png",
+        "128": "/firefox/icon-128.png",
+        "64": "/firefox/icon-64.png",
+        "60": "/firefox/icon-60.png",
+        "32": "/firefox/icon-32.png",
+        "16": "/firefox/icon-16.png"
     },
     "developer":{
         "name": "Daniel Beck",
@@ -17,6 +17,7 @@
     "permissions": {
        "systemXHR":{}
     },
+    "type": "privileged",
     "default_locale": "en",
     "locales": {
       "de": {
