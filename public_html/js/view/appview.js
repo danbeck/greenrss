@@ -76,7 +76,40 @@ AppView.prototype.registerGuiEventListeners = function() {
         $("a[data-ui=feedlyLoginButton]").click(function() {
             that.feedsmodel.setCloudService("feedly");
             var url = that.feedsmodel.ssoLoginURL();
-            $.mobile.changePage(url, {showLoadMsg: true});
+
+//            $.mobile.changePage(url, {showLoadMsg: true});
+//            $.ajax({type: "GET",
+//                url: url,
+//                xhrFields: {
+//                    mozSystem: true
+//                }
+////            headers: {Authorization: "OAuth " + that.accessToken}
+//            }).success(function(subscriptions) {
+//                console.log("everything was ok!");
+//                alert("everything was ok!");
+//            }).error(function(e) {
+//                alert("there was an error");
+////                alert(console.)
+//            });
+
+            var xhr = new XMLHttpRequest({mozSystem: true});
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        alert("everything was ok");
+//                        callback(JSON.parse(xhr.responseText).content)
+                    } else {
+                        if (xhr.status == 0) {
+                            alert("Something went wrong, please check your credentials and the server address")
+                        } else {
+                            alert("error: " + xhr.status + " " + xhr.statusText)
+                        }
+                    }
+                }
+            }
+            xhr.open("GET", url, true);
+            xhr.send();
+
         });
     }
 
@@ -97,9 +130,11 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
     if (code === undefined) {
         if (!this.feedsmodel.syncServiceConfigured()) {
             $.mobile.changePage("#firstStepPage");
-        } else
-            // show the standard page
+        } else {
+            $("#leftPanel").panel("toggle");
+            startSynchronization();
             return;
+        }
     }
     else
         this.feedsmodel.retrieveAccessToken(code, function() {
@@ -107,6 +142,13 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
             localStorage.setItem("cloudService", "feedly");
         });
 
+    function startSynchronization() {
+        this.feedsmodel.initAndloadFromDatabase(function() {
+            console.log("feed were retrieved successfully");
+        }, function() {
+            console.log("error while retrieving feeds");
+        });
+    }
 
     function extractSSOAuthorizationFromURL(url) {
         var regex = /http:\/\/.*?code=((\w|\-)*)/;
@@ -125,11 +167,5 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-    $("#leftPanel").panel("toggle");
-    this.feedsmodel.initAndloadFromDatabase(function() {
-        console.log("feed were retrieved successfully");
-    }, function() {
-        console.log("error while retrieving feeds");
-    }
-    );
+
 };

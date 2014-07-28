@@ -21,39 +21,6 @@ Feedly.prototype.ssoLoginURL = function() {
             + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
 };
 
-//Feedly.prototype.setSSOAuthorization = function(code, success) {
-//    var that = this;
-//
-//    this.ssoAuthorizationCode = code;
-//    retrieveAccessToken(success);
-//
-//    function retrieveAccessToken(successFunc) {
-//        var url = that.BASE_URL + "/auth/token";
-//        var data = {
-//            code: that.ssoAuthorizationCode,
-//            client_id: that.client_id,
-//            client_secret: that.client_secret,
-//            redirect_uri: that.redirect_uri,
-//            grant_type: "authorization_code"
-//        };
-//
-//        console.dir("POST:" + url);
-//        console.dir(data);
-//
-//        $.post(url, data).success(function(response) {
-//            console.dir(response);
-//            that.userId = response.id;
-//            that.refreshToken = response.refresh_token;
-//            that.accessToken = response.access_token;
-//            that.expiresIn = response.expires_in;
-//
-//            that.feedsModel.setAccessToken(that.accessToken);
-//            successFunc();
-//        });
-//    }
-//};
-
-
 Feedly.prototype.subscribeFeed = function(url, success) {
     var that = this;
     executePostRequest();
@@ -65,7 +32,6 @@ Feedly.prototype.subscribeFeed = function(url, success) {
 //            Authorization: "OAuth " + that.accessToken
         };
 
-        console.dir(data);
         $.ajax({type: "POST",
             url: feedlyPostUrl,
             headers: {
@@ -76,10 +42,10 @@ Feedly.prototype.subscribeFeed = function(url, success) {
             data: JSON.stringify(data),
             dataType: "json"
         }).success(function(response) {
-            console.dir(response);
+            console.log("subscribed to feed ", url);
             successFunc();
         }).error(function(e) {
-            console.log("got error");
+            console.log("Got error while subscribing to feeds");
         });
     }
 };
@@ -106,11 +72,8 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
         grant_type: "authorization_code"
     };
 
-    console.dir("POST:" + url);
-    console.dir(data);
-
     $.post(url, data).success(function(response) {
-        console.dir(response);
+        console.log("Successfully retrieved access token");
         that.userId = response.id;
         that.accessToken = response.access_token;
         that.refreshToken = response.refresh_token;
@@ -120,7 +83,10 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
         localStorage.setItem("feedly.refreshtoken", that.refreshToken);
         localStorage.setItem("feedly.expiresin", that.expiresIn);
         success();
+    }).error(function() {
+        console.log("Got an error while retrieving access token");
     });
+
 };
 
 Feedly.prototype.ssoLoginURL = function() {
@@ -141,8 +107,8 @@ Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
             Authorization: "OAuth " +
                     that.accessToken}
     }).success(function(stream) {
+        console.log("Successfully retrieved entry stream");
         stream.items.forEach(function(el) {
-            console.dir(el);
             var content = "";
             var summary = "";
             if (el.summary) {
@@ -160,11 +126,9 @@ Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
                     el.origin.htmlUrl, summary, content);
 
         });
-//        this.feedsModel.
-        console.dir(stream);
         success(stream);
     }).error(function(e) {
-        console.log("got error");
+        console.log("got error while retrieving stream", e);
         error();
     });
 };
@@ -179,13 +143,14 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
             Authorization: "OAuth " + that.accessToken
         };
 
-        console.dir(data);
         $.ajax({type: "GET",
             url: url,
+            xhrFields: {
+                mozSystem: true
+            },
             headers: {Authorization: "OAuth " + that.accessToken}
         }).success(function(subscriptions) {
-            console.dir(subscriptions);
-
+         
             subscriptions.forEach(function(subscription) {
                 var subscriptionModel = feedsmodel.getSubscription(subscription.id);
                 if (!subscriptionModel)
@@ -193,15 +158,13 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
                 that.retrieveStream(subscriptionModel, function() {
                     subscriptionModel.persistSubscription();
                 }, function() {
-                    console.log("error");
+                    console.log("Got an error while retrieving stream");
                 });
             });
 //            that.retrieveStream();
             successFunc(feedsmodel);
         }).error(function(e) {
             console.error("Got error while retrieving subscriptions", e);
-            console.dir(e.getResponseHeader());
-//            e.
             error();
         });
     }

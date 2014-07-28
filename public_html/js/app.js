@@ -21,7 +21,7 @@ $(document).on("pageinit", function() {
     appView.registerModelChangeListeners();
     appView.registerGuiEventListeners();
     appView.showInitialPage(window.location.href);
-    appView.start();
+//    appView.start();
 
 
     function cloudService() {

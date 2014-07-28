@@ -15,7 +15,7 @@
         "url": "http://daniel-beck.org"
     },
     "permissions": {
-       "systemXHR":{}
+        "systemXHR": { "description": "Required for certain web communications" }
     },
     "type": "privileged",
     "default_locale": "en",
