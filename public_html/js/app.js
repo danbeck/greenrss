@@ -2,6 +2,7 @@
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
 $(document).on("pageinit", function() {
 
+    console.log("here we go!");
 //    $.ajaxSetup({
 //        xhrFields: {
 //            mozSystem: true

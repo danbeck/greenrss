@@ -12,14 +12,25 @@ function Feedly(feedsModel) {
     this.expiresIn = undefined;
 }
 
-
-Feedly.prototype.ssoLoginURL = function() {
-    return this.BASE_URL + "/auth/auth?" +
-            "response_type=code&" +
-            "client_id=" + this.client_id + "&" +
-            "redirect_uri=" + this.redirect_uri + "&"
-            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
-};
+//
+//Feedly.prototype.ssoLoginURL = function() {
+//
+//    var host = window.location.hostname;
+////    var host = this.redirect_uri;
+//
+////    return this.BASE_URL + "/auth/auth?" +
+////            "response_type=code&" +
+////            "client_id=" + this.client_id + "&" +
+////            "redirect_uri=" + this.redirect_uri + "&"
+////            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+//    var url = this.BASE_URL + "/auth/auth?" +
+//            "response_type=code&" +
+//            "client_id=" + this.client_id + "&" +
+//            "redirect_uri=" + host + "&"
+//            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+//    console.log("redirect to:" + url);
+//    return url;
+//};
 
 Feedly.prototype.subscribeFeed = function(url, success) {
     var that = this;
@@ -90,11 +101,22 @@ Feedly.prototype.retrieveAccessToken = function(code, success) {
 };
 
 Feedly.prototype.ssoLoginURL = function() {
-    return this.BASE_URL + "/auth/auth?" +
+
+//    var host = window.location.protocol + "//" + window.location.hostname;
+    var host = this.redirect_uri;
+
+//    return this.BASE_URL + "/auth/auth?" +
+//            "response_type=code&" +
+//            "client_id=" + this.client_id + "&" +
+//            "redirect_uri=" + this.redirect_uri + "&"
+//            + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+    var url = this.BASE_URL + "/auth/auth?" +
             "response_type=code&" +
             "client_id=" + this.client_id + "&" +
-            "redirect_uri=" + this.redirect_uri + "&"
+            "redirect_uri=" + host + "&"
             + "scope=https%3A%2F%2Fcloud.feedly.com%2Fsubscriptions";
+    console.log("redirect to:" + url);
+    return url;
 };
 
 Feedly.prototype.retrieveStream = function(subscriptionModel, success, error) {
@@ -150,7 +172,7 @@ Feedly.prototype.retrieveSubscriptions = function(feedsmodel, success, error) {
             },
             headers: {Authorization: "OAuth " + that.accessToken}
         }).success(function(subscriptions) {
-         
+
             subscriptions.forEach(function(subscription) {
                 var subscriptionModel = feedsmodel.getSubscription(subscription.id);
                 if (!subscriptionModel)
