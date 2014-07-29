@@ -73,42 +73,29 @@ AppView.prototype.registerGuiEventListeners = function() {
     }
 
     function registerFeedlyButtonClickHandler() {
-        $("a[data-ui=feedlyLoginButton]").click(function() {
+        $("#chooseFeedlySynchronizationButton").click(function() {
             that.feedsmodel.setCloudService("feedly");
             var url = that.feedsmodel.ssoLoginURL();
 
-//            $.mobile.changePage(url, {showLoadMsg: true});
-//            $.ajax({type: "GET",
-//                url: url,
-//                xhrFields: {
-//                    mozSystem: true
-//                }
-////            headers: {Authorization: "OAuth " + that.accessToken}
-//            }).success(function(subscriptions) {
-//                console.log("everything was ok!");
-//                alert("everything was ok!");
-//            }).error(function(e) {
-//                alert("there was an error");
-////                alert(console.)
-//            });
+            $("#feedlyLoginButton").attr("href", url);
 
-            var xhr = new XMLHttpRequest({mozSystem: true});
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        alert("everything was ok");
-//                        callback(JSON.parse(xhr.responseText).content)
-                    } else {
-                        if (xhr.status == 0) {
-                            alert("Something went wrong, please check your credentials and the server address")
-                        } else {
-                            alert("error: " + xhr.status + " " + xhr.statusText)
-                        }
-                    }
-                }
-            }
-            xhr.open("GET", url, true);
-            xhr.send();
+//            var xhr = new XMLHttpRequest({mozSystem: true});
+//            xhr.onreadystatechange = function() {
+//                if (xhr.readyState == 4) {
+//                    if (xhr.status == 200) {
+//                        alert("everything was ok");
+////                        callback(JSON.parse(xhr.responseText).content)
+//                    } else {
+//                        if (xhr.status == 0) {
+//                            alert("Something went wrong, please check your credentials and the server address")
+//                        } else {
+//                            alert("error: " + xhr.status + " " + xhr.statusText)
+//                        }
+//                    }
+//                }
+//            }
+//            xhr.open("GET", url, true);
+//            xhr.send();
 
         });
     }
@@ -125,6 +112,7 @@ AppView.prototype.registerGuiEventListeners = function() {
 
 
 AppView.prototype.showInitialPage = function(hrefUrl) {
+    var that = this;
     var code = extractSSOAuthorizationFromURL(hrefUrl);
 
     if (code === undefined) {
@@ -143,7 +131,7 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
         });
 
     function startSynchronization() {
-        this.feedsmodel.initAndloadFromDatabase(function() {
+        that.feedsmodel.initAndloadFromDatabase(function() {
             console.log("feed were retrieved successfully");
         }, function() {
             console.log("error while retrieving feeds");

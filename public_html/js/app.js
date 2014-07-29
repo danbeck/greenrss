@@ -2,12 +2,20 @@
  * Hier beginnt die Ausführung nach dem Laden des Dokuments.*/
 $(document).on("pageinit", function() {
 
+//    $.ajaxSetup({
+//        xhrFields: {
+//            mozSystem: true
+//        }
+//    });
+
     $.ajaxSetup({
-        xhrFields: {
-            mozSystem: true
+        xhr: function() {
+            return new window.XMLHttpRequest({
+                mozSystem: true
+            });
         }
     });
-    
+
     var host = window.location.hostname;
     console.log("host:" + host);
 //    useIndexDBPolyfill();

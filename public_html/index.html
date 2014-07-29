@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/themes/ramsamsamtheme.css"/>
     <link rel="stylesheet" href="css/ramsamsam.css"/>
     <link rel="resource" type="application/l10n" href="locales/locales.ini" />
-  
+
     <script src="lib/jquery/jquery-2.1.1.min.js"></script>
     <script src="lib/jquery/jquery.indexeddb.js"></script>
     <!--<script src="lib/jquery/jquery-ui-1.10.3.min.js"></script>-->
@@ -80,7 +80,7 @@
 
         <div data-role="content">
           <ul data-role="listview">
-            <li><a href="#feedlyLoginDialog" data-rel="dialog">Feedly cloud<br>Der bekannteste Anbieter</a></li>
+            <li><a href="#feedlyLoginDialog" data-rel="dialog" id="chooseFeedlySynchronizationButton">Feedly cloud<br>Der bekannteste Anbieter</a></li>
             <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative
                 Anbieter</a></li>
             <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal speichern</a></li>
@@ -100,7 +100,7 @@
 
         <p>Feedly ist der bekannteste Feed Anbieter. Die Anmeldung geschieht über das
           Google-Login Verfahren.</p>
-        <a data-role="button" href="#" data-ui="feedlyLoginButton">Anmelden</a>
+        <a data-role="button" href="#" id="feedlyLoginButton" data-ui="feedlyLoginButton">Anmelden</a>
       </div>
     </div>
 
