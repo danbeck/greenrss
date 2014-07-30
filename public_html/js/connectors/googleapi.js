@@ -10,25 +10,10 @@ function GoogleFeedService() {
                 if (googlefeed.entries) {
 //                var subscriptionid = encodeURI(googlefeed.feedUrl);
                     googlefeed.entries.forEach(function(entry) {
-                        subscription.addItem(entry.link, entry.title, entry.publishedDate, true, 
-                        entry.author, entry.link, entry.contentSnippet, entry.content);
+                        subscription.addItem(entry.link, entry.title, entry.publishedDate, true,
+                                entry.author, entry.link, entry.contentSnippet, entry.content);
                     });
                 }
-
-//
-//                  var subscriptionObject = {
-//        id: subscriptionid,
-//        url: googleFeed.feedUrl,
-//        wwwurl: googleFeed.link,
-//        title: ,
-//        categories: undefined,
-//        image: undefined,
-//        items: this.__asSubscriptionItems(subscriptionid, googleFeed.entries)
-//    };
-//                subscription.addItem(subscriptionid,googleFeed.title, null, true, null. googleFeed.feedUrl, googlefeed.);
-//                var addedSubscription = self.__addSubscription(persistedsubscriptions, googlefeed);
-//                self.localStorageService.saveSubscriptionsInLocalStorage(persistedsubscriptions);
-//                onSubscriptionAdded(addedSubscription);
             }
             );
 
