@@ -65,28 +65,37 @@ AppView.prototype.registerGuiEventListeners = function() {
         $("#feedSearchInput").keyup(function() {
             var input = $("#feedSearchInput").val();
 
-            if (input && input.length > 2 && input !== "htt"
-                    && input !== "http" && input.substring(0, 5) !== "http:") {
-//            this.feedSearch(input);
-                FeedsSearch.searchSubscriptions(input, function(foundFeeds) {
-                    var foundSearches$ = $("#foundFeeds");
-                    foundSearches$.html("");
+            var foundSearches$ = $("#foundFeeds");
 
+            if (shouldSearchForFeeds(input)) {
+                FeedsSearch.searchSubscriptions(input, function(foundFeeds) {
+                    foundSearches$.html("");
                     if (!foundFeeds.entries)
                         return;
 
                     var feeds = foundFeeds.entries.slice(0, 4);
                     for (var i = 0; i < feeds.length; i++) {
-
-                        var checkbox$ = $("<input>").attr("type", "checkbox").attr("name", "checkbox-" + i).attr("id", "checkbox-" + i).css({opacity: 0}); //.attr("class", "custom");
-
-                        var label$ = $("<label>").attr("for", "checkbox-" + i).attr("data-iconpos", "right").html("<p>" + feeds[i].title + "</p>");
-                        foundSearches$.prepend(label$).prepend(checkbox$);
-                        checkbox$.checkboxradio();
+                        createdAndAppendEntry(feeds[i], i);
                     }
                     foundSearches$.controlgroup();
                 });
             }
+
+            function shouldSearchForFeeds(input) {
+                return input && input.length > 2 && input !== "htt"
+                        && input !== "http" && input.substring(0, 5) !== "http:";
+
+            }
+            function createdAndAppendEntry(feed, i) {
+                var checkbox$ = $("<input>").attr("type", "checkbox").attr("name", "checkbox-" + i).attr("id", "checkbox-" + i); //.attr("class", "custom");
+
+                var label$ = $("<label>").attr("for", "checkbox-" + i).attr("data-iconpos", "right").html("<p>" + feed.title + "</p>");
+                foundSearches$.prepend(label$).prepend(checkbox$);
+                checkbox$.checkboxradio();
+
+            }
+            ;
+
         });
     }
 
@@ -116,25 +125,6 @@ AppView.prototype.registerGuiEventListeners = function() {
             var url = that.feedsmodel.ssoLoginURL();
 
             $("#feedlyLoginButton").attr("href", url);
-
-//            var xhr = new XMLHttpRequest({mozSystem: true});
-//            xhr.onreadystatechange = function() {
-//                if (xhr.readyState == 4) {
-//                    if (xhr.status == 200) {
-//                        alert("everything was ok");
-////                        callback(JSON.parse(xhr.responseText).content)
-//                    } else {
-//                        if (xhr.status == 0) {
-//                            alert("Something went wrong, please check your credentials and the server address")
-//                        } else {
-//                            alert("error: " + xhr.status + " " + xhr.statusText)
-//                        }
-//                    }
-//                }
-//            }
-//            xhr.open("GET", url, true);
-//            xhr.send();
-
         });
     }
 
