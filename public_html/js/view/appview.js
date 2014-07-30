@@ -54,9 +54,47 @@ AppView.prototype.registerGuiEventListeners = function() {
     registerFeedlyButtonClickHandler();
     registerRefreshFeedsHandler();
     registerOpenLeftPanelHandler();
+    registerTheOldReaderLoginHandler();
+    registerNoCloudLoginHandler();
+    registerFeedSearchInput();
     //  $("#textIndexedDB").click(function () {
     //     that.presentationModel.saveSSOAuthorizationCode();
     // });
+
+    function registerFeedSearchInput() {
+        $("#feedSearchInput").keyup(function() {
+            var input = $("#feedSearchInput").val();
+
+            if (input && input.length > 2 && input !== "htt"
+                    && input !== "http" && input.substring(0, 5) !== "http:") {
+//            this.feedSearch(input);
+                FeedsSearch.searchSubscriptions(input, function(foundFeeds) {
+                    var foundSearches$ = $("#foundFeeds");
+                    foundSearches$.html("");
+
+                    if (!foundFeeds.entries)
+                        return;
+
+                    var feeds = foundFeeds.entries.slice(0, 4);
+                    for (var i = 0; i < feeds.length; i++) {
+
+                        var checkbox$ = $("<input>").attr("type", "checkbox").attr("name", "checkbox-" + i).attr("id", "checkbox-" + i).css({opacity: 0}); //.attr("class", "custom");
+
+                        var label$ = $("<label>").attr("for", "checkbox-" + i).attr("data-iconpos", "right").html("<p>" + feeds[i].title + "</p>");
+                        foundSearches$.prepend(label$).prepend(checkbox$);
+                        checkbox$.checkboxradio();
+                    }
+                    foundSearches$.controlgroup();
+                });
+            }
+        });
+    }
+
+    function registerNoCloudLoginHandler() {
+        $("#noCloudLoginButton").click(function() {
+            that.feedsmodel.setCloudService("local");
+        });
+    }
 
     function registerAddFeedHandler() {
         $("#addFeedButton").click(function() {
@@ -97,6 +135,14 @@ AppView.prototype.registerGuiEventListeners = function() {
 //            xhr.open("GET", url, true);
 //            xhr.send();
 
+        });
+    }
+
+    function registerTheOldReaderLoginHandler() {
+        $("#theOldReaderLoginButton").click(function() {
+            that.feedsmodel.setCloudService("theoldreader");
+            var email = $("theOldReaderLoginDialog[type='email']").val();
+            var password = $("theOldReaderLoginDialog[type='password']").val();
         });
     }
 
@@ -147,7 +193,6 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
             if (indexOfNewParameter !== -1) {
                 this.code = this.code.substring(0, indexOfNewParameter);
             }
-
             return this.code;
         }
     }
@@ -155,5 +200,4 @@ AppView.prototype.showInitialPage = function(hrefUrl) {
 
 AppView.prototype.start = function() {
     console.log("start GUI");
-
-};
+}; 

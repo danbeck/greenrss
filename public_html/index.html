@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <!--<html manifest="cache.manifest">-->
 <html>
   <head>
     <meta charset="utf-8">
-    <title>RamSamSam Reader</title>
+    <title>Green RSS Reader</title>
     <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.4.3.min.css"/>
     <link rel="stylesheet" href="lib/jquery/jquery.mobile.icons-1.4.3.min.css"/>
     <link rel="stylesheet" href="css/themes/ramsamsamtheme.css"/>
@@ -14,7 +15,7 @@
     <script src="lib/jquery/jquery.indexeddb.js"></script>
     <!--<script src="lib/jquery/jquery-ui-1.10.3.min.js"></script>-->
     <script>$(document).bind('mobileinit', function() {
-        // wird für CORS request benötigt.
+        // wird fÃ¼r CORS request benÃ¶tigt.
         $.mobile.allowCrossDomainPages = true;
         $.mobile.page.prototype.options.theme = "a";
       });
@@ -25,28 +26,51 @@
     <script src="lib/l10n.js"></script>
     <script src="js/model/util.js"></script>
     <script src="js/model/changelisteners.js"></script>
-    <script src="js/model/user.js"></script>
+    <!--     <script src="js/model/user.js"></script> -->
     <script src="js/model/indexeddb.js"></script>
-    <script src="js/model/feedsmodel.js"></script>
     <script src="js/connectors/feedly.js"></script>
     <script src="js/connectors/googleapi.js"></script>
     <script src="js/connectors/theoldreader.js"></script>
+    <script src="js/model/feedsmodel.js"></script>
     <script src="js/view/appview.js"></script>
     <script src="js/app.js"></script>
 
 
     <meta name="description" content="RSS Reader"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
   </head>
   <body>
 
     <div data-role="page" class="ui-responsive-panel" id="mainPage" data-add-back-btn="true">
       <header data-position="fixed" data-role="header" data-id="mainHeader">
-        <a id="openLeftPanel" data-role="button" data-icon="bars" data-iconpos="notext">Konfiguration</a>
-        <h1>RamSamSam Reader</h1>
-        <a href="#neuesElementHinzufuegenPopupAlle" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer
-          Eintrag</a>
+        <a id="openLeftPanel" data-role="button" data-icon="bars" >Subscriptions</a>
+        <h1>Green RSS Reader</h1>
+        <!--         <a href="addFeedButton" data-rel="dialog" data-icon="plus" data-iconpos="notext">Neuer -->
+        <!--           Eintrag</a> -->
+        <div data-role="controlgroup" data-type="horizontal" class="ui-mini ui-btn-right">
+          <a href="#addFeedPopup" data-rel="popup" class="ui-btn ui-btn-icon-right ui-icon-plus">Add</a>
+          <a href="#" data-rel="popup" class="ui-btn ui-btn-icon-right ui-icon-refresh">Reload</a>
+          <!--         <a href="#" class="ui-btn ui-btn-icon-right ui-icon-arrow-d">Down</a> -->
+        </div>
+
+
+        <!--         <div data-role="controlgroup" data-type="horizontal"> -->
+        <!--           <a href="addFeedPopup" data-rel="popup" data-icon="plus">Add Feed</a> -->
+        <!--           <a href="#" data-icon="plus">Reload</a> -->
+        <!--         </div>  -->
       </header>
+
+      <div data-role="popup" id="addFeedPopup">
+        <div data-role="content">
+          <h1>Suche oder URL eingeben</h1>
+
+          <input type="text" id="feedSearchInput" placeholder="URL oder Text">
+          <fieldset data-role="controlgroup" id="foundFeeds">
+          </fieldset>
+          <a data-role="button" href="#" id="feedlyLoginButton" data-ui="feedlyLoginButton">Hinzufügen</a>
+          <a data-role="button" href="#mainPage">Abbrechen</a>
+        </div>
+      </div>
 
       <div data-role="panel" id="leftPanel" data-display="reveal">
         <ul data-role="listview" id="subscriptionList">
@@ -62,7 +86,7 @@
     <div data-role="page" class="ui-responsive-panel" id="entryView" data-add-back-btn="true">
       <header data-position="fixed" data-role="header" data-id="mainHeader">
         <a data-role="button" data-icon="back" data-iconpos="left"  data-rel="back" >Back</a>
-        <h1>RamSamSam Reader</h1>
+        <h1>Green RSS Reader</h1>
       </header>
       <div id="entryContent">
       </div>
@@ -73,51 +97,52 @@
 
       <div data-role="content">
 
-        <h1>RamSamSam reader</h1>
+        <h1>Green RSS Reader</h1>
 
-        <p>Vielen dank, dass Sie sich für RamSamSam Reader entschieden haben. Zuerst müssen
-          Sie noch einen RSS-Dienst auswählen, um Ihre Feeds zu synchronisieren.</p>
+        <p>Vielen dank, dass Sie sich fÃ¼r Green RSS Reader entschieden haben. Zuerst mÃ¼ssen
+          Sie noch einen RSS-Dienst auswÃ¤hlen, um Ihre Feeds zu synchronisieren.</p>
 
         <div data-role="content">
           <ul data-role="listview">
-            <li><a href="#feedlyLoginDialog" data-rel="dialog" id="chooseFeedlySynchronizationButton">Feedly cloud<br>Der bekannteste Anbieter</a></li>
-            <li><a href="#theOldReaderLoginDialog" data-rel="dialog">The Old Reader<br>*Der* alternative
+            <li><a href="#feedlyLoginDialog" data-rel="popup" id="chooseFeedlySynchronizationButton">Feedly cloud<br>Der bekannteste Anbieter</a></li>
+            <li><a href="#theOldReaderLoginDialog" data-rel="popup">The Old Reader<br>*Der* alternative
                 Anbieter</a></li>
-            <li><a href="#nocloud">Keine Synchronisierung<br>Feeds lokal speichern</a></li>
+            <li><a href="#mainPage" id="noCloudLoginButton">Keine Synchronisierung<br>Feeds lokal speichern</a></li>
           </ul>
         </div>
-
-        <a data-role="button" id="testDatabase">Test Database</a>
-
       </div>
 
-    </div>
+      <div data-role="popup" id="feedlyLoginDialog">
+        <div data-role="content">
+          <h1>Feedly Cloud</h1>
 
+          <p>Die Anmeldung geschieht Ã¼ber das
+            Google-Login Verfahren.</p><p> Drücken Sie anmelden, um die der Anmeldung fortzufahren.</p>
+          <a data-role="button" href="#" id="feedlyLoginButton" data-ui="feedlyLoginButton">Anmelden</a>
+          <a data-role="button" href="#firstStepPage">Abbrechen</a>
+        </div>
+      </div>
 
-    <div data-role="dialog" id="feedlyLoginDialog">
-      <div data-role="content">
-        <h1>Feedly Cloud</h1>
+      <div data-role="popup" id="theOldReaderLoginDialog">
+        <div data-role="content">
+          <h1>TheOldReader</h1>
 
-        <p>Feedly ist der bekannteste Feed Anbieter. Die Anmeldung geschieht über das
-          Google-Login Verfahren.</p>
-        <a data-role="button" href="#" id="feedlyLoginButton" data-ui="feedlyLoginButton">Anmelden</a>
+          <p>Die Anmeldung geschieht zu TheOldReader geschieht über Benutzername und password.</p>
+          <input type="email" placeholder="E-Mail">
+          <input type="password" placeholder="Passwort">
+          <!--         <label for="hidePassword">Passwort versteckt eingeben</label> -->
+          <!--         <input type="checkbox" id="hidePassword"> -->
+          <a href="#" id="theOldReaderLoginButton" data-role="button">Anmelden</a>
+          <a data-role="button" href="#firstStepPage">Abbrechen</a>
+
+        </div>
       </div>
     </div>
-
-    <div data-role="dialog" id="theOldReaderLoginDialog">
-      <div data-role="content">
-        <h1>TheOldReader</h1>
-
-        <p>TheOldReader ist einer alternativer RSS Anbieter. Legen Sie auf der
-          Einstellungsseite von TheOldReader einpassword fest, um sich anzumelden.
-        </p>
-        <input type="email" placeholder="E-Mail">
-        <input type="password" placeholder="Passwort">
-        <label for="hidePassword">Passwort versteckt eingeben</label>
-        <input type="checkbox" id="hidePassword">
-        <a href="#" data-role="button">Anmelden</a>
-      </div>
-    </div>
-
+    <script src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("feeds", "1");
+    </script>
+    
+    <script src="js/model/feedssearcher.js"></script>
   </body>
 </html>

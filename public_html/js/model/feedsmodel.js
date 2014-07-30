@@ -1,3 +1,4 @@
+
 function FeedsModel(indexeddbService, cloudService) {
     this.subscriptions = {};
     this.categories = {};
@@ -11,6 +12,10 @@ function FeedsModel(indexeddbService, cloudService) {
 
 FeedsModel.prototype.retrieveAccessToken = function(code, success) {
     this.cloudService.retrieveAccessToken(code, success);
+};
+
+FeedsModel.prototype.retrieveLoginToken = function(username, password, success, error) {
+    this.cloudService.retrieveLoginToken(username, password, success, error);
 };
 
 FeedsModel.prototype.ssoLoginURL = function() {
