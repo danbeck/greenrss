@@ -50,7 +50,7 @@ AppView.prototype.registerModelChangeListeners = function() {
 AppView.prototype.registerGuiEventListeners = function() {
     var that = this;
 
-    registerAddFeedHandler();
+    addFeedsButtonHandler();
     registerFeedlyButtonClickHandler();
     registerRefreshFeedsHandler();
     registerOpenLeftPanelHandler();
@@ -87,7 +87,7 @@ AppView.prototype.registerGuiEventListeners = function() {
 
             }
             function createdAndAppendEntry(feed, i) {
-                var checkbox$ = $("<input>").attr("type", "checkbox").attr("name", "checkbox-" + i).attr("id", "checkbox-" + i); //.attr("class", "custom");
+                var checkbox$ = $("<input>").attr("type", "checkbox").attr("name", "checkbox-" + i).attr("data-url", feed.url).attr("data-title", feed.title).attr("id", "checkbox-" + i); //.attr("class", "custom");
 
                 var label$ = $("<label>").attr("for", "checkbox-" + i).attr("data-iconpos", "right").html("<p>" + feed.title + "</p>");
                 foundSearches$.prepend(label$).prepend(checkbox$);
@@ -140,6 +140,17 @@ AppView.prototype.registerGuiEventListeners = function() {
         $("#openLeftPanel").click(function() {
             console.log("toggling panel");
             $("#leftPanel").panel("toggle");
+        });
+    }
+
+    function addFeedsButtonHandler() {
+        $("#addFeedsButton").click(function() {
+            $("#foundFeeds input[type=checkbox]:checked").each(function(i, el) {
+                var newSubscription = that.feedsmodel.createAndPersistSubscription($(this).attr("data-url"), $(this).attr("data-title"), null, function() {
+                    console.log("done");
+                });
+                that.feedsmodel.synchronizeFeeds();
+            });
         });
     }
 
