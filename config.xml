@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id = "de.beck.ramsamsamreader"
+        id = "de.beck.greenrss"
         version = "0.0.1"> 
     <name>RamSamSam Reader</name>
 
@@ -13,5 +13,5 @@
     <feature name="http://api.phonegap.com/1.0/network"/>
     <access origin="*" />
     <content src="index.html" />
-    <icon src="img/RamSamSam.png"/>
+    <icon src="www/img/RamSamSam.png"/>
 </widget>
